@@ -39,7 +39,6 @@ COPY --from=build /app/apps/backend/dist ./dist
 COPY --from=build /app/apps/backend/prisma ./prisma
 COPY --from=prune /app/pruned/node_modules ./node_modules
 COPY --from=prune /app/pruned/package.json ./package.json
-COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
 
 USER 1001
 ENV PORT=8080
