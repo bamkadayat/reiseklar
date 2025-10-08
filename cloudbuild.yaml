@@ -1,7 +1,8 @@
 substitutions:
   _REGION: "europe-north1"
   _SERVICE_NAME: "reiseklar-backend"
-  _IMAGE: "gcr.io/$PROJECT_ID/reiseklar-backend"
+  _REPOSITORY: "reiseklar-backend"
+  _IMAGE: "europe-north1-docker.pkg.dev/$PROJECT_ID/reiseklar-backend/reiseklar-backend"
   _CONNECTOR: "svpc-eun1"
 
 options:

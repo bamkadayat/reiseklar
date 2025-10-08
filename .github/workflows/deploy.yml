@@ -10,7 +10,8 @@ env:
   PROJECT_ID: reiseklar-474512
   REGION: europe-north1
   SERVICE_NAME: reiseklar-backend
-  IMAGE: gcr.io/reiseklar-474512/reiseklar-backend
+  REPOSITORY: reiseklar-backend
+  IMAGE: europe-north1-docker.pkg.dev/reiseklar-474512/reiseklar-backend/reiseklar-backend
   CONNECTOR: svpc-eun1
 
 jobs:
@@ -35,8 +36,15 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
-      - name: Configure Docker auth for GCR
-        run: gcloud auth configure-docker gcr.io --quiet
+      - name: Configure Docker auth for Artifact Registry
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
+
+      - name: Create Artifact Registry repository if not exists
+        run: |
+          gcloud artifacts repositories create ${{ env.REPOSITORY }} \
+            --repository-format=docker \
+            --location=${{ env.REGION }} \
+            --project=${{ env.PROJECT_ID }} 2>/dev/null || echo "Repository already exists"
 
       - name: Build Docker image
         run: |
