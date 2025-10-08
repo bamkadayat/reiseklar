@@ -1,12 +1,13 @@
 # Base image (glibc) — Prisma friendly
 FROM node:20-bookworm-slim AS base
 WORKDIR /app
-ENV NODE_ENV=production
 
 # Dependencies (cacheable)
 FROM base AS deps
 RUN corepack enable
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY apps/backend/package.json ./apps/backend/
+COPY packages ./packages
 RUN pnpm fetch
 
 # Build
@@ -14,16 +15,19 @@ FROM base AS build
 RUN corepack enable
 COPY --from=deps /root/.local/share/pnpm/store /root/.local/share/pnpm/store
 COPY . .
-RUN pnpm install --offline
-RUN pnpm prisma generate
-RUN pnpm build
+RUN pnpm install --offline --frozen-lockfile
+RUN cd apps/backend && pnpm prisma generate
+RUN pnpm --filter=backend build
 
 # Prune to production deps
 FROM base AS prune
+ENV NODE_ENV=production
 RUN corepack enable
+COPY --from=build /app/package.json /app/pnpm-lock.yaml /app/pnpm-workspace.yaml ./
+COPY --from=build /app/apps/backend/package.json ./apps/backend/
+COPY --from=build /app/packages ./packages
 COPY --from=build /app/node_modules ./node_modules
-COPY --from=build /app/package.json ./package.json
-RUN pnpm prune --prod
+RUN pnpm --filter=backend --prod deploy pruned
 
 # Runtime
 FROM node:20-bookworm-slim AS runner
@@ -31,12 +35,11 @@ WORKDIR /app
 ENV NODE_ENV=production
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates openssl && rm -rf /var/lib/apt/lists/*
 
-COPY --from=build /app/dist ./dist
-COPY --from=build /app/prisma ./prisma
-COPY --from=prune /app/node_modules ./node_modules
-COPY --from=prune /app/package.json ./package.json
-# (Optional) Prisma engines if needed:
-COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma 2>/dev/null || true
+COPY --from=build /app/apps/backend/dist ./dist
+COPY --from=build /app/apps/backend/prisma ./prisma
+COPY --from=prune /app/pruned/node_modules ./node_modules
+COPY --from=prune /app/pruned/package.json ./package.json
+COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
 
 USER 1001
 ENV PORT=8080
