@@ -1,0 +1,76 @@
+name: Deploy to Cloud Run
+
+on:
+  push:
+    branches:
+      - production
+  workflow_dispatch:
+
+env:
+  PROJECT_ID: reiseklar-474512
+  REGION: europe-north1
+  SERVICE_NAME: reiseklar-backend
+  IMAGE: gcr.io/reiseklar-474512/reiseklar-backend
+  CONNECTOR: svpc-eun1
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/production'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write   # required for WIF
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # ✅ Workload Identity Federation (no JSON key)
+      - name: Authenticate to Google Cloud (WIF)
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker auth for GCR
+        run: gcloud auth configure-docker gcr.io --quiet
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t "${{ env.IMAGE }}:${{ github.sha }}" \
+            -t "${{ env.IMAGE }}:latest" \
+            -f Dockerfile .
+
+      - name: Push Docker image
+        run: |
+          docker push "${{ env.IMAGE }}:${{ github.sha }}"
+          docker push "${{ env.IMAGE }}:latest"
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy "${{ env.SERVICE_NAME }}" \
+            --image="${{ env.IMAGE }}:${{ github.sha }}" \
+            --region="${{ env.REGION }}" \
+            --platform=managed \
+            --port=8080 \
+            --vpc-connector="${{ env.CONNECTOR }}" \
+            --vpc-egress=private-ranges-only \
+            --set-secrets=DATABASE_URL=DATABASE_URL:latest \
+            --set-env-vars="NODE_ENV=production,MAILGUN_API_BASE=${{ secrets.MAILGUN_API_BASE }},MAILGUN_DOMAIN=${{ secrets.MAILGUN_DOMAIN }},MAILGUN_API_KEY=${{ secrets.MAILGUN_API_KEY }},MAILGUN_FROM=${{ secrets.MAILGUN_FROM }},MAILGUN_REPLY_TO=${{ secrets.MAILGUN_REPLY_TO }}" \
+            --allow-unauthenticated \
+            --min-instances=0 \
+            --max-instances=10 \
+            --memory=512Mi \
+            --cpu=1 \
+            --project="${{ env.PROJECT_ID }}"
+
+      - name: Show deployed URL
+        run: |
+          gcloud run services describe "${{ env.SERVICE_NAME }}" \
+            --region="${{ env.REGION }}" \
+            --format='value(status.url)' \
+            --project="${{ env.PROJECT_ID }}"

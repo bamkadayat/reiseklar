@@ -1,0 +1,43 @@
+substitutions:
+  _REGION: "europe-north1"
+  _SERVICE_NAME: "reiseklar-backend"
+  _IMAGE: "gcr.io/$PROJECT_ID/reiseklar-backend"
+  _CONNECTOR: "svpc-eun1"
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+timeout: "1200s"
+
+steps:
+  - name: "gcr.io/kaniko-project/executor:latest"
+    args:
+      - "--destination=${_IMAGE}:${COMMIT_SHA}"
+      - "--destination=${_IMAGE}:latest"
+      - "--cache=true"
+      - "--cache-ttl=48h"
+      - "--dockerfile=Dockerfile"
+      - "--context=."
+
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - ${_SERVICE_NAME}
+      - --image=${_IMAGE}:${COMMIT_SHA}
+      - --region=${_REGION}
+      - --platform=managed
+      - --port=8080
+      - --vpc-connector=${_CONNECTOR}
+      - --vpc-egress=private-ranges-only
+      - --set-secrets=DATABASE_URL=DATABASE_URL:latest
+      - --set-env-vars=NODE_ENV=production
+      - --allow-unauthenticated
+      - --min-instances=0
+      - --max-instances=10
+      - --memory=512Mi
+      - --cpu=1
+
+images:
+  - "${_IMAGE}:${COMMIT_SHA}"
+  - "${_IMAGE}:latest"
