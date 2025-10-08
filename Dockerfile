@@ -43,4 +43,4 @@ COPY --from=prune /app/pruned/package.json ./package.json
 USER 1001
 ENV PORT=8080
 EXPOSE 8080
-CMD ["node", "dist/src/index.js"]
+CMD ["node", "dist/index.js"]
