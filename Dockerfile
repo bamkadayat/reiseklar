@@ -35,13 +35,10 @@ COPY --from=build /app/packages ./packages
 COPY --from=build /app/node_modules ./node_modules
 RUN pnpm --filter=backend --prod deploy pruned
 
-# ⬇️ NEW: carry over the generated Prisma client + engines from the build layer
-# Copy into the package-local node_modules path inside the pruned tree.
-COPY --from=build /app/apps/backend/node_modules/.prisma /app/pruned/apps/backend/node_modules/.prisma
-COPY --from=build /app/apps/backend/node_modules/@prisma /app/pruned/apps/backend/node_modules/@prisma
-
-# ❌ Remove this (it caused your error)
-# RUN cd pruned && node node_modules/prisma/build/index.js generate --schema=../apps/backend/prisma/schema.prisma
+# Copy the generated Prisma client from build stage .pnpm store
+# The client is generated in the .pnpm store, not in apps/backend/node_modules
+COPY --from=build /app/node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/.prisma ./pruned/node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/.prisma
+COPY --from=build /app/node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/@prisma ./pruned/node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/@prisma
 
 # Runtime
 FROM node:20-bookworm-slim AS runner
