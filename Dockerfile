@@ -16,8 +16,12 @@ RUN corepack enable
 COPY --from=deps /root/.local/share/pnpm/store /root/.local/share/pnpm/store
 COPY . .
 RUN pnpm install --offline --frozen-lockfile
+# Build shared package first (dependency of backend)
+RUN cd packages/shared && pnpm build
+# Generate Prisma client
 RUN cd apps/backend && pnpm prisma generate
-RUN pnpm --filter=backend build
+# Build backend
+RUN cd apps/backend && pnpm build
 
 # Prune to production deps
 FROM base AS prune
@@ -37,6 +41,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates
 
 COPY --from=build /app/apps/backend/dist ./dist
 COPY --from=build /app/apps/backend/prisma ./prisma
+COPY --from=build /app/packages/shared/dist ./packages/shared/dist
+COPY --from=build /app/packages/shared/package.json ./packages/shared/package.json
 COPY --from=prune /app/pruned/node_modules ./node_modules
 COPY --from=prune /app/pruned/package.json ./package.json
 
