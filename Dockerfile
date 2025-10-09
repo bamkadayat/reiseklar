@@ -27,14 +27,15 @@ RUN cd apps/backend && pnpm build
 FROM base AS prune
 ENV NODE_ENV=production
 RUN corepack enable
+RUN apt-get update && apt-get install -y --no-install-recommends openssl && rm -rf /var/lib/apt/lists/*
 COPY --from=build /app/package.json /app/pnpm-lock.yaml /app/pnpm-workspace.yaml ./
 COPY --from=build /app/apps/backend/package.json ./apps/backend/
+COPY --from=build /app/apps/backend/prisma ./apps/backend/prisma
 COPY --from=build /app/packages ./packages
 COPY --from=build /app/node_modules ./node_modules
 RUN pnpm --filter=backend --prod deploy pruned
-# Copy the generated Prisma client from build stage to production node_modules
-COPY --from=build /app/node_modules/.prisma ./pruned/node_modules/.prisma
-COPY --from=build /app/node_modules/@prisma/client ./pruned/node_modules/@prisma/client
+# Generate Prisma client in production node_modules (prisma is now a production dependency)
+RUN cd pruned && pnpm exec prisma generate --schema=../apps/backend/prisma/schema.prisma
 
 # Runtime
 FROM node:20-bookworm-slim AS runner
