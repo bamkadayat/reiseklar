@@ -1,6 +1,4 @@
-/**
- * Reiseklar Prisma Schema
- */
+// Reiseklar Prisma Schema
 
 generator client {
   provider = "prisma-client-js"
@@ -11,9 +9,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-/**
- * USER & AUTH MODELS
- */
+// USER & AUTH MODELS
 model User {
   id              String    @id @default(cuid())
   email           String    @unique
@@ -31,9 +27,7 @@ model User {
   places Place[]
 }
 
-/**
- * Email verification codes (4-digit PIN)
- */
+// Email verification codes (4-digit PIN)
 model EmailVerification {
   id         String    @id @default(cuid())
   userId     String
@@ -50,9 +44,7 @@ model EmailVerification {
   @@index([userId, expiresAt])
 }
 
-/**
- * JWT Refresh Tokens (rotating)
- */
+// JWT Refresh Tokens (rotating)
 model RefreshToken {
   id        String    @id @default(cuid())
   userId    String
@@ -64,9 +56,7 @@ model RefreshToken {
   @@index([userId, revokedAt])
 }
 
-/**
- * TRIP & ALERT MODELS
- */
+// TRIP & ALERT MODELS
 model Place {
   id        String   @id @default(cuid())
   userId    String
@@ -95,9 +85,7 @@ model Trip {
   alerts      Alert[]
 }
 
-/**
- * ALERT MODEL
- */
+// ALERT MODEL
 model Alert {
   id           String   @id @default(cuid())
   userId       String

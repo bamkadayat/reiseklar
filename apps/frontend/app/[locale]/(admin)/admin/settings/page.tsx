@@ -1,0 +1,208 @@
+import { useTranslations } from 'next-intl';
+import { Globe, Shield, Bell, Database, Mail, Key } from 'lucide-react';
+
+export default function AdminSettingsPage() {
+  const t = useTranslations('dashboard.admin.settings');
+
+  return (
+    <div className="space-y-6 sm:space-y-8">
+      {/* Page Header */}
+      <div>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+          {t('title')}
+        </h1>
+        <p className="mt-2 text-sm sm:text-base text-gray-600">
+          {t('description')}
+        </p>
+      </div>
+
+      {/* Settings Sections */}
+      <div className="space-y-6">
+        {/* General Settings */}
+        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
+            <div className="flex items-center gap-3">
+              <Globe className="w-5 h-5 text-norwegian-blue" />
+              <h2 className="text-lg font-semibold text-gray-900">
+                {t('general')}
+              </h2>
+            </div>
+          </div>
+          <div className="p-6 space-y-4">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
+                {t('siteName')}
+              </label>
+              <input
+                type="text"
+                defaultValue="Reiseklar"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
+                {t('siteDescription')}
+              </label>
+              <textarea
+                rows={3}
+                defaultValue="Smart Commute Planner for Norway"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent"
+              />
+            </div>
+            <div className="flex items-center justify-between py-3 border-t border-gray-100">
+              <div className="flex-1">
+                <p className="font-medium text-gray-900">
+                  {t('maintenanceMode')}
+                </p>
+                <p className="text-sm text-gray-500 mt-1">
+                  {t('maintenanceModeDesc')}
+                </p>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer ml-4">
+                <input type="checkbox" className="sr-only peer" />
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        {/* Security Settings */}
+        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
+            <div className="flex items-center gap-3">
+              <Shield className="w-5 h-5 text-norwegian-blue" />
+              <h2 className="text-lg font-semibold text-gray-900">
+                {t('security')}
+              </h2>
+            </div>
+          </div>
+          <div className="p-6 space-y-4">
+            <div className="flex items-center justify-between py-3">
+              <div className="flex-1">
+                <p className="font-medium text-gray-900">
+                  {t('requireEmailVerification')}
+                </p>
+                <p className="text-sm text-gray-500 mt-1">
+                  {t('requireEmailVerificationDesc')}
+                </p>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer ml-4">
+                <input type="checkbox" className="sr-only peer" defaultChecked />
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-norwegian-blue"></div>
+              </label>
+            </div>
+            <div className="flex items-center justify-between py-3 border-t border-gray-100">
+              <div className="flex-1">
+                <p className="font-medium text-gray-900">
+                  {t('twoFactorAuth')}
+                </p>
+                <p className="text-sm text-gray-500 mt-1">
+                  {t('twoFactorAuthDesc')}
+                </p>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer ml-4">
+                <input type="checkbox" className="sr-only peer" />
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-norwegian-blue"></div>
+              </label>
+            </div>
+            <div className="space-y-2 border-t border-gray-100 pt-4">
+              <label className="block text-sm font-medium text-gray-700">
+                {t('sessionTimeout')}
+              </label>
+              <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent">
+                <option>15 minutes</option>
+                <option selected>30 minutes</option>
+                <option>1 hour</option>
+                <option>2 hours</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* API Settings */}
+        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
+            <div className="flex items-center gap-3">
+              <Key className="w-5 h-5 text-norwegian-blue" />
+              <h2 className="text-lg font-semibold text-gray-900">
+                {t('apiSettings')}
+              </h2>
+            </div>
+          </div>
+          <div className="p-6 space-y-4">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
+                {t('apiKey')}
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="password"
+                  value="••••••••••••••••"
+                  readOnly
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg bg-gray-50"
+                />
+                <button className="px-4 py-2 bg-norwegian-blue text-white font-medium rounded-lg hover:bg-norwegian-blue-600 transition-colors">
+                  {t('regenerate')}
+                </button>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
+                {t('rateLimitPerHour')}
+              </label>
+              <input
+                type="number"
+                defaultValue="1000"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Email Settings */}
+        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
+            <div className="flex items-center gap-3">
+              <Mail className="w-5 h-5 text-norwegian-blue" />
+              <h2 className="text-lg font-semibold text-gray-900">
+                {t('email')}
+              </h2>
+            </div>
+          </div>
+          <div className="p-6 space-y-4">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
+                {t('fromEmail')}
+              </label>
+              <input
+                type="email"
+                defaultValue="noreply@reiseklar.no"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
+                {t('fromName')}
+              </label>
+              <input
+                type="text"
+                defaultValue="Reiseklar"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Save Button */}
+        <div className="flex justify-end gap-4">
+          <button className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors">
+            {t('cancel')}
+          </button>
+          <button className="px-8 py-3 bg-norwegian-blue text-white font-medium rounded-lg hover:bg-norwegian-blue-600 transition-colors">
+            {t('saveChanges')}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}

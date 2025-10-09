@@ -33,9 +33,9 @@ export function Navbar() {
             {/* Language Switcher */}
             <LanguageSwitcher />
 
-            {/* Login Link */}
+            {/* Sign In Link */}
             <Link
-              href="/login"
+              href="/signIn"
               className="flex items-center gap-2 text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-base transition-colors"
             >
               <svg
@@ -54,9 +54,9 @@ export function Navbar() {
               {t("login")}
             </Link>
 
-            {/* Register Button */}
+            {/* Sign Up Button */}
             <Link
-              href="/register"
+              href="/signUp"
               className="flex items-center gap-2 text-norwegian-blue px-4 py-2 rounded-lg hover:bg-neutral-light font-medium text-base transition-colors"
             >
               <FiUserPlus className="w-5 h-5" />
@@ -109,9 +109,9 @@ export function Navbar() {
             <LanguageSwitcher />
           </div>
 
-          {/* Login Link */}
+          {/* Sign In Link */}
           <Link
-            href="/login"
+            href="/signIn"
             onClick={() => setIsMobileMenuOpen(false)}
             className="flex items-center gap-3 text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-lg py-2 transition-colors"
           >
@@ -128,17 +128,17 @@ export function Navbar() {
                 d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
               />
             </svg>
-            {t("login")}
+            {t("signIn")}
           </Link>
 
-          {/* Register Button */}
+          {/* Sign Up Button */}
           <Link
-            href="/register"
+            href="/signUp"
             onClick={() => setIsMobileMenuOpen(false)}
             className="flex items-center gap-3 text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-lg py-2 transition-colors"
           >
             <FiUserPlus className="w-6 h-6" />
-            {t("register")}
+            {t("signUp")}
           </Link>
 
           {/* About Link */}

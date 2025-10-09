@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 import helmet from 'helmet';
 import compression from 'compression';
 import morgan from 'morgan';
+import authRoutes from './routes/auth.routes';
+import userRoutes from './routes/user.routes';
 
 dotenv.config();
 
@@ -26,10 +28,9 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Routes will be added here
-// app.use('/api/auth', authRouter);
-// app.use('/api/users', usersRouter);
-// app.use('/api/trips', tripsRouter);
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 
 // 404 handler
 app.use((req, res) => {
