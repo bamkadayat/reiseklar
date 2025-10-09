@@ -47,12 +47,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates
 
 COPY --from=build /app/apps/backend/dist ./dist
 COPY --from=build /app/apps/backend/prisma ./prisma
+COPY --from=build /app/apps/backend/start.sh ./start.sh
 COPY --from=build /app/packages/shared/dist ./packages/shared/dist
 COPY --from=build /app/packages/shared/package.json ./packages/shared/package.json
 COPY --from=prune /app/pruned/node_modules ./node_modules
 COPY --from=prune /app/pruned/package.json ./package.json
 
+RUN chmod +x start.sh
+
 USER 1001
 ENV PORT=8080
 EXPOSE 8080
-CMD ["node", "dist/index.js"]
+CMD ["sh", "start.sh"]
