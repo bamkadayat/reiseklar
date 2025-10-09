@@ -35,7 +35,7 @@ COPY --from=build /app/packages ./packages
 COPY --from=build /app/node_modules ./node_modules
 RUN pnpm --filter=backend --prod deploy pruned
 # Generate Prisma client in production node_modules (prisma is now a production dependency)
-RUN cd pruned && pnpm exec prisma generate --schema=../apps/backend/prisma/schema.prisma
+RUN cd pruned && node node_modules/prisma/build/index.js generate --schema=../apps/backend/prisma/schema.prisma
 
 # Runtime
 FROM node:20-bookworm-slim AS runner
