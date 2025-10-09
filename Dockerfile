@@ -30,7 +30,6 @@ RUN corepack enable
 RUN apt-get update && apt-get install -y --no-install-recommends openssl && rm -rf /var/lib/apt/lists/*
 COPY --from=build /app/package.json /app/pnpm-lock.yaml /app/pnpm-workspace.yaml ./
 COPY --from=build /app/apps/backend/package.json ./apps/backend/
-COPY --from=build /app/apps/backend/prisma ./apps/backend/prisma
 COPY --from=build /app/packages ./packages
 COPY --from=build /app/node_modules ./node_modules
 RUN pnpm --filter=backend --prod deploy pruned
