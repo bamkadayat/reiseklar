@@ -228,7 +228,7 @@ pnpm lint
 
 ## 📝 License
 
-MIT © [Your Name]
+MIT © [Bam Kadayat]
 
 ---
 
