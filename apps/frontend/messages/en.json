@@ -1,0 +1,24 @@
+{
+  "nav": {
+    "login": "Log in",
+    "register": "Register",
+    "about": "About"
+  },
+  "home": {
+    "title": "Reiseklar",
+    "subtitle": "Smart Commute Planner for Norway",
+    "getStarted": "Get Started",
+    "learnMore": "Learn More"
+  },
+  "notFound": {
+    "title": "404",
+    "heading": "Page Not Found",
+    "description": "Sorry, we couldn't find the page you're looking for.",
+    "goHome": "Go to Homepage",
+    "goBack": "Go Back"
+  },
+  "language": {
+    "en": "English",
+    "nb": "Bokmål"
+  }
+}

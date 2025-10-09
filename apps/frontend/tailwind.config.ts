@@ -12,12 +12,12 @@ const config: Config = {
   		colors: {
   			// Custom Norwegian-themed color palette
   			'norwegian-blue': {
-  				DEFAULT: '#0033A0',
+  				DEFAULT: '#01286d',
   				50: '#E6EBF5',
   				100: '#CCE0FF',
-  				500: '#0033A0',
-  				600: '#002A80',
-  				700: '#002166',
+  				500: '#01286d',
+  				600: '#01286d',
+  				700: '#01286d',
   			},
   			'sky-blue': {
   				DEFAULT: '#4AA3FF',

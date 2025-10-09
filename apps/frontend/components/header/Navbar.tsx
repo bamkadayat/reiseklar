@@ -1,28 +1,31 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import Link from 'next/link';
-import { useState } from 'react';
-import { FiUserPlus } from 'react-icons/fi';
-import { LanguageSwitcher } from './LanguageSwitcher';
+import Image from "next/image";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/routing";
+import { useState } from "react";
+import { FiUserPlus } from "react-icons/fi";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const t = useTranslations("nav");
 
   return (
     <nav className="sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center py-2">
           {/* Logo */}
-          <Link href="/" className="flex items-center">
+          <Link href="/" className="flex items-center gap-1 py-1">
             <Image
-              src="/images/logo.svg"
+              src="/images/logo.png"
               alt="Reiseklar Logo"
-              width={190}
+              width={40}
               height={50}
               priority
-              className="h-14 w-auto"
+              className="object-contain"
             />
+            <span className="text-2xl md:text-3xl font-bold text-norwegian-blue">Reiseklar</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -35,10 +38,20 @@ export function Navbar() {
               href="/login"
               className="flex items-center gap-2 text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-base transition-colors"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                />
               </svg>
-              Log in
+              {t("login")}
             </Link>
 
             {/* Register Button */}
@@ -47,7 +60,7 @@ export function Navbar() {
               className="flex items-center gap-2 text-norwegian-blue px-4 py-2 rounded-lg hover:bg-neutral-light font-medium text-base transition-colors"
             >
               <FiUserPlus className="w-5 h-5" />
-              Register
+              {t("register")}
             </Link>
 
             {/* About Link */}
@@ -55,7 +68,7 @@ export function Navbar() {
               href="/about"
               className="text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-base transition-colors"
             >
-              About
+              {t("about")}
             </Link>
           </div>
 
@@ -66,17 +79,17 @@ export function Navbar() {
             aria-label="Toggle menu"
           >
             <span className="text-sm font-semibold transition-opacity duration-200">
-              {isMobileMenuOpen ? 'Close' : 'Menu'}
+              {isMobileMenuOpen ? "Close" : "Menu"}
             </span>
             <div className="relative w-8 h-4 flex items-center justify-center">
               <span
-                className={`absolute w-8 h-1 bg-norwegian-blue rounded-full transition-all duration-300 ease-in-out ${
-                  isMobileMenuOpen ? 'rotate-45' : 'rotate-0 -translate-y-1.5'
+                className={`absolute w-8 h-0.5 bg-norwegian-blue rounded-full transition-all duration-300 ease-in-out ${
+                  isMobileMenuOpen ? "rotate-45" : "rotate-0 -translate-y-1.5"
                 }`}
               ></span>
               <span
-                className={`absolute w-8 h-1 bg-norwegian-blue rounded-full transition-all duration-300 ease-in-out ${
-                  isMobileMenuOpen ? '-rotate-45' : 'rotate-0 translate-y-1.5'
+                className={`absolute w-8 h-0.5 bg-norwegian-blue rounded-full transition-all duration-300 ease-in-out ${
+                  isMobileMenuOpen ? "-rotate-45" : "rotate-0 translate-y-1.5"
                 }`}
               ></span>
             </div>
@@ -87,45 +100,55 @@ export function Navbar() {
       {/* Mobile Menu Overlay */}
       <div
         className={`fixed inset-0 top-16 bg-white z-40 md:hidden transition-transform duration-300 ease-in-out ${
-          isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+          isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <div className="flex flex-col h-full p-6 space-y-4">
-            {/* Language Switcher */}
-            <div className="pb-4 border-b border-gray-200">
-              <LanguageSwitcher />
-            </div>
+          {/* Language Switcher */}
+          <div className="pb-4 border-b border-gray-200">
+            <LanguageSwitcher />
+          </div>
 
-            {/* Login Link */}
-            <Link
-              href="/login"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="flex items-center gap-3 text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-lg py-2 transition-colors"
+          {/* Login Link */}
+          <Link
+            href="/login"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="flex items-center gap-3 text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-lg py-2 transition-colors"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-              Log in
-            </Link>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+              />
+            </svg>
+            {t("login")}
+          </Link>
 
-            {/* Register Button */}
-            <Link
-              href="/register"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="flex items-center gap-3 text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-lg py-2 transition-colors"
-            >
-              <FiUserPlus className="w-6 h-6" />
-              Register
-            </Link>
+          {/* Register Button */}
+          <Link
+            href="/register"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="flex items-center gap-3 text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-lg py-2 transition-colors"
+          >
+            <FiUserPlus className="w-6 h-6" />
+            {t("register")}
+          </Link>
 
-            {/* About Link */}
-            <Link
-              href="/about"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="flex items-center text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-lg py-2 transition-colors"
-            >
-              About
-            </Link>
+          {/* About Link */}
+          <Link
+            href="/about"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="flex items-center text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-lg py-2 transition-colors"
+          >
+            {t("about")}
+          </Link>
         </div>
       </div>
     </nav>

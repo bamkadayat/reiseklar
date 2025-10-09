@@ -1,0 +1,24 @@
+{
+  "nav": {
+    "login": "Logg inn",
+    "register": "Registrer",
+    "about": "Om oss"
+  },
+  "home": {
+    "title": "Reiseklar",
+    "subtitle": "Smart reiseplanlegger for Norge",
+    "getStarted": "Kom i gang",
+    "learnMore": "Lær mer"
+  },
+  "notFound": {
+    "title": "404",
+    "heading": "Siden ble ikke funnet",
+    "description": "Beklager, vi fant ikke siden du leter etter.",
+    "goHome": "Gå til hjemmeside",
+    "goBack": "Gå tilbake"
+  },
+  "language": {
+    "en": "English",
+    "nb": "Bokmål"
+  }
+}
