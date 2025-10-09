@@ -1,9 +1,16 @@
-name: Deploy to Cloud Run
+name: Deploy Backend to Cloud Run
 
 on:
   push:
     branches:
       - production
+    paths:
+      - 'apps/backend/**'
+      - 'packages/shared/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'Dockerfile'
   workflow_dispatch:
 
 env:
