@@ -18,7 +18,7 @@ COPY . .
 RUN pnpm install --offline --frozen-lockfile
 # Build shared package first (dependency of backend)
 RUN cd packages/shared && pnpm build
-# Generate Prisma client
+# ✅ Generate Prisma client while dev deps (prisma CLI) are present
 RUN cd apps/backend && pnpm prisma generate
 # Build backend
 RUN cd apps/backend && pnpm build
@@ -34,8 +34,14 @@ COPY --from=build /app/apps/backend/prisma ./apps/backend/prisma
 COPY --from=build /app/packages ./packages
 COPY --from=build /app/node_modules ./node_modules
 RUN pnpm --filter=backend --prod deploy pruned
-# Generate Prisma client in production node_modules (prisma is now a production dependency)
-RUN cd pruned && node node_modules/prisma/build/index.js generate --schema=../apps/backend/prisma/schema.prisma
+
+# ⬇️ NEW: carry over the generated Prisma client + engines from the build layer
+# Copy into the package-local node_modules path inside the pruned tree.
+COPY --from=build /app/apps/backend/node_modules/.prisma /app/pruned/apps/backend/node_modules/.prisma
+COPY --from=build /app/apps/backend/node_modules/@prisma /app/pruned/apps/backend/node_modules/@prisma
+
+# ❌ Remove this (it caused your error)
+# RUN cd pruned && node node_modules/prisma/build/index.js generate --schema=../apps/backend/prisma/schema.prisma
 
 # Runtime
 FROM node:20-bookworm-slim AS runner
