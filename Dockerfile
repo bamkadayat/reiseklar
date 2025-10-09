@@ -53,9 +53,12 @@ COPY --from=build /app/packages/shared/package.json ./packages/shared/package.js
 COPY --from=prune /app/pruned/node_modules ./node_modules
 COPY --from=prune /app/pruned/package.json ./package.json
 
-RUN chmod +x start.sh
+RUN chmod +x start.sh && \
+    mkdir -p /.npm && \
+    chown -R 1001:1001 /.npm /app
 
 USER 1001
 ENV PORT=8080
+ENV NPM_CONFIG_CACHE=/tmp/.npm
 EXPOSE 8080
 CMD ["sh", "start.sh"]
