@@ -29,12 +29,12 @@ ENV NODE_ENV=production
 RUN corepack enable
 COPY --from=build /app/package.json /app/pnpm-lock.yaml /app/pnpm-workspace.yaml ./
 COPY --from=build /app/apps/backend/package.json ./apps/backend/
-COPY --from=build /app/apps/backend/prisma ./apps/backend/prisma
 COPY --from=build /app/packages ./packages
 COPY --from=build /app/node_modules ./node_modules
 RUN pnpm --filter=backend --prod deploy pruned
-# Generate Prisma client in production node_modules
-RUN cd pruned && npx prisma generate --schema=../apps/backend/prisma/schema.prisma
+# Copy the generated Prisma client from build stage to production node_modules
+COPY --from=build /app/node_modules/.prisma ./pruned/node_modules/.prisma
+COPY --from=build /app/node_modules/@prisma/client ./pruned/node_modules/@prisma/client
 
 # Runtime
 FROM node:20-bookworm-slim AS runner
