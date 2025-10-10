@@ -1,8 +1,8 @@
 {
   "nav": {
-    "login": "Log in",
+    "login": "Sign in",
     "signIn": "Sign in",
-    "register": "Register",
+    "register": "Sign up",
     "signUp": "Sign up",
     "about": "About"
   },

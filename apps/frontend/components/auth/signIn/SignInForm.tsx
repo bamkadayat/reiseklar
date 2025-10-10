@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Link } from '@/i18n/routing';
 import { Button } from '@/components/ui/button';
@@ -10,67 +9,42 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Loader2 } from 'lucide-react';
 import { AuthDivider } from '../AuthDivider';
 import { GoogleLoginButton } from '../GoogleLoginButton';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+
+const signInSchema = z.object({
+  email: z.string().min(1, 'Email is required').email('Email is invalid'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+});
+
+type SignInFormData = z.infer<typeof signInSchema>;
 
 export function SignInForm() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setError,
+  } = useForm<SignInFormData>({
+    resolver: zodResolver(signInSchema),
   });
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
 
-  const validateForm = () => {
-    const newErrors: { email?: string; password?: string } = {};
-
-    if (!formData.email) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
-    }
-
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!validateForm()) {
-      return;
-    }
-
-    setIsLoading(true);
-
+  const onSubmit = async (data: SignInFormData) => {
     try {
       // TODO: Implement actual authentication
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       // Mock logic: if email contains 'admin', redirect to admin dashboard
-      if (formData.email.includes('admin')) {
+      if (data.email.includes('admin')) {
         router.push('/admin');
       } else {
         router.push('/user');
       }
     } catch (error) {
       console.error('Login error:', error);
-      setErrors({ email: 'Invalid email or password' });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name as keyof typeof errors]) {
-      setErrors((prev) => ({ ...prev, [name]: undefined }));
+      setError('email', { message: 'Invalid email or password' });
     }
   };
 
@@ -80,21 +54,19 @@ export function SignInForm() {
         <CardTitle className="text-2xl font-bold">Sign in</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
-              name="email"
               type="email"
               placeholder="name@example.com"
-              value={formData.email}
-              onChange={handleChange}
-              disabled={isLoading}
+              {...register('email')}
+              disabled={isSubmitting}
               className={errors.email ? 'border-red-500' : ''}
             />
             {errors.email && (
-              <p className="text-sm text-red-500">{errors.email}</p>
+              <p className="text-sm text-red-500">{errors.email.message}</p>
             )}
           </div>
 
@@ -110,25 +82,23 @@ export function SignInForm() {
             </div>
             <Input
               id="password"
-              name="password"
               type="password"
               placeholder="••••••••"
-              value={formData.password}
-              onChange={handleChange}
-              disabled={isLoading}
+              {...register('password')}
+              disabled={isSubmitting}
               className={errors.password ? 'border-red-500' : ''}
             />
             {errors.password && (
-              <p className="text-sm text-red-500">{errors.password}</p>
+              <p className="text-sm text-red-500">{errors.password.message}</p>
             )}
           </div>
 
           <Button
             type="submit"
             className="w-full bg-norwegian-blue hover:bg-norwegian-blue/90"
-            disabled={isLoading}
+            disabled={isSubmitting}
           >
-            {isLoading ? (
+            {isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Signing in...
@@ -141,7 +111,7 @@ export function SignInForm() {
 
         <AuthDivider />
 
-        <GoogleLoginButton disabled={isLoading} />
+        <GoogleLoginButton disabled={isSubmitting} />
       </CardContent>
       <CardFooter>
         <p className="text-center text-sm text-muted-foreground w-full">
