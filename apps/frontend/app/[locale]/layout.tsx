@@ -2,6 +2,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { ConditionalNavbar } from '@/components/shared/navigation/ConditionalNavbar';
+import { AuthProvider } from '@/contexts/AuthContext';
 import { locales } from '@/i18n';
 import '../globals.css';
 
@@ -28,8 +29,10 @@ export default async function LocaleLayout({
     <html lang={locale}>
       <body>
         <NextIntlClientProvider messages={messages}>
-          <ConditionalNavbar />
-          {children}
+          <AuthProvider>
+            <ConditionalNavbar />
+            {children}
+          </AuthProvider>
         </NextIntlClientProvider>
       </body>
     </html>

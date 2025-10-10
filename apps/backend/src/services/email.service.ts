@@ -1,6 +1,7 @@
 import formData from 'form-data';
 import Mailgun from 'mailgun.js';
 import { getVerificationEmailTemplate } from '../templates/verification-email.template';
+import { getPasswordResetEmailTemplate } from '../templates/password-reset.template';
 
 /**
  * Initialize Mailgun client
@@ -39,5 +40,36 @@ export const sendVerificationEmail = async (email: string, code: string): Promis
 
     // Re-throw to handle in the calling function if needed
     throw new Error('Failed to send verification email');
+  }
+};
+
+/**
+ * Send password reset email with reset link
+ */
+export const sendPasswordResetEmail = async (email: string, resetToken: string): Promise<void> => {
+  try {
+    // Get email template
+    const { html, text } = getPasswordResetEmailTemplate(resetToken);
+
+    // Send email via Mailgun
+    const result = await mg.messages.create(process.env.MAILGUN_DOMAIN || '', {
+      from: process.env.MAILGUN_FROM || 'Reiseklar <no-reply@mail.reiseklar.dev>',
+      to: [email],
+      subject: 'Reset your Reiseklar password',
+      text: text,
+      html: html,
+      'h:Reply-To': process.env.MAILGUN_REPLY_TO || 'bamkadayat@gmail.com',
+    });
+
+    console.log(`✅ Password reset email sent to ${email}`, result);
+  } catch (error) {
+    console.error('❌ Failed to send password reset email:', error);
+
+    // Still log the reset link for development/debugging
+    const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password?token=${resetToken}`;
+    console.log(`\n🔐 PASSWORD RESET LINK for ${email}: ${resetUrl}\n`);
+
+    // Re-throw to handle in the calling function if needed
+    throw new Error('Failed to send password reset email');
   }
 };

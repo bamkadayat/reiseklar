@@ -14,17 +14,24 @@ model User {
   id              String    @id @default(cuid())
   email           String    @unique
   name            String?
-  passwordHash    String
+  passwordHash    String?   // Nullable for OAuth users
   emailVerifiedAt DateTime?
+
+  // OAuth fields
+  googleId        String?   @unique
+  provider        String?   // 'local', 'google', etc.
+  avatar          String?   // Profile picture URL
+
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 
   // Relations
-  trips  Trip[]
-  alerts Alert[]
-  tokens RefreshToken[]
-  verifs EmailVerification[]
-  places Place[]
+  trips          Trip[]
+  alerts         Alert[]
+  tokens         RefreshToken[]
+  verifs         EmailVerification[]
+  passwordResets PasswordReset[]
+  places         Place[]
 }
 
 // Email verification codes (4-digit PIN)
@@ -38,6 +45,20 @@ model EmailVerification {
   lastSentAt DateTime  @default(now())
   consumedAt DateTime?
   createdAt  DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, expiresAt])
+}
+
+// Password reset tokens
+model PasswordReset {
+  id        String    @id @default(cuid())
+  userId    String
+  tokenHash String
+  expiresAt DateTime
+  consumedAt DateTime?
+  createdAt DateTime  @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 

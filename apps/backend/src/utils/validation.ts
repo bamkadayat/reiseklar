@@ -1,30 +1,14 @@
-import { z } from 'zod';
+/**
+ * Backend validation schemas - imported from shared package
+ * This ensures validation consistency between frontend and backend
+ */
 
-export const signupSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z
-    .string()
-    .min(8, 'Password must be at least 8 characters')
-    .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
-    .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
-    .regex(/[0-9]/, 'Password must contain at least one number'),
-  name: z.string().min(2, 'Name must be at least 2 characters').optional(),
-});
-
-export const verifyEmailSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  code: z.string().length(4, 'Code must be 4 digits').regex(/^\d{4}$/, 'Code must be numeric'),
-});
-
-export const loginSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(1, 'Password is required'),
-});
-
-export const refreshTokenSchema = z.object({
-  refreshToken: z.string().min(1, 'Refresh token is required'),
-});
-
-export const resendCodeSchema = z.object({
-  email: z.string().email('Invalid email address'),
-});
+export {
+  signupSchema,
+  verifyEmailSchema,
+  resendCodeSchema,
+  loginSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
+  refreshTokenSchema,
+} from '@reiseklar/shared';

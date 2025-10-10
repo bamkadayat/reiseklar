@@ -1,6 +1,9 @@
 /**
- * API Client configuration and base methods
+ * API Client configuration using Axios
+ * Uses httpOnly cookies for token storage (no localStorage)
  */
+
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
@@ -22,109 +25,61 @@ export interface ApiResponse<T> {
 }
 
 /**
- * Base fetch wrapper with error handling
+ * Create axios instance with default configuration
+ * Tokens are automatically sent via httpOnly cookies
  */
-async function fetchApi<T>(
-  endpoint: string,
-  options: RequestInit = {}
-): Promise<T> {
-  const url = `${API_URL}${endpoint}`;
-
-  const defaultHeaders: HeadersInit = {
+const axiosInstance: AxiosInstance = axios.create({
+  baseURL: API_URL,
+  timeout: 30000,
+  headers: {
     'Content-Type': 'application/json',
-  };
-
-  // Add authorization token if available
-  const token = getAccessToken();
-  if (token) {
-    defaultHeaders['Authorization'] = `Bearer ${token}`;
-  }
-
-  const config: RequestInit = {
-    ...options,
-    headers: {
-      ...defaultHeaders,
-      ...options.headers,
-    },
-  };
-
-  try {
-    const response = await fetch(url, config);
-
-    // Parse response
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new ApiError(
-        data.error || 'An error occurred',
-        response.status,
-        data
-      );
-    }
-
-    return data;
-  } catch (error) {
-    if (error instanceof ApiError) {
-      throw error;
-    }
-
-    // Network or parsing errors
-    throw new ApiError(
-      error instanceof Error ? error.message : 'Network error',
-      0
-    );
-  }
-}
+  },
+  withCredentials: true, // Important: send cookies with requests
+});
 
 /**
- * Token management
+ * Response interceptor for error handling
  */
-export function setTokens(accessToken: string, refreshToken: string) {
-  if (typeof window !== 'undefined') {
-    localStorage.setItem('accessToken', accessToken);
-    localStorage.setItem('refreshToken', refreshToken);
+axiosInstance.interceptors.response.use(
+  (response) => response.data,
+  (error: AxiosError<ApiResponse<any>>) => {
+    if (error.response) {
+      // Server responded with error
+      const errorMessage = error.response.data?.error || error.message || 'An error occurred';
+      throw new ApiError(
+        errorMessage,
+        error.response.status,
+        error.response.data
+      );
+    } else if (error.request) {
+      // Request made but no response
+      throw new ApiError('No response from server', 0);
+    } else {
+      // Something else happened
+      throw new ApiError(error.message || 'Network error', 0);
+    }
   }
-}
+);
 
-export function getAccessToken(): string | null {
-  if (typeof window !== 'undefined') {
-    return localStorage.getItem('accessToken');
-  }
-  return null;
-}
-
-export function getRefreshToken(): string | null {
-  if (typeof window !== 'undefined') {
-    return localStorage.getItem('refreshToken');
-  }
-  return null;
-}
-
-export function clearTokens() {
-  if (typeof window !== 'undefined') {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-  }
-}
-
+/**
+ * API Client with typed methods
+ */
 export const apiClient = {
-  get: <T>(endpoint: string, options?: RequestInit) =>
-    fetchApi<T>(endpoint, { ...options, method: 'GET' }),
+  get: <T = any>(endpoint: string, config?: AxiosRequestConfig): Promise<T> =>
+    axiosInstance.get(endpoint, config),
 
-  post: <T>(endpoint: string, body?: any, options?: RequestInit) =>
-    fetchApi<T>(endpoint, {
-      ...options,
-      method: 'POST',
-      body: body ? JSON.stringify(body) : undefined,
-    }),
+  post: <T = any>(endpoint: string, data?: any, config?: AxiosRequestConfig): Promise<T> =>
+    axiosInstance.post(endpoint, data, config),
 
-  put: <T>(endpoint: string, body?: any, options?: RequestInit) =>
-    fetchApi<T>(endpoint, {
-      ...options,
-      method: 'PUT',
-      body: body ? JSON.stringify(body) : undefined,
-    }),
+  put: <T = any>(endpoint: string, data?: any, config?: AxiosRequestConfig): Promise<T> =>
+    axiosInstance.put(endpoint, data, config),
 
-  delete: <T>(endpoint: string, options?: RequestInit) =>
-    fetchApi<T>(endpoint, { ...options, method: 'DELETE' }),
+  delete: <T = any>(endpoint: string, config?: AxiosRequestConfig): Promise<T> =>
+    axiosInstance.delete(endpoint, config),
+
+  patch: <T = any>(endpoint: string, data?: any, config?: AxiosRequestConfig): Promise<T> =>
+    axiosInstance.patch(endpoint, data, config),
 };
+
+// Export axios instance for advanced usage
+export { axiosInstance };

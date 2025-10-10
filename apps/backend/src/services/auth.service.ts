@@ -1,12 +1,13 @@
 import { prisma } from '../utils/prisma';
-import { hashPassword, comparePassword, generateVerificationCode, hashVerificationCode, compareVerificationCode } from '../utils/password';
+import { hashPassword, comparePassword, generateVerificationCode, hashVerificationCode, compareVerificationCode, generateResetToken, hashResetToken, compareResetToken } from '../utils/password';
 import { generateTokenPair, verifyToken } from '../utils/jwt';
 import { TokenPair } from '../types';
-import { sendVerificationEmail } from './email.service';
+import { sendVerificationEmail, sendPasswordResetEmail } from './email.service';
 
 const VERIFICATION_EXPIRY_MINUTES = 10;
 const MAX_VERIFICATION_ATTEMPTS = 5;
 const MAX_RESEND_COUNT = 3;
+const RESET_TOKEN_EXPIRY_HOURS = 1;
 
 export class AuthService {
   // Sign up a new user
@@ -203,6 +204,11 @@ export class AuthService {
       throw new Error('Email not verified. Please verify your email first');
     }
 
+    // Check if user signed up with OAuth (no password)
+    if (!user.passwordHash) {
+      throw new Error('This account uses social login. Please sign in with Google');
+    }
+
     // Verify password
     const isValidPassword = await comparePassword(password, user.passwordHash);
 
@@ -243,7 +249,6 @@ export class AuthService {
     }
 
     // Find token in database
-    const tokenHash = await hashPassword(refreshToken);
     const storedToken = await prisma.refreshToken.findFirst({
       where: {
         userId: payload.userId,
@@ -303,6 +308,9 @@ export class AuthService {
         email: true,
         name: true,
         emailVerifiedAt: true,
+        googleId: true,
+        provider: true,
+        avatar: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -313,6 +321,160 @@ export class AuthService {
     }
 
     return user;
+  }
+
+  // Find or create user from Google OAuth profile
+  async findOrCreateGoogleUser(profile: any) {
+    const email = profile.emails?.[0]?.value;
+    const googleId = profile.id;
+    const name = profile.displayName;
+    const avatar = profile.photos?.[0]?.value;
+
+    if (!email) {
+      throw new Error('No email found in Google profile');
+    }
+
+    // Check if user exists by Google ID
+    let user = await prisma.user.findUnique({
+      where: { googleId },
+    });
+
+    if (user) {
+      // Update avatar if changed
+      if (user.avatar !== avatar) {
+        user = await prisma.user.update({
+          where: { id: user.id },
+          data: { avatar },
+        });
+      }
+      return user;
+    }
+
+    // Check if user exists by email
+    user = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (user) {
+      // Link Google account to existing user
+      return await prisma.user.update({
+        where: { id: user.id },
+        data: {
+          googleId,
+          provider: 'google',
+          avatar,
+          emailVerifiedAt: user.emailVerifiedAt || new Date(), // Auto-verify if from Google
+        },
+      });
+    }
+
+    // Create new user with Google account
+    return await prisma.user.create({
+      data: {
+        email,
+        name,
+        googleId,
+        provider: 'google',
+        avatar,
+        emailVerifiedAt: new Date(), // Google emails are pre-verified
+      },
+    });
+  }
+
+  // Request password reset
+  async requestPasswordReset(email: string) {
+    const user = await prisma.user.findUnique({ where: { email } });
+
+    if (!user) {
+      // For security, don't reveal if email exists
+      return { message: 'If the email exists, a password reset link has been sent' };
+    }
+
+    if (!user.emailVerifiedAt) {
+      throw new Error('Email not verified');
+    }
+
+    // Delete any existing password reset tokens for this user
+    await prisma.passwordReset.deleteMany({
+      where: { userId: user.id },
+    });
+
+    // Generate reset token
+    const token = generateResetToken();
+    const tokenHash = await hashResetToken(token);
+
+    // Create reset record
+    const expiresAt = new Date(Date.now() + RESET_TOKEN_EXPIRY_HOURS * 60 * 60 * 1000);
+
+    await prisma.passwordReset.create({
+      data: {
+        userId: user.id,
+        tokenHash,
+        expiresAt,
+      },
+    });
+
+    // Send reset email
+    await sendPasswordResetEmail(email, token);
+
+    return { message: 'If the email exists, a password reset link has been sent' };
+  }
+
+  // Reset password with token
+  async resetPassword(token: string, newPassword: string) {
+    // Find all non-consumed reset tokens
+    const resetRecords = await prisma.passwordReset.findMany({
+      where: {
+        consumedAt: null,
+      },
+      include: {
+        user: true,
+      },
+    });
+
+    // Find matching token
+    let matchedReset = null;
+    for (const reset of resetRecords) {
+      const isValid = await compareResetToken(token, reset.tokenHash);
+      if (isValid) {
+        matchedReset = reset;
+        break;
+      }
+    }
+
+    if (!matchedReset) {
+      throw new Error('Invalid or expired reset token');
+    }
+
+    // Check expiry
+    if (new Date() > matchedReset.expiresAt) {
+      throw new Error('Reset token expired');
+    }
+
+    // Hash new password
+    const passwordHash = await hashPassword(newPassword);
+
+    // Update password and mark token as consumed
+    await prisma.$transaction([
+      prisma.user.update({
+        where: { id: matchedReset.userId },
+        data: { passwordHash },
+      }),
+      prisma.passwordReset.update({
+        where: { id: matchedReset.id },
+        data: { consumedAt: new Date() },
+      }),
+      // Revoke all existing refresh tokens for security
+      prisma.refreshToken.updateMany({
+        where: {
+          userId: matchedReset.userId,
+          revokedAt: null,
+        },
+        data: { revokedAt: new Date() },
+      }),
+    ]);
+
+    return { message: 'Password reset successful' };
   }
 }
 

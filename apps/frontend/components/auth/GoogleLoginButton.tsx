@@ -8,12 +8,22 @@ interface GoogleLoginButtonProps {
 }
 
 export function GoogleLoginButton({ disabled, onClick }: GoogleLoginButtonProps) {
+  const handleGoogleLogin = () => {
+    if (onClick) {
+      onClick();
+    } else {
+      // Redirect to backend Google OAuth endpoint
+      const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+      window.location.href = `${backendUrl}/api/auth/google`;
+    }
+  };
+
   return (
     <Button
       variant="outline"
       disabled={disabled}
       className="w-full"
-      onClick={onClick}
+      onClick={handleGoogleLogin}
       type="button"
     >
       <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">

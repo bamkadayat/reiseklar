@@ -2,6 +2,9 @@
 
 import { Menu, Bell, LogOut } from 'lucide-react';
 import { LanguageSwitcher } from '@/components/shared/navigation/LanguageSwitcher';
+import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 interface DashboardHeaderProps {
   onMenuClick: () => void;
@@ -16,6 +19,20 @@ export function DashboardHeader({
   userRole = 'user',
   notificationCount = 0,
 }: DashboardHeaderProps) {
+  const { logout } = useAuth();
+  const router = useRouter();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleLogout = async () => {
+    try {
+      setIsLoggingOut(true);
+      await logout();
+      router.push('/signIn');
+    } catch (error) {
+      console.error('Logout error:', error);
+      setIsLoggingOut(false);
+    }
+  };
   return (
     <header className="h-16 bg-white border-b border-gray-200 sticky top-0 z-30">
       <div className="h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
@@ -60,10 +77,13 @@ export function DashboardHeader({
 
           {/* Logout */}
           <button
-            className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            onClick={handleLogout}
+            disabled={isLoggingOut}
+            className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             aria-label="Logout"
+            title="Logout"
           >
-            <LogOut className="w-5 h-5" />
+            <LogOut className={`w-5 h-5 ${isLoggingOut ? 'animate-pulse' : ''}`} />
           </button>
         </div>
       </div>
