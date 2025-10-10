@@ -46,7 +46,7 @@
       "savedRoutesDesc": "Access your favorite routes quickly",
       "ecoStats": "Eco Stats",
       "ecoStatsDesc": "View your environmental impact",
-      "profile": {
+      "profilePage": {
         "title": "My Profile",
         "description": "Manage your personal information and preferences",
         "email": "Email Address",
@@ -61,7 +61,7 @@
         "pushNotifications": "Push Notifications",
         "pushNotificationsDesc": "Get real-time alerts on your device"
       },
-      "routes": {
+      "routesPage": {
         "title": "My Routes",
         "description": "Manage and view your saved routes",
         "addRoute": "Add Route",
@@ -71,7 +71,7 @@
         "avgTime": "Avg Time",
         "useRoute": "Use Route"
       },
-      "settings": {
+      "settingsPage": {
         "title": "Settings",
         "description": "Customize your preferences and account settings",
         "notifications": "Notifications",
