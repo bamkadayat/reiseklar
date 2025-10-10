@@ -13,6 +13,7 @@ import { GoogleLoginButton } from '../GoogleLoginButton';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { useAuth } from '@/contexts/AuthContext';
 
 const signInSchema = z.object({
   email: z.string().min(1, 'Email is required').email('Email is invalid'),
@@ -23,6 +24,7 @@ type SignInFormData = z.infer<typeof signInSchema>;
 
 export function SignInForm() {
   const router = useRouter();
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
 
   const {
@@ -36,18 +38,15 @@ export function SignInForm() {
 
   const onSubmit = async (data: SignInFormData) => {
     try {
-      // TODO: Implement actual authentication
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      await login(data.email, data.password);
 
-      // Mock logic: if email contains 'admin', redirect to admin dashboard
-      if (data.email.includes('admin')) {
-        router.push('/admin');
-      } else {
-        router.push('/user');
-      }
+      // Redirect to user dashboard after successful login
+      router.push('/user');
     } catch (error) {
       console.error('Login error:', error);
-      setError('email', { message: 'Invalid email or password' });
+      setError('email', {
+        message: error instanceof Error ? error.message : 'Invalid email or password'
+      });
     }
   };
 

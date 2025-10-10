@@ -1,9 +1,3 @@
-import { z } from 'zod';
-
-export const UserSchema = z.object({
-  id: z.string(),
-  email: z.string().email(),
-  name: z.string().min(1)
-});
-
-export type User = z.infer<typeof UserSchema>;
+// User types have been moved to auth.ts to consolidate all auth-related types
+// This file is kept for backward compatibility but will be removed in the future
+export type { User, UserSchema } from './auth';
