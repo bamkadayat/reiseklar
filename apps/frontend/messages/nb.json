@@ -46,7 +46,7 @@
       "savedRoutesDesc": "Få rask tilgang til favorittrutene dine",
       "ecoStats": "Øko-statistikk",
       "ecoStatsDesc": "Se din miljøpåvirkning",
-      "profile": {
+      "profilePage": {
         "title": "Min profil",
         "description": "Administrer din personlige informasjon og preferanser",
         "email": "E-postadresse",
@@ -61,7 +61,7 @@
         "pushNotifications": "Push-varsler",
         "pushNotificationsDesc": "Få sanntidsvarsler på enheten din"
       },
-      "routes": {
+      "routesPage": {
         "title": "Mine ruter",
         "description": "Administrer og se dine lagrede ruter",
         "addRoute": "Legg til rute",
@@ -71,7 +71,7 @@
         "avgTime": "Gj.snitt tid",
         "useRoute": "Bruk rute"
       },
-      "settings": {
+      "settingsPage": {
         "title": "Innstillinger",
         "description": "Tilpass dine preferanser og kontoinnstillinger",
         "notifications": "Varsler",

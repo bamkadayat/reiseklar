@@ -1,9 +1,10 @@
-'use client';
+"use client";
 
-import { Link } from '@/i18n/routing';
-import { usePathname } from 'next/navigation';
-import { LucideIcon } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Link } from "@/i18n/routing";
+import { usePathname } from "next/navigation";
+import { LucideIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 export interface SidebarItem {
   icon: LucideIcon;
@@ -38,8 +39,8 @@ export function Sidebar({ items, isOpen, onClose, logo }: SidebarProps) {
       {/* Sidebar */}
       <aside
         className={cn(
-          'fixed top-0 left-0 z-50 h-full w-64 bg-white border-r border-gray-200 transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static',
-          isOpen ? 'translate-x-0' : '-translate-x-full'
+          "fixed top-0 left-0 z-50 h-full w-64 bg-white border-r border-gray-200 transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static",
+          isOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
         {/* Logo Section */}
@@ -47,12 +48,19 @@ export function Sidebar({ items, isOpen, onClose, logo }: SidebarProps) {
           <div>
             {logo && (
               <>
+              <div className="flex items-center gap-2">
+                <Image
+                  src="/images/logo.png"
+                  alt="Reiseklar Logo"
+                  width={32}
+                  height={40}
+                  priority
+                  className="object-contain"
+                />
                 <h2 className="text-xl font-bold text-norwegian-blue">
                   {logo.text}
                 </h2>
-                {logo.subtitle && (
-                  <p className="text-xs text-gray-500">{logo.subtitle}</p>
-                )}
+                </div>
               </>
             )}
           </div>
@@ -88,10 +96,10 @@ export function Sidebar({ items, isOpen, onClose, logo }: SidebarProps) {
                 href={item.href}
                 onClick={() => onClose()}
                 className={cn(
-                  'flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors',
+                  "flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors",
                   isActive
-                    ? 'bg-norwegian-blue text-white'
-                    : 'text-gray-700 hover:bg-gray-100'
+                    ? "bg-norwegian-blue text-white"
+                    : "text-gray-700 hover:bg-gray-100"
                 )}
               >
                 <Icon className="w-5 h-5" />
@@ -99,10 +107,10 @@ export function Sidebar({ items, isOpen, onClose, logo }: SidebarProps) {
                 {item.badge && (
                   <span
                     className={cn(
-                      'px-2 py-1 text-xs rounded-full',
+                      "px-2 py-1 text-xs rounded-full",
                       isActive
-                        ? 'bg-white/20 text-white'
-                        : 'bg-norwegian-blue/10 text-norwegian-blue'
+                        ? "bg-white/20 text-white"
+                        : "bg-norwegian-blue/10 text-norwegian-blue"
                     )}
                   >
                     {item.badge}

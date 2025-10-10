@@ -223,7 +223,10 @@ pnpm typecheck
 # Linting
 pnpm lint
 ```
-
+## Run PRISMA STUDIO
+```
+npx prisma studio
+```
 ---
 
 ## 📝 License

@@ -19,18 +19,15 @@ export function DashboardHeader({
   return (
     <header className="h-16 bg-white border-b border-gray-200 sticky top-0 z-30">
       <div className="h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        {/* Left Side - Menu Button */}
-        <button
-          onClick={onMenuClick}
-          className="lg:hidden p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-          aria-label="Open menu"
-        >
-          <Menu className="w-6 h-6" />
-        </button>
-
-        {/* Center - Logo for mobile */}
-        <div className="lg:hidden absolute left-1/2 -translate-x-1/2">
-          <h1 className="text-lg font-bold text-norwegian-blue">Reiseklar</h1>
+        {/* Left Side - Menu Button + Logo */}
+        <div className="flex items-center gap-3">
+          <button
+            onClick={onMenuClick}
+            className="lg:hidden p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+            aria-label="Open menu"
+          >
+            <Menu className="w-6 h-6" />
+          </button>
         </div>
 
         {/* Right Side - Actions */}
