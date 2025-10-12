@@ -1,11 +1,13 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
+import React, { createContext, useContext, useEffect, useCallback } from 'react';
 import { authService, User } from '@/lib/api/auth.service';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { setUser as setReduxUser, clearUser } from '@/store/authSlice';
 
 interface AuthContextType {
   user: User | null;
-  isLoading: boolean;
+  isInitialized: boolean;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
@@ -14,37 +16,9 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Helper to get cached user from localStorage
-const getCachedUser = (): User | null => {
-  if (typeof window === 'undefined') return null;
-  try {
-    const cached = localStorage.getItem('auth_user');
-    return cached ? JSON.parse(cached) : null;
-  } catch {
-    return null;
-  }
-};
-
-// Helper to cache user in localStorage
-const setCachedUser = (user: User | null) => {
-  if (typeof window === 'undefined') return;
-  try {
-    if (user) {
-      localStorage.setItem('auth_user', JSON.stringify(user));
-    } else {
-      localStorage.removeItem('auth_user');
-    }
-  } catch {
-    // Ignore localStorage errors
-  }
-};
-
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  // Initialize with cached user to prevent flickering
-  const initialUser = useMemo(() => getCachedUser(), []);
-  const [user, setUser] = useState<User | null>(initialUser);
-  // Only show loading if we don't have cached user data
-  const [isLoading, setIsLoading] = useState(!initialUser);
+  const dispatch = useAppDispatch();
+  const { user, isAuthenticated, isInitialized } = useAppSelector((state) => state.auth);
 
   // Load user profile on mount
   // With cookie-based auth, we always try to get the profile
@@ -52,26 +26,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const loadUser = useCallback(async () => {
     try {
       const userData = await authService.getProfile();
-      setUser(userData);
-      setCachedUser(userData); // Cache for next page load
+      dispatch(setReduxUser(userData));
     } catch (error) {
       // Not logged in or session expired
-      setUser(null);
-      setCachedUser(null); // Clear cache
-    } finally {
-      // Only set loading to false if we didn't have cached data
-      setIsLoading(false);
+      dispatch(clearUser());
     }
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
-    loadUser();
-  }, [loadUser]);
+    if (!isInitialized) {
+      loadUser();
+    }
+  }, [isInitialized, loadUser]);
 
   const login = async (email: string, password: string) => {
     const response = await authService.login({ email, password });
-    setUser(response.user);
-    setCachedUser(response.user); // Cache user
+    dispatch(setReduxUser(response.user));
   };
 
   const logout = async () => {
@@ -81,8 +51,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.error('Logout error:', error);
       // Continue with logout even if backend call fails
     } finally {
-      setUser(null);
-      setCachedUser(null); // Clear cache
+      dispatch(clearUser());
     }
   };
 
@@ -92,8 +61,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const value: AuthContextType = {
     user,
-    isLoading,
-    isAuthenticated: !!user,
+    isInitialized,
+    isAuthenticated,
     login,
     logout,
     refreshUser,

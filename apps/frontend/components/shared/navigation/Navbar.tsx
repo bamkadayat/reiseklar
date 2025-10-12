@@ -9,12 +9,14 @@ import { LogOut, User } from "lucide-react";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
+import { useAppSelector } from "@/store/hooks";
 
 export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const t = useTranslations("nav");
-  const { user, isAuthenticated, logout } = useAuth();
+  const { logout } = useAuth();
+  const { user, isAuthenticated, isInitialized } = useAppSelector((state) => state.auth);
   const router = useRouter();
 
   const handleLogout = async () => {
@@ -28,6 +30,37 @@ export function Navbar() {
       setIsLoggingOut(false);
     }
   };
+
+  // Show skeleton while auth is loading to prevent flickering
+  if (!isInitialized) {
+    return (
+      <nav className="sticky top-0 z-50 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-2">
+            {/* Logo */}
+            <Link href="/" className="flex items-center gap-1 py-1">
+              <Image
+                src="/images/logo.png"
+                alt="Reiseklar Logo"
+                width={40}
+                height={50}
+                priority
+                className="object-contain"
+              />
+              <span className="text-2xl md:text-3xl font-bold text-norwegian-blue">Reiseklar</span>
+            </Link>
+
+            {/* Skeleton loader for nav items */}
+            <div className="hidden md:flex items-center gap-6">
+              <div className="h-6 w-24 bg-gray-200 animate-pulse rounded"></div>
+              <div className="h-6 w-20 bg-gray-200 animate-pulse rounded"></div>
+              <div className="h-10 w-28 bg-gray-200 animate-pulse rounded-lg"></div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    );
+  }
 
   return (
     <nav className="sticky top-0 z-50 bg-white">

@@ -4,13 +4,13 @@ import type { User } from '@/lib/api/auth.service';
 interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
-  isLoading: boolean;
+  isInitialized: boolean; // Track if auth check is complete
 }
 
 const initialState: AuthState = {
   user: null,
   isAuthenticated: false,
-  isLoading: true,
+  isInitialized: false, // Start as false, set to true after first check
 };
 
 const authSlice = createSlice({
@@ -20,18 +20,18 @@ const authSlice = createSlice({
     setUser: (state, action: PayloadAction<User | null>) => {
       state.user = action.payload;
       state.isAuthenticated = !!action.payload;
-      state.isLoading = false;
-    },
-    setLoading: (state, action: PayloadAction<boolean>) => {
-      state.isLoading = action.payload;
+      state.isInitialized = true;
     },
     clearUser: (state) => {
       state.user = null;
       state.isAuthenticated = false;
-      state.isLoading = false;
+      state.isInitialized = true;
+    },
+    setInitialized: (state, action: PayloadAction<boolean>) => {
+      state.isInitialized = action.payload;
     },
   },
 });
 
-export const { setUser, setLoading, clearUser } = authSlice.actions;
+export const { setUser, clearUser, setInitialized } = authSlice.actions;
 export default authSlice.reducer;

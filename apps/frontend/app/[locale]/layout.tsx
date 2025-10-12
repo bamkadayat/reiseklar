@@ -3,6 +3,7 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { ConditionalNavbar } from '@/components/shared/navigation/ConditionalNavbar';
 import { AuthProvider } from '@/contexts/AuthContext';
+import { ReduxProvider } from '@/components/providers/ReduxProvider';
 import { locales } from '@/i18n';
 import '../globals.css';
 
@@ -28,12 +29,14 @@ export default async function LocaleLayout({
   return (
     <html lang={locale}>
       <body>
-        <NextIntlClientProvider messages={messages}>
-          <AuthProvider>
-            <ConditionalNavbar />
-            {children}
-          </AuthProvider>
-        </NextIntlClientProvider>
+        <ReduxProvider>
+          <NextIntlClientProvider messages={messages}>
+            <AuthProvider>
+              <ConditionalNavbar />
+              {children}
+            </AuthProvider>
+          </NextIntlClientProvider>
+        </ReduxProvider>
       </body>
     </html>
   );

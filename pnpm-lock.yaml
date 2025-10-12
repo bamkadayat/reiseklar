@@ -127,7 +127,7 @@ importers:
         specifier: ^1.2.3
         version: 1.2.3(@types/react@19.2.2)(react@19.2.0)
       '@reduxjs/toolkit':
-        specifier: ^2.3.0
+        specifier: ^2.9.0
         version: 2.9.0(react-redux@9.2.0(@types/react@19.2.2)(react@19.2.0)(redux@5.0.1))(react@19.2.0)
       '@reiseklar/shared':
         specifier: workspace:*
@@ -172,7 +172,7 @@ importers:
         specifier: ^5.5.0
         version: 5.5.0(react@19.2.0)
       react-redux:
-        specifier: ^9.1.2
+        specifier: ^9.2.0
         version: 9.2.0(@types/react@19.2.2)(react@19.2.0)(redux@5.0.1)
       tailwind-merge:
         specifier: ^2.6.0
