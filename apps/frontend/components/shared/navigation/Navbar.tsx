@@ -14,7 +14,7 @@ export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const t = useTranslations("nav");
-  const { user, isAuthenticated, isLoading, logout } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
   const router = useRouter();
 
   const handleLogout = async () => {
@@ -59,13 +59,7 @@ export function Navbar() {
               {t("about")}
             </Link>
 
-            {isLoading ? (
-              /* Show loading skeleton while checking auth */
-              <div className="flex items-center gap-4">
-                <div className="w-20 h-8 bg-gray-200 rounded animate-pulse"></div>
-                <div className="w-20 h-8 bg-gray-200 rounded animate-pulse"></div>
-              </div>
-            ) : isAuthenticated ? (
+            {isAuthenticated ? (
               <>
                 {/* User Profile */}
                 <Link
@@ -167,13 +161,7 @@ export function Navbar() {
             {t("about")}
           </Link>
 
-          {isLoading ? (
-            /* Show loading state in mobile menu */
-            <div className="flex flex-col gap-3">
-              <div className="w-full h-10 bg-gray-200 rounded animate-pulse"></div>
-              <div className="w-full h-10 bg-gray-200 rounded animate-pulse"></div>
-            </div>
-          ) : isAuthenticated ? (
+          {isAuthenticated ? (
             <>
               {/* User Profile */}
               <Link
