@@ -6,16 +6,16 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 export default function SignUpPage() {
-  const { isAuthenticated, isInitialized } = useAuth();
+  const { isAuthenticated, isCheckingAuth } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (isInitialized && isAuthenticated) {
+    if (!isCheckingAuth && isAuthenticated) {
       router.push('/user');
     }
-  }, [isAuthenticated, isInitialized, router]);
+  }, [isAuthenticated, isCheckingAuth, router]);
 
-  if (!isInitialized) {
+  if (isCheckingAuth) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-norwegian-blue"></div>
