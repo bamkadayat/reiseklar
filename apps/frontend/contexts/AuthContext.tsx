@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useEffect } from 'react';
+import React, { createContext, useContext } from 'react';
 import { User } from '@/lib/api/auth.service';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { checkAuth, loginUser, logoutUser } from '@/store/authSlice';
@@ -19,11 +19,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const dispatch = useAppDispatch();
   const { user, isAuthenticated, isCheckingAuth } = useAppSelector((state) => state.auth);
-
-  // Check auth status on mount
-  useEffect(() => {
-    dispatch(checkAuth());
-  }, [dispatch]);
 
   const login = async (email: string, password: string) => {
     await dispatch(loginUser({ email, password })).unwrap();
