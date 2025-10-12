@@ -43,15 +43,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Initialize with cached user to prevent flickering
   const initialUser = useMemo(() => getCachedUser(), []);
   const [user, setUser] = useState<User | null>(initialUser);
-  // Start with loading true, only set to false after initial auth check
-  const [isLoading, setIsLoading] = useState(true);
+  // Only show loading if we don't have cached user data
+  const [isLoading, setIsLoading] = useState(!initialUser);
 
   // Load user profile on mount
   // With cookie-based auth, we always try to get the profile
   // The backend will validate the cookie
   const loadUser = useCallback(async () => {
     try {
-      setIsLoading(true);
       const userData = await authService.getProfile();
       setUser(userData);
       setCachedUser(userData); // Cache for next page load
@@ -60,6 +59,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(null);
       setCachedUser(null); // Clear cache
     } finally {
+      // Only set loading to false if we didn't have cached data
       setIsLoading(false);
     }
   }, []);
