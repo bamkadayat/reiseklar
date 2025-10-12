@@ -16,7 +16,7 @@ export function Navbar() {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const t = useTranslations("nav");
   const { logout } = useAuth();
-  const { user, isAuthenticated, isInitialized } = useAppSelector((state) => state.auth);
+  const { user, isAuthenticated, isCheckingAuth } = useAppSelector((state) => state.auth);
   const router = useRouter();
 
   const handleLogout = async () => {
@@ -30,37 +30,6 @@ export function Navbar() {
       setIsLoggingOut(false);
     }
   };
-
-  // Show skeleton while auth is loading to prevent flickering
-  if (!isInitialized) {
-    return (
-      <nav className="sticky top-0 z-50 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-2">
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-1 py-1">
-              <Image
-                src="/images/logo.png"
-                alt="Reiseklar Logo"
-                width={40}
-                height={50}
-                priority
-                className="object-contain"
-              />
-              <span className="text-2xl md:text-3xl font-bold text-norwegian-blue">Reiseklar</span>
-            </Link>
-
-            {/* Skeleton loader for nav items */}
-            <div className="hidden md:flex items-center gap-6">
-              <div className="h-6 w-24 bg-gray-200 animate-pulse rounded"></div>
-              <div className="h-6 w-20 bg-gray-200 animate-pulse rounded"></div>
-              <div className="h-10 w-28 bg-gray-200 animate-pulse rounded-lg"></div>
-            </div>
-          </div>
-        </div>
-      </nav>
-    );
-  }
 
   return (
     <nav className="sticky top-0 z-50 bg-white">
@@ -92,7 +61,12 @@ export function Navbar() {
               {t("about")}
             </Link>
 
-            {isAuthenticated ? (
+            {isCheckingAuth ? (
+              <div className="flex items-center gap-4">
+                <div className="h-6 w-24 bg-gray-200 animate-pulse rounded"></div>
+                <div className="h-10 w-28 bg-gray-200 animate-pulse rounded-lg"></div>
+              </div>
+            ) : isAuthenticated ? (
               <>
                 {/* User Profile */}
                 <Link
@@ -194,7 +168,12 @@ export function Navbar() {
             {t("about")}
           </Link>
 
-          {isAuthenticated ? (
+          {isCheckingAuth ? (
+            <div className="flex flex-col items-center justify-center gap-3 py-4">
+              <div className="h-12 w-32 bg-gray-200 animate-pulse rounded"></div>
+              <div className="h-12 w-40 bg-gray-200 animate-pulse rounded-full"></div>
+            </div>
+          ) : isAuthenticated ? (
             <>
               {/* User Profile */}
               <Link
