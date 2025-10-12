@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { ConditionalNavbar } from '@/components/shared/navigation/ConditionalNavbar';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { ReduxProvider } from '@/components/providers/ReduxProvider';
+import { AppInitializer } from '@/components/AppInitializer';
 import { locales } from '@/i18n';
 import '../globals.css';
 
@@ -31,10 +32,12 @@ export default async function LocaleLayout({
       <body>
         <ReduxProvider>
           <NextIntlClientProvider messages={messages}>
-            <AuthProvider>
-              <ConditionalNavbar />
-              {children}
-            </AuthProvider>
+            <AppInitializer>
+              <AuthProvider>
+                <ConditionalNavbar />
+                {children}
+              </AuthProvider>
+            </AppInitializer>
           </NextIntlClientProvider>
         </ReduxProvider>
       </body>

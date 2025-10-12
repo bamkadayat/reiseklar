@@ -16,7 +16,7 @@ export function Navbar() {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const t = useTranslations("nav");
   const { logout } = useAuth();
-  const { user, isAuthenticated, isCheckingAuth } = useAppSelector((state) => state.auth);
+  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
   const router = useRouter();
 
   const handleLogout = async () => {
@@ -61,12 +61,7 @@ export function Navbar() {
               {t("about")}
             </Link>
 
-            {isCheckingAuth ? (
-              <div className="flex items-center gap-4">
-                <div className="h-6 w-24 bg-gray-200 animate-pulse rounded"></div>
-                <div className="h-10 w-28 bg-gray-200 animate-pulse rounded-lg"></div>
-              </div>
-            ) : isAuthenticated ? (
+            {isAuthenticated ? (
               <>
                 {/* User Profile */}
                 <Link
@@ -168,12 +163,7 @@ export function Navbar() {
             {t("about")}
           </Link>
 
-          {isCheckingAuth ? (
-            <div className="flex flex-col items-center justify-center gap-3 py-4">
-              <div className="h-12 w-32 bg-gray-200 animate-pulse rounded"></div>
-              <div className="h-12 w-40 bg-gray-200 animate-pulse rounded-full"></div>
-            </div>
-          ) : isAuthenticated ? (
+          {isAuthenticated ? (
             <>
               {/* User Profile */}
               <Link
