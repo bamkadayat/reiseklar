@@ -26,12 +26,12 @@ export function HeroSection() {
   }, [t]);
 
   return (
-    <div className="w-full max-w-4xl">
+    <div className="w-full max-w-4xl py-8 sm:py-12 md:py-16">
       <div className="text-center mb-8">
-        <p className="text-xl sm:text-2xl text-gray-600 mb-2">
+        <p className="text-xl sm:text-2xl text-blue-100 mb-2">
           {mounted ? greeting : '\u00A0'},
         </p>
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white">
           {t('heroQuestion')}
         </h1>
       </div>
@@ -39,13 +39,6 @@ export function HeroSection() {
       {/* Search Form */}
       <div className="mb-8">
         <SearchForm />
-      </div>
-
-      {/* Additional Info */}
-      <div className="text-center">
-        <p className="text-lg text-gray-600">
-          {t('subtitle')}
-        </p>
       </div>
     </div>
   );
