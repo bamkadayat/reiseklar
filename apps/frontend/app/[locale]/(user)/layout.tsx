@@ -3,6 +3,7 @@
 import { ReactNode, useState } from 'react';
 import { UserSidebar } from '@/components/user/layout/UserSidebar';
 import { DashboardHeader } from '@/components/shared/layout/DashboardHeader';
+import { useAppSelector } from '@/store/hooks';
 // import { useAuth } from '@/hooks/useAuth'; // TODO: Implement auth hook
 // import { redirect } from 'next/navigation';
 
@@ -12,6 +13,7 @@ export default function UserLayout({
   children: ReactNode;
 }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { user } = useAppSelector((state) => state.auth);
 
   // TODO: Implement proper authentication
   // const { user, isLoading } = useAuth();
@@ -37,7 +39,7 @@ export default function UserLayout({
         {/* Header */}
         <DashboardHeader
           onMenuClick={() => setIsSidebarOpen(true)}
-          userName="John Doe"
+          userName={user?.name || 'User'}
           userRole="user"
           notificationCount={3}
         />

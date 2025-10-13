@@ -5,6 +5,7 @@ import { LanguageSwitcher } from '@/components/shared/navigation/LanguageSwitche
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useAppSelector } from "@/store/hooks";
 
 interface DashboardHeaderProps {
   onMenuClick: () => void;
@@ -22,6 +23,7 @@ export function DashboardHeader({
   const { logout } = useAuth();
   const router = useRouter();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
 
   const handleLogout = async () => {
     try {
@@ -33,6 +35,7 @@ export function DashboardHeader({
       setIsLoggingOut(false);
     }
   };
+
   return (
     <header className="h-16 bg-white border-b border-gray-200 sticky top-0 z-30">
       <div className="h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
@@ -70,8 +73,7 @@ export function DashboardHeader({
               {userName.charAt(0).toUpperCase()}
             </div>
             <div className="text-sm">
-              <p className="font-medium text-gray-900">{userName}</p>
-              <p className="text-xs text-gray-500 capitalize">{userRole}</p>
+              <p className="font-medium text-gray-900"> {user?.name}</p>
             </div>
           </div>
 

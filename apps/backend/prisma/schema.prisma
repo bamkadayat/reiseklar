@@ -10,21 +10,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// USER & AUTH MODELS
+
 model User {
   id              String    @id @default(cuid())
   email           String    @unique
   name            String?
-  passwordHash    String?   // Nullable for OAuth users
+  passwordHash    String?
   emailVerifiedAt DateTime?
+  role            Role      @default(USER) 
 
   // OAuth fields
-  googleId        String?   @unique
-  provider        String?   // 'local', 'google', etc.
-  avatar          String?   // Profile picture URL
+  googleId String? @unique
+  provider String?
+  avatar   String?
 
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Relations
   trips          Trip[]
@@ -35,7 +36,12 @@ model User {
   places         Place[]
 }
 
-// Email verification codes (4-digit PIN)
+enum Role {
+  USER
+  ADMIN
+}
+
+
 model EmailVerification {
   id         String    @id @default(cuid())
   userId     String
@@ -54,19 +60,19 @@ model EmailVerification {
 
 // Password reset tokens
 model PasswordReset {
-  id        String    @id @default(cuid())
-  userId    String
-  tokenHash String
-  expiresAt DateTime
+  id         String    @id @default(cuid())
+  userId     String
+  tokenHash  String
+  expiresAt  DateTime
   consumedAt DateTime?
-  createdAt DateTime  @default(now())
+  createdAt  DateTime  @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, expiresAt])
 }
 
-// JWT Refresh Tokens (rotating)
+
 model RefreshToken {
   id        String    @id @default(cuid())
   userId    String
@@ -78,7 +84,7 @@ model RefreshToken {
   @@index([userId, revokedAt])
 }
 
-// TRIP & ALERT MODELS
+
 model Place {
   id        String   @id @default(cuid())
   userId    String
@@ -107,7 +113,7 @@ model Trip {
   alerts      Alert[]
 }
 
-// ALERT MODEL
+
 model Alert {
   id           String   @id @default(cuid())
   userId       String
