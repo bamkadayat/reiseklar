@@ -6,9 +6,80 @@
     "signUp": "Sign up",
     "about": "About"
   },
+  "about": {
+    "hero": {
+      "title": "About Reiseklar",
+      "subtitle": "Empowering smarter, greener commutes across Norway",
+      "getStarted": "Get Started",
+      "learnMore": "Learn More"
+    },
+    "stats": {
+      "users": "Active Users",
+      "routes": "Routes Planned",
+      "co2Saved": "CO₂ Saved",
+      "timeSaved": "Time Saved"
+    },
+    "mission": {
+      "title": "Our Mission",
+      "description1": "Reiseklar was born from a simple idea: commuting in Norway should be easier, faster, and more environmentally friendly. We combine real-time transit data, intelligent routing algorithms, and user-friendly design to help you make the most of your journey.",
+      "description2": "Whether you're taking the bus, train, tram, or ferry, our platform provides personalized route recommendations that save you time while reducing your carbon footprint. Join thousands of Norwegians who are already making their daily commute smarter."
+    },
+    "features": {
+      "title": "What We Offer",
+      "subtitle": "Everything you need for a seamless commute experience",
+      "smartRouting": {
+        "title": "Smart Route Planning",
+        "description": "Our AI-powered algorithms analyze multiple factors to find the optimal route for your journey, considering time, cost, and environmental impact."
+      },
+      "realTime": {
+        "title": "Real-Time Updates",
+        "description": "Stay informed with live transit updates, delays, and alternative routes. Never miss your connection again."
+      },
+      "ecoFriendly": {
+        "title": "Eco-Friendly Choices",
+        "description": "Track your environmental impact and discover greener alternatives. Every journey counts towards a sustainable future."
+      },
+      "multiModal": {
+        "title": "Multi-Modal Transport",
+        "description": "Seamlessly combine buses, trains, trams, ferries, and walking to create the perfect journey for your needs."
+      }
+    },
+    "values": {
+      "title": "Our Core Values",
+      "innovation": {
+        "title": "Innovation",
+        "description": "We continuously improve our platform with cutting-edge technology to deliver the best commute experience."
+      },
+      "community": {
+        "title": "Community First",
+        "description": "Your feedback shapes our product. We build features that truly matter to Norwegian commuters."
+      },
+      "sustainability": {
+        "title": "Sustainability",
+        "description": "We're committed to reducing carbon emissions by making public transport more accessible and appealing."
+      }
+    },
+    "cta": {
+      "title": "Ready to Transform Your Commute?",
+      "description": "Join our community and start planning smarter routes today",
+      "button": "Sign Up Now"
+    }
+  },
   "home": {
     "title": "Reiseklar",
     "subtitle": "Smart Commute Planner for Norway",
+    "heroQuestion": "Where do you want to travel?",
+    "greetings": {
+      "morning": "Good morning",
+      "afternoon": "Good afternoon",
+      "evening": "Good evening"
+    },
+    "search": {
+      "from": "From",
+      "to": "To",
+      "button": "Search",
+      "yourPosition": "Your position"
+    },
     "getStarted": "Get Started",
     "learnMore": "Learn More"
   },
@@ -22,6 +93,25 @@
   "language": {
     "en": "English",
     "nb": "Bokmål"
+  },
+  "journey": {
+    "filters": {
+      "title": "How do you prefer to travel?",
+      "publicTransport": "Public transport",
+      "alternatives": "Alternatives",
+      "all": "All"
+    },
+    "alternatives": {
+      "title": "Alternative routes",
+      "showInMap": "Show in map",
+      "somethingWrong": "Something wrong?"
+    },
+    "details": {
+      "showDetails": "Show details",
+      "hideDetails": "Hide details",
+      "arrival": "Arrival",
+      "walk": "Walk"
+    }
   },
   "dashboard": {
     "user": {
@@ -47,19 +137,30 @@
       "ecoStats": "Eco Stats",
       "ecoStatsDesc": "View your environmental impact",
       "profilePage": {
-        "title": "My Profile",
-        "description": "Manage your personal information and preferences",
-        "email": "Email Address",
-        "phone": "Phone Number",
-        "location": "Location",
-        "joined": "Member Since",
-        "memberSince": "Member since",
-        "editProfile": "Edit Profile",
-        "preferences": "Preferences",
-        "emailNotifications": "Email Notifications",
-        "emailNotificationsDesc": "Receive updates via email",
-        "pushNotifications": "Push Notifications",
-        "pushNotificationsDesc": "Get real-time alerts on your device"
+        "greetings": {
+          "morning": "Good morning",
+          "afternoon": "Good afternoon",
+          "evening": "Good evening"
+        },
+        "personalInfo": {
+          "title": "Personal information",
+          "edit": "Edit",
+          "fullName": "Full name",
+          "save": "Save",
+          "cancel": "Cancel"
+        },
+        "loginSecurity": {
+          "title": "Login and security",
+          "email": "Email",
+          "confirmed": "Confirmed",
+          "changeEmail": "Change email",
+          "mobilePhone": "Mobile phone"
+        },
+        "deleteProfile": {
+          "title": "Do you want to delete the profile?",
+          "description": "Content that will be deleted includes tickets, payment cards, receipts and favorites. In cases where your profile is linked to an ongoing case, we will store certain information about you in addition to this.",
+          "button": "Delete profile"
+        }
       },
       "routesPage": {
         "title": "My Routes",
@@ -119,7 +220,7 @@
       "viewAnalyticsDesc": "Analyze platform usage and trends",
       "routeManagement": "Route Management",
       "routeManagementDesc": "Manage and optimize routes",
-      "users": {
+      "usersPage": {
         "title": "User Management",
         "description": "Manage all users and their permissions",
         "addUser": "Add User",
@@ -136,7 +237,7 @@
         "trips": "Trips",
         "actions": "Actions"
       },
-      "analytics": {
+      "analyticsPage": {
         "title": "Analytics",
         "description": "View detailed platform analytics and insights",
         "last7Days": "Last 7 Days",
@@ -157,7 +258,7 @@
         "avgDuration": "Avg Duration",
         "trend": "Trend"
       },
-      "settings": {
+      "settingsPage": {
         "title": "System Settings",
         "description": "Configure system-wide settings and preferences",
         "general": "General Settings",
