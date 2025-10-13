@@ -80,6 +80,20 @@
       "button": "Søk",
       "yourPosition": "Posisjonen din"
     },
+    "features": {
+      "mapAndDepartures": {
+        "title": "Kart og avganger",
+        "description": "Se avganger fra stoppesteder, eller finn sparkesykler og bysykler i kartet."
+      },
+      "trainsInEurope": {
+        "title": "Tog i Europa",
+        "description": "Få informasjon om Interrail, togtilbudet i Europa og avvik."
+      },
+      "aboutEntur": {
+        "title": "Om Entur",
+        "description": "Les om Entur, hva vi gjør og reiseplanleggeren vår."
+      }
+    },
     "getStarted": "Kom i gang",
     "learnMore": "Lær mer"
   },

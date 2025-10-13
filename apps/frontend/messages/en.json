@@ -80,6 +80,20 @@
       "button": "Search",
       "yourPosition": "Your position"
     },
+    "features": {
+      "mapAndDepartures": {
+        "title": "Map and Departures",
+        "description": "View departures from stops, or find scooters and city bikes on the map."
+      },
+      "trainsInEurope": {
+        "title": "Trains in Europe",
+        "description": "Get information about Interrail, train services in Europe and delays."
+      },
+      "aboutEntur": {
+        "title": "About Entur",
+        "description": "Read about Entur, what we do and our journey planner."
+      }
+    },
     "getStarted": "Get Started",
     "learnMore": "Learn More"
   },
