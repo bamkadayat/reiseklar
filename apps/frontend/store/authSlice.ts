@@ -24,6 +24,7 @@ export const checkAuth = createAsyncThunk(
       const user = await authService.getProfile();
       return user;
     } catch (error: any) {
+      // Silently reject - 401 errors are expected when not logged in
       return rejectWithValue('Not authenticated');
     }
   }

@@ -27,15 +27,9 @@ export function getVerificationEmailTemplate(code: string): { html: string; text
               <h1 style="margin: 0 0 40px 0; color: #003d82; font-size: 32px; font-weight: 700; letter-spacing: -0.5px;">
                 Reiseklar
               </h1>
-
-              <!-- Title -->
-              <h2 style="margin: 0 0 16px 0; color: #1a1a1a; font-size: 28px; font-weight: 600; line-height: 1.3;">
-                Verify your email address
-              </h2>
-
               <!-- Description -->
               <p style="margin: 0 0 32px 0; color: #64748b; font-size: 16px; line-height: 1.6;">
-                To complete your registration and get started, please enter the verification code below:
+                Enter this verification code to verify your email
               </p>
 
               <!-- Verification Code Box -->
@@ -46,24 +40,10 @@ export function getVerificationEmailTemplate(code: string): { html: string; text
                       <div style="color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 16px; font-weight: 600;">
                         YOUR VERIFICATION CODE
                       </div>
-                      <!-- Code Digits -->
-                      <table cellpadding="0" cellspacing="0" align="center" style="margin: 0 auto 20px auto;">
-                        <tr>
-                          ${digits.map(digit => `
-                            <td style="padding: 0 8px;">
-                              <div style="background-color: #ffffff; border: 2px solid #e2e8f0; border-radius: 8px; width: 60px; height: 70px; display: flex; align-items: center; justify-content: center;">
-                                <span style="color: #003d82; font-size: 36px; font-weight: 700; font-family: 'Courier New', monospace; line-height: 70px; display: block; text-align: center;">
-                                  ${digit}
-                                </span>
-                              </div>
-                            </td>
-                          `).join('')}
-                        </tr>
-                      </table>
                       <!-- Copyable Code -->
                       <div style="margin-top: 20px; text-align: center;">
                         <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px 16px; display: inline-block;">
-                          <span style="color: #003d82; font-size: 24px; font-weight: 600; font-family: 'Courier New', monospace; letter-spacing: 4px; user-select: all; -webkit-user-select: all; -moz-user-select: all; -ms-user-select: all;">
+                          <span style="color: #003d82; font-size: 30px; font-weight: 600; font-family: 'Courier New', monospace; letter-spacing: 4px; user-select: all; -webkit-user-select: all; -moz-user-select: all; -ms-user-select: all;">
                             ${code}
                           </span>
                         </div>

@@ -4,11 +4,17 @@ import { z } from 'zod';
 // USER TYPES
 // ============================================
 
+export enum Role {
+  USER = 'USER',
+  ADMIN = 'ADMIN',
+}
+
 export const UserSchema = z.object({
   id: z.string(),
   email: z.string().email(),
   name: z.string().nullable(),
   emailVerifiedAt: z.string().nullable(),
+  role: z.nativeEnum(Role),
   googleId: z.string().nullable().optional(),
   provider: z.enum(['local', 'google']).nullable().optional(),
   avatar: z.string().nullable().optional(),

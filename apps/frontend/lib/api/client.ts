@@ -43,14 +43,25 @@ const axiosInstance: AxiosInstance = axios.create({
 axiosInstance.interceptors.response.use(
   (response) => response.data,
   (error: AxiosError<ApiResponse<any>>) => {
+    // Don't log 401 errors for auth check endpoint - they're expected when logged out
+    const isAuthCheck = error.config?.url?.includes('/api/users/me');
+    const is401 = error.response?.status === 401;
+
     if (error.response) {
       // Server responded with error
       const errorMessage = error.response.data?.error || error.message || 'An error occurred';
-      throw new ApiError(
+      const apiError = new ApiError(
         errorMessage,
         error.response.status,
         error.response.data
       );
+
+      // Silently throw for expected 401 on auth check
+      if (isAuthCheck && is401) {
+        throw apiError;
+      }
+
+      throw apiError;
     } else if (error.request) {
       // Request made but no response
       throw new ApiError('No response from server', 0);

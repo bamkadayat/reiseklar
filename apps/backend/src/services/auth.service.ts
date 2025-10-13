@@ -148,6 +148,7 @@ export class AuthService {
         id: user.id,
         email: user.email,
         name: user.name,
+        role: user.role,
       },
       ...tokens,
     };
@@ -233,6 +234,7 @@ export class AuthService {
         id: user.id,
         email: user.email,
         name: user.name,
+        role: user.role,
       },
       ...tokens,
     };
@@ -308,6 +310,7 @@ export class AuthService {
         email: true,
         name: true,
         emailVerifiedAt: true,
+        role: true,
         googleId: true,
         provider: true,
         avatar: true,
