@@ -68,6 +68,18 @@
   "home": {
     "title": "Reiseklar",
     "subtitle": "Smart Commute Planner for Norway",
+    "heroQuestion": "Where do you want to travel?",
+    "greetings": {
+      "morning": "Good morning",
+      "afternoon": "Good afternoon",
+      "evening": "Good evening"
+    },
+    "search": {
+      "from": "From",
+      "to": "To",
+      "button": "Search",
+      "yourPosition": "Your position"
+    },
     "getStarted": "Get Started",
     "learnMore": "Learn More"
   },
@@ -81,6 +93,25 @@
   "language": {
     "en": "English",
     "nb": "Bokmål"
+  },
+  "journey": {
+    "filters": {
+      "title": "How do you prefer to travel?",
+      "publicTransport": "Public transport",
+      "alternatives": "Alternatives",
+      "all": "All"
+    },
+    "alternatives": {
+      "title": "Alternative routes",
+      "showInMap": "Show in map",
+      "somethingWrong": "Something wrong?"
+    },
+    "details": {
+      "showDetails": "Show details",
+      "hideDetails": "Hide details",
+      "arrival": "Arrival",
+      "walk": "Walk"
+    }
   },
   "dashboard": {
     "user": {

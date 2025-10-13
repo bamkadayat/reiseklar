@@ -68,6 +68,18 @@
   "home": {
     "title": "Reiseklar",
     "subtitle": "Smart reiseplanlegger for Norge",
+    "heroQuestion": "hvor vil du reise?",
+    "greetings": {
+      "morning": "God morgen",
+      "afternoon": "God dag",
+      "evening": "God kveld"
+    },
+    "search": {
+      "from": "Fra",
+      "to": "Til",
+      "button": "Søk",
+      "yourPosition": "Posisjonen din"
+    },
     "getStarted": "Kom i gang",
     "learnMore": "Lær mer"
   },
@@ -81,6 +93,25 @@
   "language": {
     "en": "English",
     "nb": "Bokmål"
+  },
+  "journey": {
+    "filters": {
+      "title": "Hvordan foretrekker du å reise?",
+      "publicTransport": "Kollektivtransport",
+      "alternatives": "Alternativer",
+      "all": "Alle"
+    },
+    "alternatives": {
+      "title": "Alternative ruter",
+      "showInMap": "Vis i kart",
+      "somethingWrong": "Noe galt?"
+    },
+    "details": {
+      "showDetails": "Vis detaljer",
+      "hideDetails": "Skjul detaljer",
+      "arrival": "Ankomst",
+      "walk": "Gå"
+    }
   },
   "dashboard": {
     "user": {

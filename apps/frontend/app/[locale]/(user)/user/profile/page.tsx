@@ -6,28 +6,32 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function UserProfilePage() {
   const t = useTranslations('dashboard.user.profilePage');
   const [isEditing, setIsEditing] = useState(false);
+  const [greeting, setGreeting] = useState('');
+  const [mounted, setMounted] = useState(false);
   const [formData, setFormData] = useState({
     fullName: 'Bam Kadayat'
   });
 
-  // Get dynamic greeting based on Norway time
-  const getGreeting = () => {
+  useEffect(() => {
+    setMounted(true);
+
+    // Get dynamic greeting based on Norway time
     const norwayTime = new Date().toLocaleString('en-US', { timeZone: 'Europe/Oslo' });
     const hour = new Date(norwayTime).getHours();
 
     if (hour >= 5 && hour < 12) {
-      return t('greetings.morning');
+      setGreeting(t('greetings.morning'));
     } else if (hour >= 12 && hour < 18) {
-      return t('greetings.afternoon');
+      setGreeting(t('greetings.afternoon'));
     } else {
-      return t('greetings.evening');
+      setGreeting(t('greetings.evening'));
     }
-  };
+  }, [t]);
 
   const handleSave = () => {
     // Handle save logic here
@@ -44,7 +48,7 @@ export default function UserProfilePage() {
       {/* Greeting Header */}
       <div>
         <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">
-          {getGreeting()}, {formData.fullName}
+          {mounted ? greeting : '\u00A0'}, {formData.fullName}
         </h1>
       </div>
 
