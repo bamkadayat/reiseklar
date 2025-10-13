@@ -6,6 +6,65 @@
     "signUp": "Registrer",
     "about": "Om oss"
   },
+  "about": {
+    "hero": {
+      "title": "Om Reiseklar",
+      "subtitle": "Gjør reisene dine smartere og mer miljøvennlige i hele Norge",
+      "getStarted": "Kom i gang",
+      "learnMore": "Lær mer"
+    },
+    "stats": {
+      "users": "Aktive brukere",
+      "routes": "Ruter planlagt",
+      "co2Saved": "CO₂ spart",
+      "timeSaved": "Tid spart"
+    },
+    "mission": {
+      "title": "Vårt oppdrag",
+      "description1": "Reiseklar ble født av en enkel idé: reising i Norge skal være enklere, raskere og mer miljøvennlig. Vi kombinerer sanntids transportdata, intelligente rutealgoritmer og brukervennlig design for å hjelpe deg å få mest mulig ut av reisen din.",
+      "description2": "Enten du tar buss, tog, trikk eller ferge, gir plattformen vår personlige ruteanbefalinger som sparer deg tid mens du reduserer karbonavtrykket ditt. Bli med tusenvis av nordmenn som allerede gjør pendlerreisen smartere."
+    },
+    "features": {
+      "title": "Hva vi tilbyr",
+      "subtitle": "Alt du trenger for en sømløs reiseopplevelse",
+      "smartRouting": {
+        "title": "Smart ruteplanlegging",
+        "description": "Våre AI-drevne algoritmer analyserer flere faktorer for å finne den optimale ruten for reisen din, med hensyn til tid, kostnad og miljøpåvirkning."
+      },
+      "realTime": {
+        "title": "Sanntidsoppdateringer",
+        "description": "Hold deg informert med live transportoppdateringer, forsinkelser og alternative ruter. Aldri gå glipp av forbindelsen igjen."
+      },
+      "ecoFriendly": {
+        "title": "Miljøvennlige valg",
+        "description": "Spor miljøpåvirkningen din og oppdag grønnere alternativer. Hver reise teller mot en bærekraftig fremtid."
+      },
+      "multiModal": {
+        "title": "Multimodal transport",
+        "description": "Kombiner sømløst busser, tog, trikker, ferger og gange for å skape den perfekte reisen for dine behov."
+      }
+    },
+    "values": {
+      "title": "Våre kjerneverdier",
+      "innovation": {
+        "title": "Innovasjon",
+        "description": "Vi forbedrer kontinuerlig plattformen vår med banebrytende teknologi for å levere den beste reiseopplevelsen."
+      },
+      "community": {
+        "title": "Samfunnet først",
+        "description": "Tilbakemeldingene dine former produktet vårt. Vi bygger funksjoner som virkelig betyr noe for norske pendlere."
+      },
+      "sustainability": {
+        "title": "Bærekraft",
+        "description": "Vi er forpliktet til å redusere karbonutslipp ved å gjøre kollektivtransport mer tilgjengelig og attraktivt."
+      }
+    },
+    "cta": {
+      "title": "Klar til å forvandle reisen din?",
+      "description": "Bli med i samfunnet vårt og begynn å planlegge smartere ruter i dag",
+      "button": "Registrer deg nå"
+    }
+  },
   "home": {
     "title": "Reiseklar",
     "subtitle": "Smart reiseplanlegger for Norge",
@@ -47,19 +106,30 @@
       "ecoStats": "Øko-statistikk",
       "ecoStatsDesc": "Se din miljøpåvirkning",
       "profilePage": {
-        "title": "Min profil",
-        "description": "Administrer din personlige informasjon og preferanser",
-        "email": "E-postadresse",
-        "phone": "Telefonnummer",
-        "location": "Sted",
-        "joined": "Medlem siden",
-        "memberSince": "Medlem siden",
-        "editProfile": "Rediger profil",
-        "preferences": "Preferanser",
-        "emailNotifications": "E-postvarsler",
-        "emailNotificationsDesc": "Motta oppdateringer via e-post",
-        "pushNotifications": "Push-varsler",
-        "pushNotificationsDesc": "Få sanntidsvarsler på enheten din"
+        "greetings": {
+          "morning": "God morgen",
+          "afternoon": "God ettermiddag",
+          "evening": "God kveld"
+        },
+        "personalInfo": {
+          "title": "Personlig informasjon",
+          "edit": "Rediger",
+          "fullName": "Fullt navn",
+          "save": "Lagre",
+          "cancel": "Avbryt"
+        },
+        "loginSecurity": {
+          "title": "Innlogging og sikkerhet",
+          "email": "E-post",
+          "confirmed": "Bekreftet",
+          "changeEmail": "Endre e-post",
+          "mobilePhone": "Mobiltelefon"
+        },
+        "deleteProfile": {
+          "title": "Vil du slette profilen?",
+          "description": "Innhold som vil bli slettet inkluderer billetter, betalingskort, kvitteringer og favoritter. I tilfeller der profilen din er knyttet til en pågående sak, vil vi lagre viss informasjon om deg i tillegg til dette.",
+          "button": "Slett profil"
+        }
       },
       "routesPage": {
         "title": "Mine ruter",
@@ -119,7 +189,7 @@
       "viewAnalyticsDesc": "Analyser plattformbruk og trender",
       "routeManagement": "Ruteadministrasjon",
       "routeManagementDesc": "Administrer og optimaliser ruter",
-      "users": {
+      "usersPage": {
         "title": "Brukeradministrasjon",
         "description": "Administrer alle brukere og deres tillatelser",
         "addUser": "Legg til bruker",
@@ -136,7 +206,7 @@
         "trips": "Reiser",
         "actions": "Handlinger"
       },
-      "analytics": {
+      "analyticsPage": {
         "title": "Analyse",
         "description": "Se detaljert plattformanalyse og innsikt",
         "last7Days": "Siste 7 dager",
@@ -157,7 +227,7 @@
         "avgDuration": "Gj.snitt varighet",
         "trend": "Trend"
       },
-      "settings": {
+      "settingsPage": {
         "title": "Systeminnstillinger",
         "description": "Konfigurer systemomfattende innstillinger og preferanser",
         "general": "Generelle innstillinger",
