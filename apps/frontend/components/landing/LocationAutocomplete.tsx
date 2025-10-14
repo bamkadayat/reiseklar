@@ -41,7 +41,10 @@ export function LocationAutocomplete({
     const searchLocations = async () => {
       if (!value || value.length < 2) {
         setLocations([]);
-        setIsOpen(false);
+        // Don't close dropdown if user is focused - they should still see "Your position" option
+        if (!isFocused) {
+          setIsOpen(false);
+        }
         return;
       }
 
@@ -75,13 +78,21 @@ export function LocationAutocomplete({
 
         if (result.success && result.data && Array.isArray(result.data)) {
           setLocations(result.data);
-          setIsOpen(result.data.length > 0);
+          // Keep dropdown open if focused, even if no results
+          if (isFocused) {
+            setIsOpen(true);
+          } else {
+            setIsOpen(result.data.length > 0);
+          }
         }
       } catch (error: any) {
         if (error.name !== 'AbortError') {
           console.error('Error fetching locations:', error);
           setLocations([]);
-          setIsOpen(false);
+          // Don't close dropdown if user is focused
+          if (!isFocused) {
+            setIsOpen(false);
+          }
         }
       } finally {
         setIsLoading(false);
@@ -96,7 +107,7 @@ export function LocationAutocomplete({
         abortControllerRef.current.abort();
       }
     };
-  }, [value]);
+  }, [value, isFocused]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -229,10 +240,6 @@ export function LocationAutocomplete({
           }
         }}
         onFocus={() => {
-          // Don't set focused or open if already selected
-          if (hasSelected) {
-            return;
-          }
           setIsFocused(true);
           // Always open dropdown on focus to show "Your position" option
           setIsOpen(true);

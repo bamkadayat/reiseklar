@@ -68,7 +68,7 @@
   "home": {
     "title": "Reiseklar",
     "subtitle": "Smart Commute Planner for Norway",
-    "heroQuestion": "Where do you want to travel?",
+    "heroQuestion": "Ready to go somewhere?",
     "greetings": {
       "morning": "Good morning",
       "afternoon": "Good afternoon",
@@ -95,7 +95,19 @@
       }
     },
     "getStarted": "Get Started",
-    "learnMore": "Learn More"
+    "learnMore": "Learn More",
+    "weather": {
+      "title": "Weather in",
+      "today": "Today",
+      "wind": "Wind",
+      "humidity": "Humidity",
+      "forecast": "7-Day Forecast",
+      "newsAttribution": "News provided by"
+    },
+    "news": {
+      "title": "Latest News",
+      "newsAttribution": "News provided by"
+    }
   },
   "notFound": {
     "title": "404",

@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { Cloud, CloudRain, Sun, Wind, Droplets, MapPin } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import type { WeatherData } from '@reiseklar/shared/types/weather';
 
 export function WeatherSection() {
+  const t = useTranslations('home.weather');
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -161,8 +163,8 @@ export function WeatherSection() {
 
   if (loading) {
     return (
-      <div className="w-full max-w-6xl mx-auto px-4 py-12">
-        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 shadow-sm border border-gray-100">
+      <div className="w-full h-full">
+        <div className="rounded-2xl p-8 shadow-sm border border-gray-100 h-full">
           <div className="animate-pulse">
             <div className="h-8 bg-gray-200 rounded w-48 mb-6"></div>
             <div className="h-32 bg-gray-200 rounded mb-6"></div>
@@ -179,8 +181,8 @@ export function WeatherSection() {
 
   if (error || !weather) {
     return (
-      <div className="w-full max-w-6xl mx-auto px-4 py-12">
-        <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-2xl p-8 shadow-sm border border-red-100">
+      <div className="w-full h-full">
+        <div className="rounded-2xl p-8 shadow-sm border border-gray-100 h-full">
           <p className="text-red-700 text-center">{error || 'Weather data unavailable'}</p>
         </div>
       </div>
@@ -188,11 +190,11 @@ export function WeatherSection() {
   }
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-4 py-12">
-      <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 shadow-sm border border-gray-100">
+    <div className="w-full h-full">
+      <div className="rounded-2xl p-8 shadow-sm border border-gray-100 h-full flex flex-col">
         <div className="flex items-center space-x-2 mb-8">
-          <MapPin className="w-6 h-6 text-gray-700" />
-          <h2 className="text-3xl font-bold text-gray-900">Weather in {locationName}</h2>
+          <MapPin className="w-5 h-5 text-gray-700" />
+          <h2 className="text-2xl font-bold text-gray-900">{t('title')} {locationName}</h2>
         </div>
 
         {/* Current Weather */}
@@ -203,7 +205,7 @@ export function WeatherSection() {
                 {getWeatherIcon(weather.current.condition)}
               </div>
               <div>
-                <p className="text-sm text-gray-600 mb-1">Today</p>
+                <p className="text-sm text-gray-600 mb-1">{t('today')}</p>
                 <p className="text-5xl font-bold text-gray-900">
                   {weather.current.temperature}°C
                 </p>
@@ -214,7 +216,7 @@ export function WeatherSection() {
               <div className="flex items-center space-x-2">
                 <Wind className="w-5 h-5 text-gray-500" />
                 <div>
-                  <p className="text-xs text-gray-500">Wind</p>
+                  <p className="text-xs text-gray-500">{t('wind')}</p>
                   <p className="text-lg font-semibold text-gray-700">
                     {weather.current.windSpeed} m/s
                   </p>
@@ -223,7 +225,7 @@ export function WeatherSection() {
               <div className="flex items-center space-x-2">
                 <Droplets className="w-5 h-5 text-gray-500" />
                 <div>
-                  <p className="text-xs text-gray-500">Humidity</p>
+                  <p className="text-xs text-gray-500">{t('humidity')}</p>
                   <p className="text-lg font-semibold text-gray-700">
                     {weather.current.humidity}%
                   </p>
@@ -235,7 +237,7 @@ export function WeatherSection() {
 
         {/* Weekly Forecast */}
         <div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-4">7-Day Forecast</h3>
+          <h3 className="text-xl font-semibold text-gray-900 mb-4">{t('forecast')}</h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-7 gap-4">
             {weather.forecast.map((day, index) => (
               <div
