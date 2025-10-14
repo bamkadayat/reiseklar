@@ -33,6 +33,30 @@ interface JourneySearchModifierProps {
   }) => void;
 }
 
+// Helper function to format minutes to days, hours and minutes
+const formatMinutesToTime = (minutes: number) => {
+  if (minutes >= 1440) { // 24 hours = 1440 minutes
+    const days = Math.floor(minutes / 1440);
+    const remainingMinutes = minutes % 1440;
+    const hours = Math.floor(remainingMinutes / 60);
+    const mins = remainingMinutes % 60;
+
+    if (hours > 0 && mins > 0) {
+      return `${days} d ${hours} h ${mins} min`;
+    } else if (hours > 0) {
+      return `${days} d ${hours} h`;
+    } else if (mins > 0) {
+      return `${days} d ${mins} min`;
+    }
+    return `${days} d`;
+  } else if (minutes >= 60) {
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    return remainingMinutes > 0 ? `${hours} h ${remainingMinutes} min` : `${hours} h`;
+  }
+  return `${minutes} min`;
+};
+
 export function JourneySearchModifier({
   initialFrom,
   initialTo,
@@ -217,24 +241,24 @@ export function JourneySearchModifier({
           <div className="flex gap-2">
             <button
               type="button"
-              className="flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl py-3 font-medium transition-colors flex items-center justify-center gap-2"
+              className="flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl py-3 font-medium transition-colors flex flex-col items-center justify-center gap-1.5"
             >
-              <Bus className="w-5 h-5" />
-              <span className="text-sm">{transitTime ? `${transitTime} min` : '...'}</span>
+              <Bus className="w-5 h-5 flex-shrink-0" />
+              <span className="text-xs leading-tight text-center whitespace-nowrap">{transitTime ? formatMinutesToTime(transitTime) : '...'}</span>
             </button>
             <button
               type="button"
-              className="flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl py-3 font-medium transition-colors flex items-center justify-center gap-2"
+              className="flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl py-3 font-medium transition-colors flex flex-col items-center justify-center gap-1.5"
             >
-              <Bike className="w-5 h-5" />
-              <span className="text-sm">{bikeTime ? `${bikeTime} min` : '...'}</span>
+              <Bike className="w-5 h-5 flex-shrink-0" />
+              <span className="text-xs leading-tight text-center whitespace-nowrap">{bikeTime ? formatMinutesToTime(bikeTime) : '...'}</span>
             </button>
             <button
               type="button"
-              className="flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl py-3 font-medium transition-colors flex items-center justify-center gap-2"
+              className="flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl py-3 font-medium transition-colors flex flex-col items-center justify-center gap-1.5"
             >
-              <Footprints className="w-5 h-5" />
-              <span className="text-sm">{walkTime ? `${walkTime} min` : '...'}</span>
+              <Footprints className="w-5 h-5 flex-shrink-0" />
+              <span className="text-xs leading-tight text-center whitespace-nowrap">{walkTime ? formatMinutesToTime(walkTime) : '...'}</span>
             </button>
           </div>
 

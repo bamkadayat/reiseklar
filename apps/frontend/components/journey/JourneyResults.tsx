@@ -6,6 +6,7 @@ import { JourneyCard } from './JourneyCard';
 import { JourneyCardSkeleton } from './JourneyCardSkeleton';
 import { AlternativeRoutes } from './AlternativeRoutes';
 import { JourneySearchModifier } from './JourneySearchModifier';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 interface JourneyResultsProps {
   startId: string;
@@ -41,6 +42,7 @@ export function JourneyResults({
   const [journeys, setJourneys] = useState<Journey[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
 
   // Current search parameters
   const [searchParams, setSearchParams] = useState({
@@ -150,10 +152,73 @@ export function JourneyResults({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 py-4 lg:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Sidebar - Search Modifier */}
-          <div className="lg:col-span-1">
+          {/* Mobile: Compact Search Header (shown on mobile only) */}
+          <div className="lg:hidden">
+            <button
+              onClick={() => setIsSearchExpanded(!isSearchExpanded)}
+              className="w-full bg-white rounded-xl p-4 shadow-sm border border-gray-200 hover:bg-gray-50 transition-colors"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex-1 text-left">
+                  <div className="flex items-center gap-2 text-sm">
+                    <span className="font-semibold text-gray-900">{searchParams.startLabel}</span>
+                    <span className="text-gray-400">→</span>
+                    <span className="font-semibold text-gray-900">{searchParams.stopLabel}</span>
+                  </div>
+                  <div className="text-xs text-gray-500 mt-1">
+                    {searchParams.dateTime.toLocaleDateString('no-NO', {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric'
+                    })} • {searchParams.dateTime.toLocaleTimeString('no-NO', {
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    })}
+                  </div>
+                </div>
+                {isSearchExpanded ? (
+                  <ChevronUp className="w-5 h-5 text-gray-600 flex-shrink-0" />
+                ) : (
+                  <ChevronDown className="w-5 h-5 text-gray-600 flex-shrink-0" />
+                )}
+              </div>
+            </button>
+
+            {/* Expanded Search Section */}
+            {isSearchExpanded && (
+              <div className="mt-4">
+                <JourneySearchModifier
+                  initialFrom={searchParams.startLabel}
+                  initialTo={searchParams.stopLabel}
+                  initialFromId={searchParams.startId}
+                  initialToId={searchParams.stopId}
+                  initialFromLat={searchParams.startLat}
+                  initialFromLon={searchParams.startLon}
+                  initialToLat={searchParams.stopLat}
+                  initialToLon={searchParams.stopLon}
+                  onSearch={(params) => {
+                    setSearchParams({
+                      startId: params.startId,
+                      startLabel: params.startLabel,
+                      startLat: params.startLat,
+                      startLon: params.startLon,
+                      stopId: params.stopId,
+                      stopLabel: params.stopLabel,
+                      stopLat: params.stopLat,
+                      stopLon: params.stopLon,
+                      dateTime: params.dateTime,
+                    });
+                    setIsSearchExpanded(false); // Collapse after search
+                  }}
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Desktop: Left Sidebar - Search Modifier (hidden on mobile) */}
+          <div className="hidden lg:block lg:col-span-1">
             <JourneySearchModifier
               initialFrom={searchParams.startLabel}
               initialTo={searchParams.stopLabel}

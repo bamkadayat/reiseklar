@@ -88,7 +88,7 @@ export async function GET() {
         contentToCheck.includes(keyword.toLowerCase())
       );
 
-      if (isRelevant && newsItems.length < 6) {
+      if (isRelevant && newsItems.length < 5) {
         newsItems.push({
           title,
           link,
@@ -100,9 +100,9 @@ export async function GET() {
       }
     });
 
-    // If no relevant news found, return top 6 general news
+    // If no relevant news found, return top 5 general news
     if (newsItems.length === 0) {
-      itemsArray.slice(0, 6).forEach((item: any) => {
+      itemsArray.slice(0, 5).forEach((item: any) => {
         const title = item.title || '';
         const link = item.link || '';
         const description = item.description || '';

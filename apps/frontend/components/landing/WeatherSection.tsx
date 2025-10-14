@@ -44,12 +44,7 @@ export function WeatherSection() {
 
         const weatherApiUrl = process.env.NEXT_PUBLIC_YR_API_URL || '';
         const response = await fetch(
-          `${weatherApiUrl}/compact?lat=${lat}&lon=${lon}`,
-          {
-            headers: {
-              'User-Agent': 'Reiseklar reiseklar.no contact@reiseklar.no',
-            },
-          }
+          `${weatherApiUrl}/compact?lat=${lat}&lon=${lon}`
         );
 
         if (!response.ok) {
@@ -66,6 +61,28 @@ export function WeatherSection() {
           humidity: Math.round(currentData.data.instant.details.relative_humidity),
           condition: currentData.data.next_1_hours?.summary?.symbol_code || 'unknown',
         };
+
+        // Process hourly data for next 24 hours
+        const hourlyToday = [];
+        const now = new Date();
+        const next24Hours = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+
+        for (const item of data.properties.timeseries) {
+          const itemDate = new Date(item.time);
+
+          if (itemDate >= now && itemDate <= next24Hours) {
+            hourlyToday.push({
+              time: item.time,
+              hour: itemDate.getHours(),
+              temperature: Math.round(item.data.instant.details.air_temperature),
+              condition: item.data.next_1_hours?.summary?.symbol_code || 'unknown',
+              precipitation: item.data.next_1_hours?.details?.precipitation_amount || 0,
+              windSpeed: Math.round(item.data.instant.details.wind_speed),
+            });
+          }
+
+          if (itemDate > next24Hours) break;
+        }
 
         // Process weekly forecast (next 7 days around noon)
         const forecast = [];
@@ -112,7 +129,7 @@ export function WeatherSection() {
           }
         }
 
-        setWeather({ current, forecast });
+        setWeather({ current, hourlyToday, forecast });
         setLoading(false);
       } catch (err) {
         console.error('Error fetching weather:', err);
@@ -156,9 +173,9 @@ export function WeatherSection() {
   };
 
   const getSmallWeatherIcon = (condition: string) => {
-    if (condition.includes('rain')) return <CloudRain className="w-6 h-6" />;
-    if (condition.includes('cloud')) return <Cloud className="w-6 h-6" />;
-    return <Sun className="w-6 h-6" />;
+    if (condition.includes('rain')) return <CloudRain className="w-full h-full" />;
+    if (condition.includes('cloud')) return <Cloud className="w-full h-full" />;
+    return <Sun className="w-full h-full" />;
   };
 
   if (loading) {
@@ -191,71 +208,115 @@ export function WeatherSection() {
 
   return (
     <div className="w-full h-full">
-      <div className="rounded-2xl p-8 shadow-sm border border-gray-100 h-full flex flex-col">
-        <div className="flex items-center space-x-2 mb-8">
-          <MapPin className="w-5 h-5 text-gray-700" />
-          <h2 className="text-2xl font-bold text-gray-900">{t('title')} {locationName}</h2>
+      <div className="rounded-2xl p-4 sm:p-6 bg-gradient-to-br from-blue-50 to-indigo-50 h-full flex flex-col gap-4 sm:gap-6">
+        {/* Header */}
+        <div className="flex items-center gap-2">
+          <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
+          <h2 className="text-lg sm:text-xl font-bold text-gray-900">{locationName}</h2>
         </div>
 
         {/* Current Weather */}
-        <div className="bg-white rounded-xl p-6 mb-8 shadow-sm">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-6">
-              <div className="text-blue-600">
+        <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm md:mb-6">
+          <div className="grid grid-cols-3 gap-4 sm:gap-6">
+            {/* Temperature */}
+            <div className="flex flex-col items-start">
+              <div className="text-blue-500 mb-3">
                 {getWeatherIcon(weather.current.condition)}
               </div>
-              <div>
-                <p className="text-sm text-gray-600 mb-1">{t('today')}</p>
-                <p className="text-5xl font-bold text-gray-900">
-                  {weather.current.temperature}°C
-                </p>
-              </div>
+              <p className="text-xs uppercase tracking-wide text-gray-500 mb-1">{t('today')}</p>
+              <p className="text-2xl sm:text-3xl font-bold text-gray-900">
+                {weather.current.temperature}°
+              </p>
             </div>
 
-            <div className="flex space-x-8">
-              <div className="flex items-center space-x-2">
-                <Wind className="w-5 h-5 text-gray-500" />
-                <div>
-                  <p className="text-xs text-gray-500">{t('wind')}</p>
-                  <p className="text-lg font-semibold text-gray-700">
-                    {weather.current.windSpeed} m/s
-                  </p>
+            {/* Wind */}
+            <div className="flex flex-col items-start">
+              <Wind className="w-6 h-6 sm:w-8 sm:h-8 text-gray-400 mb-3" />
+              <p className="text-xs uppercase tracking-wide text-gray-500 mb-1">{t('wind')}</p>
+              <p className="text-lg sm:text-xl font-bold text-gray-900">
+                {weather.current.windSpeed}
+                <span className="text-sm font-normal text-gray-500 ml-1">m/s</span>
+              </p>
+            </div>
+
+            {/* Humidity */}
+            <div className="flex flex-col items-start">
+              <Droplets className="w-6 h-6 sm:w-8 sm:h-8 text-gray-400 mb-3" />
+              <p className="text-xs uppercase tracking-wide text-gray-500 mb-1">{t('humidity')}</p>
+              <p className="text-lg sm:text-xl font-bold text-gray-900">
+                {weather.current.humidity}
+                <span className="text-sm font-normal text-gray-500 ml-1">%</span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Hourly Forecast - Next 24 Hours */}
+        <div className='md:mb-6'>
+          <h3 className="text-sm font-semibold text-gray-900 mb-3 uppercase tracking-wide">Next 24 Hours</h3>
+          <div className="bg-white rounded-xl p-4 shadow-sm overflow-x-auto">
+            <div className="flex gap-4">
+              {weather.hourlyToday.filter((_, index) => index % 2 === 0).map((hour, index) => (
+                <div key={index} className="flex flex-col items-center min-w-[56px] pb-1">
+                  <div className="text-xs font-medium text-gray-500 mb-2">
+                    {hour.hour.toString().padStart(2, '0')}
+                  </div>
+                  <div className="w-7 h-7 text-blue-500 mb-2">
+                    {getSmallWeatherIcon(hour.condition)}
+                  </div>
+                  <div className="text-base font-bold text-gray-900 mb-2">{hour.temperature}°</div>
+                  {hour.precipitation > 0 && (
+                    <div className="flex items-center gap-1 mb-1.5">
+                      <Droplets className="w-3 h-3 text-blue-400" />
+                      <span className="text-xs text-blue-600 font-medium">{hour.precipitation}</span>
+                    </div>
+                  )}
+                  <div className="flex items-center gap-1 mt-auto">
+                    <Wind className="w-3 h-3 text-gray-400" />
+                    <span className="text-xs text-gray-500">{hour.windSpeed}</span>
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Droplets className="w-5 h-5 text-gray-500" />
-                <div>
-                  <p className="text-xs text-gray-500">{t('humidity')}</p>
-                  <p className="text-lg font-semibold text-gray-700">
-                    {weather.current.humidity}%
-                  </p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
 
         {/* Weekly Forecast */}
         <div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-4">{t('forecast')}</h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-7 gap-4">
+          <h3 className="text-sm font-semibold text-gray-900 mb-3 uppercase tracking-wide">{t('forecast')}</h3>
+          <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-2 sm:gap-3">
             {weather.forecast.map((day, index) => (
               <div
                 key={index}
-                className="bg-white rounded-lg p-4 text-center shadow-sm hover:shadow-md transition-shadow duration-200"
+                className="bg-white rounded-lg p-3 sm:p-4 flex flex-col items-center shadow-sm hover:shadow-md transition-shadow"
               >
-                <p className="text-sm font-semibold text-gray-700 mb-2">
+                <p className="text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">
                   {day.day}
                 </p>
-                <div className="flex justify-center text-blue-600 mb-2">
+                <div className="w-8 h-8 text-blue-500 mb-2">
                   {getSmallWeatherIcon(day.condition)}
                 </div>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-xl font-bold text-gray-900">
                   {day.temperature}°
                 </p>
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Attribution */}
+        <div className="pt-4 border-t border-blue-200">
+          <p className="text-xs text-gray-600 text-center">
+            Weather provided by{' '}
+            <a
+              href="https://www.yr.no"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:underline font-medium"
+            >
+              YR
+            </a>
+          </p>
         </div>
       </div>
     </div>
