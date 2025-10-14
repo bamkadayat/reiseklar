@@ -44,7 +44,35 @@ const formatTime = (isoString: string) => {
 
 const formatDuration = (seconds: number) => {
   const minutes = Math.floor(seconds / 60);
+
+  if (minutes >= 1440) { // 24 hours = 1440 minutes
+    const days = Math.floor(minutes / 1440);
+    const remainingMinutes = minutes % 1440;
+    const hours = Math.floor(remainingMinutes / 60);
+    const mins = remainingMinutes % 60;
+
+    if (hours > 0 && mins > 0) {
+      return `${days} d ${hours} h ${mins} min`;
+    } else if (hours > 0) {
+      return `${days} d ${hours} h`;
+    } else if (mins > 0) {
+      return `${days} d ${mins} min`;
+    }
+    return `${days} d`;
+  } else if (minutes >= 60) {
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    return remainingMinutes > 0 ? `${hours} h ${remainingMinutes} min` : `${hours} h`;
+  }
   return `${minutes} min`;
+};
+
+const formatDistance = (meters: number) => {
+  if (meters >= 1000) {
+    const kilometers = (meters / 1000).toFixed(2);
+    return `${kilometers} km`;
+  }
+  return `${Math.round(meters)} m`;
 };
 
 export function JourneyCard({ journey, from }: JourneyCardProps) {
@@ -213,8 +241,7 @@ export function JourneyCard({ journey, from }: JourneyCardProps) {
                     {leg.fromPlace?.name} → {leg.toPlace?.name}
                   </p>
                   <p className="text-sm text-gray-500">
-                    {formatDuration(leg.duration)} • {Math.round(leg.distance)}{" "}
-                    m
+                    {formatDuration(leg.duration)} • {formatDistance(leg.distance)}
                   </p>
                 </div>
                 <div className="text-sm text-gray-600">
