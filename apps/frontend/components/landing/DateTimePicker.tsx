@@ -11,6 +11,7 @@ interface DateTimePickerProps {
   label: string;
   showOnlyDateAndNow?: boolean;
   showOnlyTime?: boolean;
+  showOnlyDate?: boolean;
 }
 
 // Custom input component for DatePicker
@@ -59,10 +60,32 @@ export function DateTimePicker({
   label,
   showOnlyDateAndNow = false,
   showOnlyTime = false,
+  showOnlyDate = false,
 }: DateTimePickerProps) {
   const handleNowClick = () => {
     onDateChange(new Date());
   };
+
+  // Only date picker without "Nå" button
+  if (showOnlyDate) {
+    return (
+      <div className="w-full">
+        <DatePicker
+          selected={date}
+          onChange={(newDate) => {
+            if (newDate) {
+              onDateChange(newDate);
+            }
+          }}
+          dateFormat="dd.MM.yyyy"
+          minDate={new Date()}
+          customInput={<DateInput label={label} />}
+          calendarClassName="shadow-lg border border-gray-200"
+          wrapperClassName="w-full"
+        />
+      </div>
+    );
+  }
 
   // Mobile specific layouts
   if (showOnlyDateAndNow) {
@@ -95,22 +118,25 @@ export function DateTimePicker({
 
   if (showOnlyTime) {
     return (
-      <DatePicker
-        selected={date}
-        onChange={(newDate) => {
-          if (newDate) {
-            onDateChange(newDate);
-          }
-        }}
-        showTimeSelect
-        showTimeSelectOnly
-        timeIntervals={1}
-        timeCaption="Tid"
-        dateFormat="HH:mm"
-        timeFormat="HH:mm"
-        customInput={<TimeInput />}
-        calendarClassName="shadow-lg border border-gray-200"
-      />
+      <div className="w-full">
+        <DatePicker
+          selected={date}
+          onChange={(newDate) => {
+            if (newDate) {
+              onDateChange(newDate);
+            }
+          }}
+          showTimeSelect
+          showTimeSelectOnly
+          timeIntervals={1}
+          timeCaption="Tid"
+          dateFormat="HH:mm"
+          timeFormat="HH:mm"
+          customInput={<TimeInput />}
+          calendarClassName="shadow-lg border border-gray-200"
+          wrapperClassName="w-full"
+        />
+      </div>
     );
   }
 

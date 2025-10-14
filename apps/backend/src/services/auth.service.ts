@@ -326,6 +326,38 @@ export class AuthService {
     return user;
   }
 
+  // Update user profile
+  async updateUserProfile(userId: string, data: { name?: string }) {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        name: data.name !== undefined ? data.name : user.name,
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        emailVerifiedAt: true,
+        role: true,
+        googleId: true,
+        provider: true,
+        avatar: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    return updatedUser;
+  }
+
   // Find or create user from Google OAuth profile
   async findOrCreateGoogleUser(profile: any) {
     const email = profile.emails?.[0]?.value;

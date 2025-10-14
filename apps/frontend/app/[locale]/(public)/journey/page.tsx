@@ -14,6 +14,7 @@ function JourneyContent() {
   const stopLabel = searchParams.get('stopLabel');
   const stopLat = searchParams.get('stopLat');
   const stopLon = searchParams.get('stopLon');
+  const date = searchParams.get('date');
 
   if (!startId || !stopId || !startLat || !startLon || !stopLat || !stopLon) {
     return (
@@ -36,6 +37,7 @@ function JourneyContent() {
       stopLabel={stopLabel || ''}
       stopLat={parseFloat(stopLat)}
       stopLon={parseFloat(stopLon)}
+      dateTime={date ? new Date(parseInt(date)) : new Date()}
     />
   );
 }

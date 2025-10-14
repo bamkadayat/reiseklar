@@ -3,9 +3,9 @@
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { JourneyCard } from './JourneyCard';
-import { TransportFilters } from './TransportFilters';
+import { JourneyCardSkeleton } from './JourneyCardSkeleton';
 import { AlternativeRoutes } from './AlternativeRoutes';
-import { Loader2 } from 'lucide-react';
+import { JourneySearchModifier } from './JourneySearchModifier';
 
 interface JourneyResultsProps {
   startId: string;
@@ -16,6 +16,7 @@ interface JourneyResultsProps {
   stopLabel: string;
   stopLat: number;
   stopLon: number;
+  dateTime: Date;
 }
 
 interface Journey {
@@ -34,14 +35,25 @@ export function JourneyResults({
   stopLabel,
   stopLat,
   stopLon,
+  dateTime,
 }: JourneyResultsProps) {
   const t = useTranslations('journey');
   const [journeys, setJourneys] = useState<Journey[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedModes, setSelectedModes] = useState<string[]>([
-    'bus', 'metro', 'tram', 'train', 'ferry'
-  ]);
+
+  // Current search parameters
+  const [searchParams, setSearchParams] = useState({
+    startId,
+    startLabel,
+    startLat,
+    startLon,
+    stopId,
+    stopLabel,
+    stopLat,
+    stopLon,
+    dateTime,
+  });
 
   useEffect(() => {
     const fetchJourneys = async () => {
@@ -52,21 +64,23 @@ export function JourneyResults({
         const enturApiUrl = process.env.NEXT_PUBLIC_ENTUR_API_URL || 'https://api.entur.io';
 
         // GraphQL query for Entur Journey Planner using coordinates
+        const dateTimeISO = searchParams.dateTime.toISOString();
         const query = `
           {
             trip(
               from: {
                 coordinates: {
-                  latitude: ${startLat}
-                  longitude: ${startLon}
+                  latitude: ${searchParams.startLat}
+                  longitude: ${searchParams.startLon}
                 }
               }
               to: {
                 coordinates: {
-                  latitude: ${stopLat}
-                  longitude: ${stopLon}
+                  latitude: ${searchParams.stopLat}
+                  longitude: ${searchParams.stopLon}
                 }
               }
+              dateTime: "${dateTimeISO}"
               numTripPatterns: 5
             ) {
               tripPatterns {
@@ -132,74 +146,61 @@ export function JourneyResults({
     };
 
     fetchJourneys();
-  }, [startId, stopId, startLat, startLon, stopLat, stopLon]);
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <Loader2 className="w-12 h-12 text-blue-700 animate-spin mx-auto" />
-          <p className="mt-4 text-gray-600">Searching for best routes...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-        <div className="text-center max-w-md">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Something went wrong</h1>
-          <p className="text-gray-600 mb-4">{error}</p>
-          <button
-            onClick={() => window.history.back()}
-            className="px-6 py-3 bg-blue-700 text-white rounded-lg hover:bg-blue-800"
-          >
-            Go back
-          </button>
-        </div>
-      </div>
-    );
-  }
+  }, [searchParams]);
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-2">
-            <h1 className="text-2xl font-bold text-gray-900">
-              {startLabel} → {stopLabel}
-            </h1>
-            <p className="text-gray-600">{new Date().toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long' })}</p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Left Sidebar - Filters */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left Sidebar - Search Modifier */}
           <div className="lg:col-span-1">
-            <TransportFilters
-              selectedModes={selectedModes}
-              onModeChange={setSelectedModes}
+            <JourneySearchModifier
+              initialFrom={searchParams.startLabel}
+              initialTo={searchParams.stopLabel}
+              initialFromId={searchParams.startId}
+              initialToId={searchParams.stopId}
+              initialFromLat={searchParams.startLat}
+              initialFromLon={searchParams.startLon}
+              initialToLat={searchParams.stopLat}
+              initialToLon={searchParams.stopLon}
+              onSearch={(params) => {
+                setSearchParams({
+                  startId: params.startId,
+                  startLabel: params.startLabel,
+                  startLat: params.startLat,
+                  startLon: params.startLon,
+                  stopId: params.stopId,
+                  stopLabel: params.stopLabel,
+                  stopLat: params.stopLat,
+                  stopLon: params.stopLon,
+                  dateTime: params.dateTime,
+                });
+              }}
             />
           </div>
 
           {/* Main Content - Journey Results */}
           <div className="lg:col-span-2 space-y-4">
-            {journeys.length === 0 ? (
+            {isLoading ? (
+              <>
+                <JourneyCardSkeleton />
+                <JourneyCardSkeleton />
+                <JourneyCardSkeleton />
+              </>
+            ) : error ? (
+              <div className="bg-white rounded-xl p-8 text-center">
+                <h2 className="text-xl font-bold text-gray-900 mb-2">Something went wrong</h2>
+                <p className="text-gray-600">{error}</p>
+              </div>
+            ) : journeys.length === 0 ? (
               <div className="bg-white rounded-xl p-8 text-center">
                 <p className="text-gray-600">No journeys found</p>
               </div>
             ) : (
               journeys.map((journey, index) => (
-                <JourneyCard key={index} journey={journey} from={startLabel} />
+                <JourneyCard key={index} journey={journey} from={searchParams.startLabel} />
               ))
             )}
-          </div>
-
-          {/* Right Sidebar - Alternative Routes */}
-          <div className="lg:col-span-1">
-            <AlternativeRoutes from={startLabel} to={stopLabel} />
           </div>
         </div>
       </div>
