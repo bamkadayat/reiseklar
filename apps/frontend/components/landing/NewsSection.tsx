@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Newspaper, ExternalLink, Calendar } from 'lucide-react';
+import { ExternalLink, Calendar } from 'lucide-react';
+import { RiNewsFill } from 'react-icons/ri';
 import { useTranslations } from 'next-intl';
 
 interface NewsItem {
@@ -71,17 +72,51 @@ export function NewsSection() {
     return tmp.textContent || tmp.innerText || '';
   };
 
+  const truncateTitle = (title: string, maxLength: number = 60) => {
+    if (title.length <= maxLength) {
+      return title;
+    }
+    return title.substring(0, maxLength).trim() + '...';
+  };
+
   if (loading) {
     return (
       <div className="w-full h-full">
-        <div className="rounded-2xl p-8 shadow-sm border border-gray-100 h-full">
+        <div className="rounded-2xl p-8 shadow-sm border border-gray-100 h-full flex flex-col">
           <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-64 mb-6"></div>
-            <div className="grid grid-cols-1 gap-6">
-              {[...Array(3)].map((_, i) => (
-                <div key={i} className="h-64 bg-gray-200 rounded-lg"></div>
+            {/* Header skeleton */}
+            <div className="flex items-center space-x-2 mb-8">
+              <div className="w-5 h-5 bg-gray-200 rounded"></div>
+              <div className="h-8 bg-gray-200 rounded w-32"></div>
+            </div>
+
+            {/* News items skeleton */}
+            <div className="flex-1 space-y-2">
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="py-2.5 border-b border-gray-100">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1 min-w-0 space-y-2">
+                      {/* Title skeleton */}
+                      <div className="space-y-1.5">
+                        <div className="h-4 bg-gray-200 rounded w-full"></div>
+                        <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                      </div>
+                      {/* Metadata skeleton */}
+                      <div className="flex items-center gap-2">
+                        <div className="h-3 bg-gray-200 rounded w-20"></div>
+                        <div className="w-1 h-1 bg-gray-200 rounded-full"></div>
+                        <div className="h-3 bg-gray-200 rounded w-16"></div>
+                      </div>
+                    </div>
+                    {/* Icon skeleton */}
+                    <div className="w-3.5 h-3.5 bg-gray-200 rounded flex-shrink-0 mt-0.5"></div>
+                  </div>
+                </div>
               ))}
             </div>
+
+            {/* Attribution skeleton */}
+            <div className="h-4 bg-gray-200 rounded w-48 mx-auto mt-8"></div>
           </div>
         </div>
       </div>
@@ -104,7 +139,7 @@ export function NewsSection() {
     <div className="w-full h-full">
       <div className="rounded-2xl p-8 shadow-sm border border-gray-100 h-full flex flex-col">
         <div className="flex items-center space-x-2 mb-8">
-          <Newspaper className="w-5 h-5 text-gray-700" />
+          <RiNewsFill className="w-5 h-5 text-gray-700" />
           <h2 className="text-2xl font-bold text-gray-900">{t('title')}</h2>
         </div>
 
@@ -120,7 +155,7 @@ export function NewsSection() {
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1 min-w-0">
                   <h3 className="font-semibold text-base text-gray-900 mb-1 group-hover:text-blue-600 transition-colors line-clamp-2 leading-snug">
-                    {item.title}
+                    {truncateTitle(item.title)}
                   </h3>
                   <div className="flex items-center gap-2 text-xs text-gray-500">
                     {item.categories.length > 0 && (
