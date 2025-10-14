@@ -176,4 +176,17 @@ export const authService = {
 
     return response.data;
   },
+
+  /**
+   * Update current user profile
+   */
+  async updateProfile(data: { name?: string }): Promise<User> {
+    const response = await apiClient.put<ApiResponse<User>>('/api/users/me', data);
+
+    if (!response.success || !response.data) {
+      throw new Error(response.error || 'Failed to update profile');
+    }
+
+    return response.data;
+  },
 };

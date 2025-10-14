@@ -45,7 +45,7 @@ export function Navbar() {
               priority
               className="object-contain"
             />
-            <span className="text-2xl md:text-3xl font-bold text-norwegian-blue">Reiseklar</span>
+            <span className="text-2xl md:text-3xl font-bold text-norwegian-blue">Reise<span className="text-red-900">klar</span></span>
           </Link>
 
           {/* Desktop Navigation */}
