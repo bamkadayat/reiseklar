@@ -68,7 +68,7 @@
   "home": {
     "title": "Reiseklar",
     "subtitle": "Smart reiseplanlegger for Norge",
-    "heroQuestion": "hvor vil du reise?",
+    "heroQuestion": "Klar til å dra et sted?",
     "greetings": {
       "morning": "God morgen",
       "afternoon": "God dag",
@@ -95,7 +95,19 @@
       }
     },
     "getStarted": "Kom i gang",
-    "learnMore": "Lær mer"
+    "learnMore": "Lær mer",
+    "weather": {
+      "title": "Vær i",
+      "today": "I dag",
+      "wind": "Vind",
+      "humidity": "Fuktighet",
+      "forecast": "7-dagers varsel",
+      "newsAttribution": "Nyheter levert av"
+    },
+    "news": {
+      "title": "Siste nyheter",
+      "newsAttribution": "Nyheter levert av"
+    }
   },
   "notFound": {
     "title": "404",

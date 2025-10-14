@@ -31,7 +31,7 @@ export function HeroSection() {
         <p className="text-xl sm:text-2xl text-blue-100 mb-2">
           {mounted ? greeting : '\u00A0'},
         </p>
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white">
           {t('heroQuestion')}
         </h1>
       </div>

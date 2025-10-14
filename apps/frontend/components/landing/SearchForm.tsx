@@ -58,6 +58,9 @@ export function SearchForm() {
     setFrom(value);
     if (locationData) {
       setFromData(locationData);
+    } else {
+      // Clear location data when user is manually editing
+      setFromData(null);
     }
   };
 
@@ -65,6 +68,9 @@ export function SearchForm() {
     setTo(value);
     if (locationData) {
       setToData(locationData);
+    } else {
+      // Clear location data when user is manually editing
+      setToData(null);
     }
   };
 
