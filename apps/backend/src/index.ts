@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser';
 import passport from 'passport';
 import authRoutes from './routes/auth.routes';
 import userRoutes from './routes/user.routes';
+import enturRoutes from './routes/entur.routes';
 import { configurePassport } from './config/passport';
 
 dotenv.config();
@@ -42,6 +43,7 @@ app.get('/health', (req, res) => {
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/entur', enturRoutes);
 
 // 404 handler
 app.use((req, res) => {

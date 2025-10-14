@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { MapPin, Loader2, Navigation } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { EnturLocation } from '@reiseklar/shared';
 
 export interface LocationData {
   id: string;
@@ -20,14 +21,6 @@ interface LocationAutocompleteProps {
   icon?: 'circle' | 'pin';
 }
 
-interface EnturLocation {
-  id: string;
-  name: string;
-  label: string;
-  latitude: number;
-  longitude: number;
-}
-
 export function LocationAutocomplete({
   value,
   onChange,
@@ -39,6 +32,8 @@ export function LocationAutocomplete({
   const [locations, setLocations] = useState<EnturLocation[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isGettingLocation, setIsGettingLocation] = useState(false);
+  const [hasSelected, setHasSelected] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -46,6 +41,7 @@ export function LocationAutocomplete({
     const searchLocations = async () => {
       if (!value || value.length < 2) {
         setLocations([]);
+        setIsOpen(false);
         return;
       }
 
@@ -60,17 +56,13 @@ export function LocationAutocomplete({
       setIsLoading(true);
 
       try {
-        const enturApiUrl = process.env.NEXT_PUBLIC_ENTUR_API_URL || 'https://api.entur.io';
-        const clientName = process.env.NEXT_PUBLIC_ENTUR_CLIENT_NAME || 'reiseklar-norway';
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8080';
 
         const response = await fetch(
-          `${enturApiUrl}/geocoder/v1/autocomplete?text=${encodeURIComponent(
+          `${backendUrl}/api/entur/autocomplete?text=${encodeURIComponent(
             value
           )}&lang=en&size=10`,
           {
-            headers: {
-              'ET-Client-Name': clientName,
-            },
             signal: abortControllerRef.current.signal,
           }
         );
@@ -79,19 +71,11 @@ export function LocationAutocomplete({
           throw new Error('Failed to fetch locations');
         }
 
-        const data = await response.json();
+        const result = await response.json();
 
-        if (data.features && Array.isArray(data.features)) {
-          const parsedLocations: EnturLocation[] = data.features.map((feature: any) => ({
-            id: feature.properties.id || '',
-            name: feature.properties.name || '',
-            label: feature.properties.label || '',
-            latitude: feature.geometry.coordinates[1],
-            longitude: feature.geometry.coordinates[0],
-          }));
-
-          setLocations(parsedLocations);
-          setIsOpen(parsedLocations.length > 0);
+        if (result.success && result.data && Array.isArray(result.data)) {
+          setLocations(result.data);
+          setIsOpen(result.data.length > 0);
         }
       } catch (error: any) {
         if (error.name !== 'AbortError') {
@@ -133,6 +117,9 @@ export function LocationAutocomplete({
       longitude: location.longitude,
     });
     setIsOpen(false);
+    setIsFocused(false);
+    setHasSelected(true);
+    setLocations([]);
   };
 
   const handleUseMyPosition = () => {
@@ -145,29 +132,22 @@ export function LocationAutocomplete({
 
           // Reverse geocode to get location name
           try {
-            const enturApiUrl = process.env.NEXT_PUBLIC_ENTUR_API_URL || 'https://api.entur.io';
-            const clientName = process.env.NEXT_PUBLIC_ENTUR_CLIENT_NAME || 'reiseklar-norway';
+            const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8080';
 
             const response = await fetch(
-              `${enturApiUrl}/geocoder/v1/reverse?point.lat=${latitude}&point.lon=${longitude}&size=1`,
-              {
-                headers: {
-                  'ET-Client-Name': clientName,
-                },
-              }
+              `${backendUrl}/api/entur/reverse?lat=${latitude}&lon=${longitude}&size=1`
             );
 
             if (response.ok) {
-              const data = await response.json();
-              if (data.features && data.features.length > 0) {
-                const feature = data.features[0];
-                const locationLabel = feature.properties.label || 'Your position';
-                onChange(locationLabel, {
-                  id: `${latitude},${longitude}`,
-                  name: feature.properties.name || 'Your position',
-                  label: locationLabel,
-                  latitude,
-                  longitude,
+              const result = await response.json();
+              if (result.success && result.data && result.data.length > 0) {
+                const location = result.data[0];
+                onChange(location.label, {
+                  id: location.id,
+                  name: location.name,
+                  label: location.label,
+                  latitude: location.latitude,
+                  longitude: location.longitude,
                 });
               } else {
                 // Fallback if no address found
@@ -193,12 +173,33 @@ export function LocationAutocomplete({
           }
 
           setIsOpen(false);
+          setIsFocused(false);
+          setHasSelected(true);
+          setLocations([]);
           setIsGettingLocation(false);
         },
         (error) => {
           console.error('Error getting location:', error);
-          alert('Unable to get your location. Please check your browser permissions.');
+          let errorMessage = 'Unable to get your location. ';
+
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              errorMessage += 'Please allow location access in your browser settings.';
+              break;
+            case error.POSITION_UNAVAILABLE:
+              errorMessage += 'Location information is unavailable.';
+              break;
+            case error.TIMEOUT:
+              errorMessage += 'Location request timed out.';
+              break;
+            default:
+              errorMessage += 'An unknown error occurred.';
+          }
+
+          alert(errorMessage);
           setIsGettingLocation(false);
+          setIsOpen(false);
+          setIsFocused(false);
         }
       );
     } else {
@@ -211,18 +212,39 @@ export function LocationAutocomplete({
     <div ref={wrapperRef} className="flex-1 relative">
       <div className="absolute left-4 top-1/2 -translate-y-1/2 z-10">
         {icon === 'circle' ? (
-          <div className="w-3 h-3 rounded-full border-2 border-red-500"></div>
+          <div className="w-3 h-3 rounded-full border-2 border-red-800"></div>
         ) : (
-          <MapPin className="w-5 h-5 text-red-500" />
+          <MapPin className="w-5 h-5 text-red-800" />
         )}
       </div>
       <Input
         type="text"
         placeholder={placeholder}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
-        onFocus={() => setIsOpen(true)}
-        className="w-full pl-10 pr-10 py-6 bg-gray-100 rounded-xl border-0 focus-visible:ring-2 focus-visible:ring-blue-500 text-gray-900 text-base"
+        onChange={(e) => {
+          onChange(e.target.value);
+          // Reset hasSelected flag when user starts typing again
+          if (hasSelected) {
+            setHasSelected(false);
+          }
+        }}
+        onFocus={() => {
+          // Don't set focused or open if already selected
+          if (hasSelected) {
+            return;
+          }
+          setIsFocused(true);
+          // Always open dropdown on focus to show "Your position" option
+          setIsOpen(true);
+        }}
+        onBlur={() => {
+          // Delay to allow click events on dropdown items to fire first
+          setTimeout(() => {
+            setIsFocused(false);
+            setIsOpen(false);
+          }, 200);
+        }}
+        className="w-full pl-10 pr-10 py-6 bg-white border border-gray-300 rounded-xl focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:border-blue-500 text-gray-900 text-base transition-all"
         autoComplete="off"
       />
 
@@ -234,11 +256,14 @@ export function LocationAutocomplete({
       )}
 
       {/* Dropdown */}
-      {isOpen && (
+      {isOpen && isFocused && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg border border-gray-200 max-h-64 overflow-y-auto z-50">
           {/* Your Position Option */}
           <button
-            onClick={handleUseMyPosition}
+            onMouseDown={(e) => {
+              e.preventDefault(); // Prevent input blur
+              handleUseMyPosition();
+            }}
             disabled={isGettingLocation}
             className="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors flex items-center gap-3 border-b border-gray-100"
           >
@@ -256,7 +281,10 @@ export function LocationAutocomplete({
           {locations.length > 0 && locations.map((location) => (
             <button
               key={location.id}
-              onClick={() => handleSelect(location)}
+              onMouseDown={(e) => {
+                e.preventDefault(); // Prevent input blur
+                handleSelect(location);
+              }}
               className="w-full px-4 py-3 text-left hover:bg-gray-100 transition-colors flex items-center gap-3 last:rounded-b-xl"
             >
               <MapPin className="w-4 h-4 text-gray-400 flex-shrink-0" />
