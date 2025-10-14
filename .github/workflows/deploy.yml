@@ -75,7 +75,7 @@ jobs:
             --vpc-connector="${{ env.CONNECTOR }}" \
             --vpc-egress=private-ranges-only \
             --set-secrets=DATABASE_URL=DATABASE_URL:latest \
-            --set-env-vars="NODE_ENV=production,FRONTEND_URL=${{ secrets.FRONTEND_URL }},GOOGLE_CALLBACK_URL=${{ secrets.GOOGLE_CALLBACK_URL }},MAILGUN_API_BASE=${{ secrets.MAILGUN_API_BASE }},MAILGUN_DOMAIN=${{ secrets.MAILGUN_DOMAIN }},MAILGUN_API_KEY=${{ secrets.MAILGUN_API_KEY }},MAILGUN_FROM=${{ secrets.MAILGUN_FROM }},MAILGUN_REPLY_TO=${{ secrets.MAILGUN_REPLY_TO }},GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }},GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" \
+            --set-env-vars="NODE_ENV=production,FRONTEND_URL=${{ secrets.FRONTEND_URL }},GOOGLE_CALLBACK_URL=${{ secrets.GOOGLE_CALLBACK_URL }},MAILGUN_API_BASE=${{ secrets.MAILGUN_API_BASE }},MAILGUN_DOMAIN=${{ secrets.MAILGUN_DOMAIN }},MAILGUN_API_KEY=${{ secrets.MAILGUN_API_KEY }},MAILGUN_FROM=${{ secrets.MAILGUN_FROM }},MAILGUN_REPLY_TO=${{ secrets.MAILGUN_REPLY_TO }},GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }},GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }},ENTUR_API_URL=${{ secrets.ENTUR_API_URL }},ENTUR_CLIENT_NAME=${{ secrets.ENTUR_CLIENT_NAME }}" \
             --allow-unauthenticated \
             --min-instances=0 \
             --max-instances=10 \
