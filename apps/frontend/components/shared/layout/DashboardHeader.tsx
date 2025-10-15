@@ -1,11 +1,12 @@
 'use client';
 
-import { Menu, Bell, LogOut } from 'lucide-react';
+import { Menu, Bell, LogOut, Home } from 'lucide-react';
 import { LanguageSwitcher } from '@/components/shared/navigation/LanguageSwitcher';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useAppSelector } from "@/store/hooks";
+import Link from 'next/link';
 
 interface DashboardHeaderProps {
   onMenuClick: () => void;
@@ -52,6 +53,15 @@ export function DashboardHeader({
 
         {/* Right Side - Actions */}
         <div className="flex items-center gap-2 sm:gap-4 ml-auto">
+          {/* Home Button */}
+          <Link
+            href="/"
+            className="p-2 text-gray-600 hover:text-norwegian-blue hover:bg-blue-50 rounded-lg transition-colors"
+            title="Back to Home"
+          >
+            <Home className="w-5 h-5" />
+          </Link>
+
           {/* Language Switcher */}
           <div className="hidden sm:block">
             <LanguageSwitcher />
