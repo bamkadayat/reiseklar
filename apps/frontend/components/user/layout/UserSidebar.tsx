@@ -1,6 +1,6 @@
 'use client';
 
-import { Home, Route, User, Settings, LogOut } from 'lucide-react';
+import { Home, Route, User, Settings, Search, ArrowLeft } from 'lucide-react';
 import { Sidebar, SidebarItem } from '@/components/shared/layout/Sidebar';
 import { useTranslations } from 'next-intl';
 
@@ -13,6 +13,11 @@ export function UserSidebar({ isOpen, onClose }: UserSidebarProps) {
   const t = useTranslations('dashboard.user');
 
   const menuItems: SidebarItem[] = [
+    {
+      icon: Search,
+      label: 'Search Routes',
+      href: '/',
+    },
     {
       icon: Home,
       label: t('dashboard'),

@@ -291,7 +291,21 @@ export function JourneyResults({
               </div>
             ) : (
               journeys.map((journey, index) => (
-                <JourneyCard key={index} journey={journey} from={searchParams.startLabel} />
+                <JourneyCard
+                  key={index}
+                  journey={journey}
+                  from={searchParams.startLabel}
+                  fromData={{
+                    label: searchParams.startLabel,
+                    lat: searchParams.startLat,
+                    lon: searchParams.startLon,
+                  }}
+                  toData={{
+                    label: searchParams.stopLabel,
+                    lat: searchParams.stopLat,
+                    lon: searchParams.stopLon,
+                  }}
+                />
               ))
             )}
           </div>

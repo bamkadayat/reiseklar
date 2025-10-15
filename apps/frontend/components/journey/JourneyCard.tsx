@@ -1,15 +1,28 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Train, Bus, Cable, Ship, ChevronRight, Flag, Plane } from "lucide-react";
+import { Train, Bus, Cable, Ship, ChevronRight, Flag, Plane, Bookmark, Check } from "lucide-react";
 import { IoMdWalk } from "react-icons/io";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { tripsService } from "@/lib/api/trips.service";
+import { useRouter } from "next/navigation";
 
 interface JourneyCardProps {
   journey: any;
   from: string;
+  fromData?: {
+    label: string;
+    lat: number;
+    lon: number;
+  };
+  toData?: {
+    label: string;
+    lat: number;
+    lon: number;
+  };
 }
 
 const getModeIcon = (mode: string) => {
@@ -79,9 +92,13 @@ const formatDistance = (meters: number) => {
   return `${Math.round(meters)} m`;
 };
 
-export function JourneyCard({ journey, from }: JourneyCardProps) {
+export function JourneyCard({ journey, from, fromData, toData }: JourneyCardProps) {
   const t = useTranslations("journey");
+  const router = useRouter();
+  const { isAuthenticated } = useAuth();
   const [showDetails, setShowDetails] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
 
   const mainLeg = journey.legs?.find((leg: any) => leg.mode !== "foot");
   const totalWalkingTime = journey.legs
@@ -97,6 +114,49 @@ export function JourneyCard({ journey, from }: JourneyCardProps) {
 
   // Get the destination from the main leg
   const destination = mainLeg?.toPlace?.name || mainLeg?.line?.name || "";
+
+  const handleSaveTrip = async () => {
+    // Check if user is logged in
+    if (!isAuthenticated) {
+      // Redirect to login page
+      router.push('/signIn');
+      return;
+    }
+
+    // Check if we have the required data
+    if (!fromData || !toData) {
+      alert('Missing location data. Please try searching again.');
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      await tripsService.createTrip({
+        origin: {
+          label: fromData.label,
+          lat: fromData.lat,
+          lon: fromData.lon,
+          address: fromData.label,
+        },
+        destination: {
+          label: toData.label,
+          lat: toData.lat,
+          lon: toData.lon,
+          address: toData.label,
+        },
+        accessibility: 'none',
+      });
+
+      setIsSaved(true);
+      // Reset the saved state after 3 seconds
+      setTimeout(() => setIsSaved(false), 3000);
+    } catch (error: any) {
+      console.error('Error saving trip:', error);
+      alert(error.message || 'Failed to save trip. Please try again.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
     <Card className="shadow-none">
@@ -397,6 +457,36 @@ export function JourneyCard({ journey, from }: JourneyCardProps) {
             ))}
           </div>
         )}
+
+        {/* Save Route Button */}
+        <div className="mt-4 pt-4 border-t border-gray-200">
+          <Button
+            onClick={handleSaveTrip}
+            disabled={isSaving || isSaved}
+            className={`w-full ${
+              isSaved
+                ? "bg-green-600 hover:bg-green-600"
+                : "bg-blue-600 hover:bg-blue-700"
+            }`}
+          >
+            {isSaving ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                Saving...
+              </>
+            ) : isSaved ? (
+              <>
+                <Check className="w-4 h-4 mr-2" />
+                Saved!
+              </>
+            ) : (
+              <>
+                <Bookmark className="w-4 h-4 mr-2" />
+                Save Route
+              </>
+            )}
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );
