@@ -95,15 +95,43 @@ export function JourneyResults({
                   duration
                   fromPlace {
                     name
+                    quay {
+                      name
+                      publicCode
+                    }
                   }
                   toPlace {
                     name
+                    quay {
+                      name
+                      publicCode
+                    }
                   }
                   fromEstimatedCall {
                     expectedDepartureTime
+                    aimedDepartureTime
+                    quay {
+                      name
+                      publicCode
+                    }
                   }
                   toEstimatedCall {
                     expectedArrivalTime
+                    aimedArrivalTime
+                    quay {
+                      name
+                      publicCode
+                    }
+                  }
+                  intermediateEstimatedCalls {
+                    expectedArrivalTime
+                    aimedArrivalTime
+                    expectedDepartureTime
+                    aimedDepartureTime
+                    quay {
+                      name
+                      publicCode
+                    }
                   }
                   line {
                     publicCode
