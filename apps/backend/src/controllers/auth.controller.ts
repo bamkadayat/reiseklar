@@ -299,9 +299,9 @@ export class AuthController {
   // POST /api/auth/reset-password
   async resetPassword(req: Request, res: Response) {
     try {
-      const { token, password } = resetPasswordSchema.parse(req.body);
+      const { email, code, password } = resetPasswordSchema.parse(req.body);
 
-      const result = await authService.resetPassword(token, password);
+      const result = await authService.resetPassword(email, code, password);
 
       res.status(200).json({
         success: true,

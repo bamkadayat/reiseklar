@@ -1,9 +1,7 @@
 /**
- * Email template for password reset
+ * Email template for password reset with PIN code
  */
-export function getPasswordResetEmailTemplate(resetToken: string): { html: string; text: string } {
-  const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password?token=${resetToken}`;
-
+export function getPasswordResetEmailTemplate(resetCode: string): { html: string; text: string } {
   const html = `
 <!DOCTYPE html>
 <html lang="en">
@@ -34,40 +32,31 @@ export function getPasswordResetEmailTemplate(resetToken: string): { html: strin
 
               <!-- Description -->
               <p style="margin: 0 0 32px 0; color: #64748b; font-size: 16px; line-height: 1.6;">
-                We received a request to reset your password. Click the button below to create a new password:
+                We received a request to reset your password. Use the following 4-digit code to reset your password:
               </p>
 
-              <!-- Reset Button -->
+              <!-- PIN Code Box -->
               <table width="100%" cellpadding="0" cellspacing="0" style="margin: 0 0 32px 0;">
                 <tr>
                   <td align="center">
-                    <a href="${resetUrl}" style="display: inline-block; background-color: #003d82; color: #ffffff; text-decoration: none; padding: 16px 40px; border-radius: 8px; font-size: 16px; font-weight: 600; text-align: center; min-width: 200px;">
-                      Reset Password
-                    </a>
+                    <div style="display: inline-block; background: linear-gradient(135deg, #003d82 0%, #0052b4 100%); color: #ffffff; padding: 24px 48px; border-radius: 12px; font-size: 48px; font-weight: 700; letter-spacing: 12px; font-family: 'Courier New', monospace; box-shadow: 0 4px 12px rgba(0, 61, 130, 0.3);">
+                      ${resetCode}
+                    </div>
                   </td>
                 </tr>
               </table>
 
-              <!-- Alternative Link -->
+              <!-- Instructions -->
               <p style="margin: 0 0 32px 0; color: #64748b; font-size: 14px; line-height: 1.6; text-align: center;">
-                Or copy and paste this link into your browser:
+                Enter this code on the password reset page to create your new password.
               </p>
-              <table width="100%" cellpadding="0" cellspacing="0" style="margin: 0 0 32px 0;">
-                <tr>
-                  <td style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; word-break: break-all;">
-                    <a href="${resetUrl}" style="color: #003d82; font-size: 14px; text-decoration: none;">
-                      ${resetUrl}
-                    </a>
-                  </td>
-                </tr>
-              </table>
 
               <!-- Warning Box -->
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td style="background-color: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 16px 20px;">
                     <p style="margin: 0 0 4px 0; color: #92400e; font-size: 14px; font-weight: 600; line-height: 1.5;">
-                      ⏱ This link will expire in 1 hour.
+                      ⏱ This code will expire in 10 minutes.
                     </p>
                     <p style="margin: 0; color: #92400e; font-size: 14px; line-height: 1.5;">
                       If you didn't request a password reset, you can safely ignore this email. Your password will remain unchanged.
@@ -114,14 +103,15 @@ Reset Your Password - Reiseklar
 
 We received a request to reset your password.
 
-To reset your password, click the link below:
-${resetUrl}
+Your password reset code is: ${resetCode}
 
-This link will expire in 1 hour.
+Enter this code on the password reset page to create your new password.
+
+This code will expire in 10 minutes.
 
 If you didn't request a password reset, you can safely ignore this email. Your password will remain unchanged.
 
-Security tip: Never share your password or reset link with anyone. Reiseklar will never ask for your password via email.
+Security tip: Never share your password or reset code with anyone. Reiseklar will never ask for your password via email.
 
 Need help? Contact us at bamkadayat@gmail.com
 

@@ -3,9 +3,9 @@
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FiUserPlus } from "react-icons/fi";
-import { LogOut, User } from "lucide-react";
+import { LogOut, User, X } from "lucide-react";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
@@ -31,32 +31,70 @@ export function Navbar() {
     }
   };
 
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileMenuOpen]);
+
+  // Handle keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isMobileMenuOpen) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    if (isMobileMenuOpen) {
+      document.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isMobileMenuOpen]);
+
   return (
-    <nav className="sticky top-0 z-50 bg-white">
+    <>
+  <nav className="sticky top-0 z-40 bg-white backdrop-blur-sm bg-opacity-95 shadow-sm border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-2">
+        <div className="flex justify-between items-center py-3">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-1 py-1">
-            <Image
-              src="/images/logo.png"
-              alt="Reiseklar Logo"
-              width={40}
-              height={50}
-              priority
-              className="object-contain"
-            />
-            <span className="text-2xl md:text-3xl font-bold text-norwegian-blue">Reise<span className="text-red-900">klar</span></span>
+          <Link href="/" className="flex items-center gap-2 py-2 group">
+            <div className="relative">
+              <Image
+                src="/images/logo.png"
+                alt="Reiseklar Logo"
+                width={40}
+                height={50}
+                priority
+                className="object-contain transition-transform duration-300 group-hover:scale-110"
+              />
+            </div>
+            <span className="text-2xl md:text-3xl font-bold text-norwegian-blue transition-all duration-300 group-hover:tracking-wide">
+              Reise<span className="text-red-900">klar</span>
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-2">
             {/* Language Switcher */}
-            <LanguageSwitcher />
+            <div className="mr-2">
+              <LanguageSwitcher />
+            </div>
 
             {/* About Link */}
             <Link
               href="/about"
-              className="text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-base transition-colors"
+              className="text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-base px-3 py-2 rounded-lg hover:bg-gray-50 transition-all duration-200"
             >
               {t("about")}
             </Link>
@@ -66,20 +104,20 @@ export function Navbar() {
                 {/* User Profile */}
                 <Link
                   href="/user"
-                  className="flex items-center gap-2 text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-base transition-colors"
+                  className="flex items-center gap-2 text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-base px-4 py-2 rounded-lg hover:bg-gray-50 transition-all duration-200"
                 >
                   <User className="w-5 h-5" />
-                  {user?.name || 'Dashboard'}
+                  <span className="hidden lg:inline">{user?.name || 'Dashboard'}</span>
                 </Link>
 
                 {/* Logout Button */}
                 <button
                   onClick={handleLogout}
                   disabled={isLoggingOut}
-                  className="flex items-center gap-2 text-red-600 hover:text-red-700 px-4 py-2 rounded-lg hover:bg-red-50 font-medium text-base transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex items-center gap-2 text-red-600 hover:text-red-700 px-4 py-2 rounded-lg hover:bg-red-50 font-medium text-base transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
                 >
                   <LogOut className={`w-5 h-5 ${isLoggingOut ? 'animate-pulse' : ''}`} />
-                  {isLoggingOut ? 'Logging out...' : 'Logout'}
+                  <span className="hidden lg:inline">{isLoggingOut ? 'Logging out...' : 'Logout'}</span>
                 </button>
               </>
             ) : (
@@ -87,7 +125,7 @@ export function Navbar() {
                 {/* Sign In Link */}
                 <Link
                   href="/signIn"
-                  className="flex items-center gap-2 text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-base transition-colors"
+                  className="flex items-center gap-2 text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-base px-4 py-2 rounded-lg hover:bg-gray-50 transition-all duration-200"
                 >
                   <svg
                     className="w-5 h-5"
@@ -102,16 +140,16 @@ export function Navbar() {
                       d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                     />
                   </svg>
-                  {t("login")}
+                  <span className="hidden lg:inline">{t("login")}</span>
                 </Link>
 
                 {/* Sign Up Button */}
                 <Link
                   href="/signUp"
-                  className="flex items-center gap-2 text-norwegian-blue px-4 py-2 rounded-lg hover:bg-neutral-light font-medium text-base transition-colors"
+                  className="flex items-center gap-2 text-norwegian-blue px-4 py-2 rounded-lg hover:bg-neutral-light font-medium text-base transition-all duration-200 border border-norwegian-blue/20 hover:border-norwegian-blue/40 shadow-sm hover:shadow-md"
                 >
                   <FiUserPlus className="w-5 h-5" />
-                  {t("register")}
+                  <span className="hidden lg:inline">{t("register")}</span>
                 </Link>
               </>
             )}
@@ -120,8 +158,10 @@ export function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden flex flex-col items-center gap-1.5 text-norwegian-blue p-3"
-            aria-label="Toggle menu"
+            className="md:hidden flex flex-col items-center gap-1.5 text-norwegian-blue p-3 hover:bg-gray-50 rounded-lg transition-all duration-200"
+            aria-label={isMobileMenuOpen ? "Close mobile menu" : "Open mobile menu"}
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-menu"
           >
             <span className="text-sm font-semibold transition-opacity duration-200">
               {isMobileMenuOpen ? "Close" : "Menu"}
@@ -141,87 +181,128 @@ export function Navbar() {
           </button>
         </div>
       </div>
+    </nav>
 
-      {/* Mobile Menu Overlay */}
-      <div
-        className={`fixed inset-0 top-16 bg-white z-40 md:hidden transition-transform duration-300 ease-in-out ${
-          isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
-        }`}
-      >
-        <div className="flex flex-col h-full p-6 space-y-4">
-          {/* Language Switcher */}
-          <div className="pb-4 border-b border-gray-200">
-            <LanguageSwitcher />
-          </div>
+    {/* Backdrop & Mobile Menu moved outside <nav> to escape stacking context */}
+    {/* Mobile Menu Backdrop */}
+    <div
+      className={`fixed inset-0 bg-black/40 backdrop-blur-sm z-50 md:hidden transition-opacity duration-300 ${
+        isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+      }`}
+      onClick={() => setIsMobileMenuOpen(false)}
+      aria-hidden="true"
+    />
 
-          {/* About Link */}
-          <Link
-            href="/about"
+    {/* Mobile Menu Overlay */}
+    <div
+      id="mobile-menu"
+      className={`fixed right-0 top-0 bottom-0 w-96 max-w-[90vw] bg-white z-[60] md:hidden transition-transform duration-300 ease-in-out shadow-2xl border-l border-gray-100 ${
+        isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
+      }`}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="mobile-menu-title"
+    >
+      <div className="flex flex-col h-full overflow-y-auto">
+        {/* Menu Header */}
+        <div className="px-6 py-4 border-b border-gray-100 bg-gray-50 flex-shrink-0 flex items-center justify-between">
+          <h3 id="mobile-menu-title" className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Menu</h3>
+          <button
+            type="button"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="flex items-center text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-lg py-2 transition-colors"
+            className="p-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-norwegian-blue/50 transition"
+            aria-label="Close mobile menu"
           >
-            {t("about")}
-          </Link>
+            <X className="w-5 h-5" />
+          </button>
+        </div>
 
-          {isAuthenticated ? (
-            <>
-              {/* User Profile */}
-              <Link
-                href="/user"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center gap-3 text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-lg py-2 transition-colors"
-              >
-                <User className="w-6 h-6" />
-                {user?.name || 'Dashboard'}
-              </Link>
+        <div className="flex-1 px-4 py-6 space-y-1">
+          {/* Language Switcher */}
+            <div className="mb-6 px-2">
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Language</p>
+              <LanguageSwitcher />
+            </div>
 
-              {/* Logout Button */}
-              <button
-                onClick={handleLogout}
-                disabled={isLoggingOut}
-                className="flex items-center gap-3 text-red-600 hover:text-red-700 font-medium text-lg py-2 transition-colors disabled:opacity-50 w-full text-left"
-              >
-                <LogOut className={`w-6 h-6 ${isLoggingOut ? 'animate-pulse' : ''}`} />
-                {isLoggingOut ? 'Logging out...' : 'Logout'}
-              </button>
-            </>
-          ) : (
-            <>
-              {/* Sign In Link */}
-              <Link
-                href="/signIn"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center gap-3 text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-lg py-2 transition-colors"
-              >
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                  />
-                </svg>
-                {t("signIn")}
-              </Link>
+            {/* Navigation Section */}
+            <div className="space-y-1">
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 px-2">Navigation</p>
 
-              {/* Sign Up Button */}
+              {/* About Link */}
               <Link
-                href="/signUp"
+                href="/about"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center gap-3 text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-lg py-2 transition-colors"
+                className="flex items-center text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-base px-4 py-3 rounded-xl hover:bg-gray-50 transition-all duration-200 active:scale-95"
               >
-                <FiUserPlus className="w-6 h-6" />
-                {t("signUp")}
+                {t("about")}
               </Link>
-            </>
-          )}
+            </div>
+
+            {/* Account Section */}
+            <div className="pt-6 space-y-1">
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 px-2">Account</p>
+
+              {isAuthenticated ? (
+                <>
+                  {/* User Profile */}
+                  <Link
+                    href="/user"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center gap-3 text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-base px-4 py-3 rounded-xl hover:bg-gray-50 transition-all duration-200 active:scale-95"
+                  >
+                    <User className="w-5 h-5" />
+                    <span>{user?.name || 'Dashboard'}</span>
+                  </Link>
+
+                  {/* Logout Button */}
+                  <button
+                    onClick={handleLogout}
+                    disabled={isLoggingOut}
+                    className="flex items-center gap-3 text-red-600 hover:text-red-700 font-medium text-base px-4 py-3 rounded-xl hover:bg-red-50 transition-all duration-200 disabled:opacity-50 w-full text-left active:scale-95"
+                  >
+                    <LogOut className={`w-5 h-5 ${isLoggingOut ? 'animate-pulse' : ''}`} />
+                    <span>{isLoggingOut ? 'Logging out...' : 'Logout'}</span>
+                  </button>
+                </>
+              ) : (
+                <>
+                  {/* Sign In Link */}
+                  <Link
+                    href="/signIn"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center gap-3 text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-base px-4 py-3 rounded-xl hover:bg-gray-50 transition-all duration-200 active:scale-95"
+                  >
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                      />
+                    </svg>
+                    <span>{t("signIn")}</span>
+                  </Link>
+
+                  {/* Sign Up Button */}
+                  <Link
+                    href="/signUp"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center justify-center gap-2 text-white bg-norwegian-blue hover:bg-norwegian-blue-600 font-medium text-base px-4 py-3 rounded-xl transition-all duration-200 mt-4 shadow-md hover:shadow-lg active:scale-95"
+                  >
+                    <FiUserPlus className="w-5 h-5" />
+                    <span>{t("signUp")}</span>
+                  </Link>
+                </>
+              )}
+            </div>
         </div>
       </div>
-    </nav>
+    </div>
+    </>
   );
 }

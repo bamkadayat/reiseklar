@@ -2,6 +2,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { ConditionalNavbar } from '@/components/shared/navigation/ConditionalNavbar';
+import { Footer } from '@/components/shared/layout/Footer';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { ReduxProvider } from '@/components/providers/ReduxProvider';
 import { AppInitializer } from '@/components/AppInitializer';
@@ -34,8 +35,13 @@ export default async function LocaleLayout({
           <NextIntlClientProvider messages={messages}>
             <AppInitializer>
               <AuthProvider>
-                <ConditionalNavbar />
-                {children}
+                <div className="flex flex-col min-h-screen">
+                  <ConditionalNavbar />
+                  <main className="flex-1">
+                    {children}
+                  </main>
+                  <Footer />
+                </div>
               </AuthProvider>
             </AppInitializer>
           </NextIntlClientProvider>
