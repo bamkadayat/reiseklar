@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
-import { MapPin, Loader2, Navigation } from 'lucide-react';
+import { MapPin, Loader2, Navigation, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { EnturLocation } from '@reiseklar/shared';
 
@@ -133,6 +133,14 @@ export function LocationAutocomplete({
     setLocations([]);
   };
 
+  // Reset hasSelected when value changes (user is editing)
+  useEffect(() => {
+    if (hasSelected && value.length < 2) {
+      // User is deleting the selected value
+      setHasSelected(false);
+    }
+  }, [value, hasSelected]);
+
   const handleUseMyPosition = () => {
     setIsGettingLocation(true);
 
@@ -238,11 +246,19 @@ export function LocationAutocomplete({
           if (hasSelected) {
             setHasSelected(false);
           }
+          // Ensure dropdown opens when user is typing
+          if (e.target.value.length >= 2) {
+            setIsOpen(true);
+          }
         }}
-        onFocus={() => {
+        onFocus={(e) => {
           setIsFocused(true);
           // Always open dropdown on focus to show "Your position" option
           setIsOpen(true);
+          // Select all text when clicking on a selected value for easy replacement
+          if (hasSelected && value) {
+            e.target.select();
+          }
         }}
         onBlur={() => {
           // Delay to allow click events on dropdown items to fire first
@@ -254,6 +270,21 @@ export function LocationAutocomplete({
         className="w-full pl-10 pr-10 py-6 bg-white border border-gray-300 rounded-xl focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:border-blue-500 text-gray-900 text-base transition-all"
         autoComplete="off"
       />
+
+      {/* Clear button (when value exists and not loading) */}
+      {value && !isLoading && (
+        <button
+          type="button"
+          onClick={() => {
+            onChange('');
+            setHasSelected(false);
+            setLocations([]);
+          }}
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-10 hover:bg-gray-100 rounded-full p-1 transition-colors"
+        >
+          <X className="w-4 h-4 text-gray-500 hover:text-gray-700" />
+        </button>
+      )}
 
       {/* Loading indicator */}
       {isLoading && (

@@ -54,21 +54,22 @@ export function SignInForm() {
   };
 
   return (
-    <Card className="border-0 shadow-xl">
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold">Sign in</CardTitle>
+    <Card className="border border-gray-200 shadow-none w-full">
+      <CardHeader className="text-center pb-4 pt-6 sm:pb-6 sm:pt-8">
+        <CardTitle className="text-2xl sm:text-3xl font-bold">Welcome back</CardTitle>
+        <p className="text-sm text-gray-600">Sign in to continue to Reiseklar</p>
       </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <CardContent className="px-4 sm:px-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email" className="text-sm font-medium text-gray-700">Email</Label>
             <Input
               id="email"
               type="email"
               placeholder="name@example.com"
               {...register('email')}
               disabled={isSubmitting}
-              className={errors.email ? 'border-red-500' : ''}
+              className={`h-12 ${errors.email ? 'border-red-500' : ''}`}
             />
             {errors.email && (
               <p className="text-sm text-red-500">{errors.email.message}</p>
@@ -77,10 +78,10 @@ export function SignInForm() {
 
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-sm font-medium text-gray-700">Password</Label>
               <Link
                 href="/forgot-password"
-                className="text-sm text-norwegian-blue hover:underline"
+                className="text-sm text-blue-600 hover:underline"
               >
                 Forgot password?
               </Link>
@@ -89,10 +90,10 @@ export function SignInForm() {
               <Input
                 id="password"
                 type={showPassword ? 'text' : 'password'}
-                placeholder="••••••••"
+                placeholder="Enter your password"
                 {...register('password')}
                 disabled={isSubmitting}
-                className={errors.password ? 'border-red-500 pr-10' : 'pr-10'}
+                className={`h-12 pr-10 ${errors.password ? 'border-red-500' : ''}`}
               />
               <button
                 type="button"
@@ -101,9 +102,9 @@ export function SignInForm() {
                 tabIndex={-1}
               >
                 {showPassword ? (
-                  <EyeOff className="h-4 w-4" />
+                  <EyeOff className="h-5 w-5" />
                 ) : (
-                  <Eye className="h-4 w-4" />
+                  <Eye className="h-5 w-5" />
                 )}
               </button>
             </div>
@@ -114,7 +115,7 @@ export function SignInForm() {
 
           <Button
             type="submit"
-            className="w-full bg-norwegian-blue hover:bg-norwegian-blue/90"
+            className="w-full bg-norwegian-blue hover:bg-norwegian-blue/90 text-white py-6 rounded-lg text-base font-medium"
             disabled={isSubmitting}
           >
             {isSubmitting ? (
@@ -128,14 +129,21 @@ export function SignInForm() {
           </Button>
         </form>
 
-        <AuthDivider />
+        <div className="relative my-6">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-300"></div>
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="px-4 bg-white text-gray-500 uppercase tracking-wider text-xs">Or continue with</span>
+          </div>
+        </div>
 
         <GoogleLoginButton disabled={isSubmitting} />
       </CardContent>
-      <CardFooter>
-        <p className="text-center text-sm text-muted-foreground w-full">
+      <CardFooter className="pb-8">
+        <p className="text-center text-sm text-gray-600 w-full">
           Don&apos;t have an account?{' '}
-          <Link href="/signUp" className="text-norwegian-blue hover:underline font-medium">
+          <Link href="/signUp" className="text-blue-600 hover:underline font-medium">
             Sign up
           </Link>
         </p>

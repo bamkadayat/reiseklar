@@ -2,6 +2,7 @@
 
 import { useLocale, useTranslations } from 'next-intl';
 import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { ChevronDown, Check } from 'lucide-react';
 import {
   DropdownMenu,
@@ -16,6 +17,16 @@ export function LanguageSwitcher() {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    const apply = () => setIsMobile(mq.matches);
+    apply();
+    mq.addEventListener('change', apply);
+    return () => mq.removeEventListener('change', apply);
+  }, []);
 
   const languages = {
     en: { label: t('en'), flag: '🇬🇧' },
@@ -36,7 +47,7 @@ export function LanguageSwitcher() {
         <span className="text-sm font-medium">{languages[locale as keyof typeof languages]?.label || 'Bokmål'}</span>
         <ChevronDown className="h-4 w-4" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-40">
+  <DropdownMenuContent align={isMobile ? 'start' : 'end'} sideOffset={6} className="w-44">
         {locales.map((loc) => (
           <DropdownMenuItem
             key={loc}

@@ -32,5 +32,9 @@ export default function SignInPage() {
     return null;
   }
 
-  return <SignInForm />;
+  return (
+    <div className="w-full max-w-[500px] mx-auto p-4 mt-8 sm:mt-24">
+      <SignInForm />
+    </div>
+  );
 }

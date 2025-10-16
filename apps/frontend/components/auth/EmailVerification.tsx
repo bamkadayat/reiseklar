@@ -16,17 +16,53 @@ interface EmailVerificationProps {
 
 export function EmailVerification({ email, onBack }: EmailVerificationProps) {
   const router = useRouter();
-  const [code, setCode] = useState('');
+  const [digits, setDigits] = useState(['', '', '', '']);
   const [isVerifying, setIsVerifying] = useState(false);
   const [isResending, setIsResending] = useState(false);
   const [error, setError] = useState('');
   const [resendMessage, setResendMessage] = useState('');
 
+  const handleDigitChange = (index: number, value: string) => {
+    // Only allow single digit
+    const digit = value.replace(/\D/g, '').slice(0, 1);
+
+    const newDigits = [...digits];
+    newDigits[index] = digit;
+    setDigits(newDigits);
+
+    // Auto-focus next input
+    if (digit && index < 3) {
+      const nextInput = document.getElementById(`digit-${index + 1}`);
+      nextInput?.focus();
+    }
+  };
+
+  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Backspace' && !digits[index] && index > 0) {
+      // Move to previous input on backspace if current is empty
+      const prevInput = document.getElementById(`digit-${index - 1}`);
+      prevInput?.focus();
+    }
+  };
+
+  const handlePaste = (e: React.ClipboardEvent) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 4);
+    const newDigits = pastedData.split('').concat(['', '', '', '']).slice(0, 4);
+    setDigits(newDigits);
+
+    // Focus the next empty input or the last one
+    const nextEmptyIndex = newDigits.findIndex(d => !d);
+    const focusIndex = nextEmptyIndex === -1 ? 3 : nextEmptyIndex;
+    document.getElementById(`digit-${focusIndex}`)?.focus();
+  };
+
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
-    if (!code || code.length !== 4) {
+    const code = digits.join('');
+    if (code.length !== 4) {
       setError('Please enter a 4-digit code');
       return;
     }
@@ -57,7 +93,8 @@ export function EmailVerification({ email, onBack }: EmailVerificationProps) {
     try {
       await authService.resendVerificationCode({ email });
       setResendMessage('A new code has been sent to your email');
-      setCode(''); // Clear the input
+      setDigits(['', '', '', '']); // Clear the inputs
+      document.getElementById('digit-0')?.focus();
     } catch (error) {
       console.error('Resend error:', error);
       setError(
@@ -71,40 +108,41 @@ export function EmailVerification({ email, onBack }: EmailVerificationProps) {
   };
 
   return (
-    <Card className="border-0 shadow-xl">
-      <CardHeader className="space-y-1">
-        <div className="flex justify-center mb-4">
-          <div className="bg-norwegian-blue/10 p-3 rounded-full">
-            <Mail className="h-6 w-6 text-norwegian-blue" />
-          </div>
+    <Card className="border border-gray-200 shadow-none w-full">
+      <CardHeader className="text-center pb-4 pt-6 sm:pb-6 sm:pt-8">
+        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-norwegian-blue/10">
+          <Mail className="h-6 w-6 text-norwegian-blue" />
         </div>
-        <CardTitle className="text-2xl font-bold text-center">
+        <CardTitle className="text-2xl sm:text-3xl font-bold">
           Verify your email
         </CardTitle>
-        <CardDescription className="text-center">
+        <p className="text-sm text-gray-600 mt-2">
           We sent a 4-digit code to <strong>{email}</strong>
-        </CardDescription>
+        </p>
       </CardHeader>
-      <CardContent>
-        <form onSubmit={handleVerify} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="code">Verification Code</Label>
-            <Input
-              id="code"
-              type="text"
-              inputMode="numeric"
-              pattern="[0-9]*"
-              maxLength={4}
-              placeholder="Enter 4-digit code"
-              value={code}
-              onChange={(e) => {
-                const value = e.target.value.replace(/\D/g, '');
-                setCode(value);
-              }}
-              disabled={isVerifying || isResending}
-              className={`text-center text-2xl tracking-widest ${error ? 'border-red-500' : ''}`}
-              autoFocus
-            />
+      <CardContent className="px-4 sm:px-6">
+        <form onSubmit={handleVerify} className="space-y-5">
+          <div className="space-y-3">
+            <Label className="text-sm font-medium text-gray-700">Verification Code</Label>
+            <div className="flex gap-3">
+              {digits.map((digit, index) => (
+                <Input
+                  key={index}
+                  id={`digit-${index}`}
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  maxLength={1}
+                  value={digit}
+                  onChange={(e) => handleDigitChange(index, e.target.value)}
+                  onKeyDown={(e) => handleKeyDown(index, e)}
+                  onPaste={index === 0 ? handlePaste : undefined}
+                  disabled={isVerifying || isResending}
+                  className={`w-14 h-14 text-center text-2xl font-semibold ${error ? 'border-red-500' : 'border-gray-300'}`}
+                  autoFocus={index === 0}
+                />
+              ))}
+            </div>
             {error && (
               <p className="text-sm text-red-500">{error}</p>
             )}
@@ -115,8 +153,8 @@ export function EmailVerification({ email, onBack }: EmailVerificationProps) {
 
           <Button
             type="submit"
-            className="w-full bg-norwegian-blue hover:bg-norwegian-blue/90"
-            disabled={isVerifying || isResending || code.length !== 4}
+            className="w-full bg-norwegian-blue hover:bg-norwegian-blue/90 text-white py-6 rounded-lg text-base font-medium"
+            disabled={isVerifying || isResending || digits.join('').length !== 4}
           >
             {isVerifying ? (
               <>
@@ -130,8 +168,8 @@ export function EmailVerification({ email, onBack }: EmailVerificationProps) {
         </form>
 
         <div className="mt-4 space-y-2">
-          <p className="text-sm text-center text-muted-foreground">
-            Did not receive the code?
+          <p className="text-sm text-center text-gray-600">
+            Didn&apos;t receive the code?
           </p>
           <Button
             variant="outline"

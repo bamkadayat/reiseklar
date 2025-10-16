@@ -27,5 +27,9 @@ export default function SignUpPage() {
     return null;
   }
 
-  return <SignUpForm />;
+  return (
+    <div className="w-full max-w-[500px] px-4 mt-8 sm:mt-24">
+      <SignUpForm />
+    </div>
+  );
 }

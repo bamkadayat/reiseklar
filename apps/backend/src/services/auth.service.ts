@@ -421,88 +421,104 @@ export class AuthService {
     const user = await prisma.user.findUnique({ where: { email } });
 
     if (!user) {
-      // For security, don't reveal if email exists
-      return { message: 'If the email exists, a password reset link has been sent' };
+      throw new Error('No account found with this email address');
+    }
+
+    if (!user.emailVerifiedAt) {
+      throw new Error('Email not verified. Please verify your email first');
+    }
+
+    // Delete any existing password reset codes for this user
+    await prisma.passwordReset.deleteMany({
+      where: { userId: user.id },
+    });
+
+    // Generate 4-digit PIN code (similar to email verification)
+    const code = generateVerificationCode();
+    const codeHash = await hashVerificationCode(code);
+
+    // Create reset record (expires in 10 minutes, same as email verification)
+    const expiresAt = new Date(Date.now() + VERIFICATION_EXPIRY_MINUTES * 60 * 1000);
+
+    await prisma.passwordReset.create({
+      data: {
+        userId: user.id,
+        tokenHash: codeHash, // Using tokenHash field to store code hash
+        expiresAt,
+      },
+    });
+
+    // Send reset email with PIN code
+    await sendPasswordResetEmail(email, code);
+
+    return { message: 'If the email exists, a password reset code has been sent' };
+  }
+
+  // Reset password with PIN code
+  async resetPassword(email: string, code: string, newPassword: string) {
+    // Find user
+    const user = await prisma.user.findUnique({ where: { email } });
+
+    if (!user) {
+      throw new Error('User not found');
     }
 
     if (!user.emailVerifiedAt) {
       throw new Error('Email not verified');
     }
 
-    // Delete any existing password reset tokens for this user
-    await prisma.passwordReset.deleteMany({
-      where: { userId: user.id },
-    });
-
-    // Generate reset token
-    const token = generateResetToken();
-    const tokenHash = await hashResetToken(token);
-
-    // Create reset record
-    const expiresAt = new Date(Date.now() + RESET_TOKEN_EXPIRY_HOURS * 60 * 60 * 1000);
-
-    await prisma.passwordReset.create({
-      data: {
-        userId: user.id,
-        tokenHash,
-        expiresAt,
-      },
-    });
-
-    // Send reset email
-    await sendPasswordResetEmail(email, token);
-
-    return { message: 'If the email exists, a password reset link has been sent' };
-  }
-
-  // Reset password with token
-  async resetPassword(token: string, newPassword: string) {
-    // Find all non-consumed reset tokens
-    const resetRecords = await prisma.passwordReset.findMany({
+    // Find reset record
+    const reset = await prisma.passwordReset.findFirst({
       where: {
+        userId: user.id,
         consumedAt: null,
       },
-      include: {
-        user: true,
-      },
+      orderBy: { createdAt: 'desc' },
     });
 
-    // Find matching token
-    let matchedReset = null;
-    for (const reset of resetRecords) {
-      const isValid = await compareResetToken(token, reset.tokenHash);
-      if (isValid) {
-        matchedReset = reset;
-        break;
-      }
-    }
-
-    if (!matchedReset) {
-      throw new Error('Invalid or expired reset token');
+    if (!reset) {
+      throw new Error('No password reset request found');
     }
 
     // Check expiry
-    if (new Date() > matchedReset.expiresAt) {
-      throw new Error('Reset token expired');
+    if (new Date() > reset.expiresAt) {
+      throw new Error('Reset code expired');
+    }
+
+    // Check attempts (max 5, same as email verification)
+    if (reset.attempts >= MAX_VERIFICATION_ATTEMPTS) {
+      throw new Error('Too many attempts. Please request a new reset code');
+    }
+
+    // Verify code
+    const isValid = await compareVerificationCode(code, reset.tokenHash);
+
+    if (!isValid) {
+      // Increment attempts
+      await prisma.passwordReset.update({
+        where: { id: reset.id },
+        data: { attempts: reset.attempts + 1 },
+      });
+      throw new Error('Invalid reset code');
     }
 
     // Hash new password
     const passwordHash = await hashPassword(newPassword);
 
-    // Update password and mark token as consumed
+    // Update password and mark code as consumed
     await prisma.$transaction([
       prisma.user.update({
-        where: { id: matchedReset.userId },
+        where: { id: user.id },
         data: { passwordHash },
       }),
       prisma.passwordReset.update({
-        where: { id: matchedReset.id },
+        where: { id: reset.id },
         data: { consumedAt: new Date() },
       }),
       // Revoke all existing refresh tokens for security
       prisma.refreshToken.updateMany({
         where: {
-          userId: matchedReset.userId,
+          userId: user.id,
           revokedAt: null,
         },
         data: { revokedAt: new Date() },

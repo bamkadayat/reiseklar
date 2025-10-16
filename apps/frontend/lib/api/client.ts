@@ -50,11 +50,12 @@ axiosInstance.interceptors.response.use(
     if (error.response) {
       // Server responded with error
       const errorMessage = error.response.data?.error || error.message || 'An error occurred';
-      const apiError = new ApiError(
-        errorMessage,
-        error.response.status,
-        error.response.data
-      );
+
+      // Create error with proper constructor
+      const apiError: any = new Error(errorMessage);
+      apiError.name = 'ApiError';
+      apiError.statusCode = error.response.status;
+      apiError.response = error.response.data;
 
       // Silently throw for expected 401 on auth check
       if (isAuthCheck && is401) {
@@ -64,10 +65,16 @@ axiosInstance.interceptors.response.use(
       throw apiError;
     } else if (error.request) {
       // Request made but no response
-      throw new ApiError('No response from server', 0);
+      const apiError: any = new Error('No response from server');
+      apiError.name = 'ApiError';
+      apiError.statusCode = 0;
+      throw apiError;
     } else {
       // Something else happened
-      throw new ApiError(error.message || 'Network error', 0);
+      const apiError: any = new Error(error.message || 'Network error');
+      apiError.name = 'ApiError';
+      apiError.statusCode = 0;
+      throw apiError;
     }
   }
 );

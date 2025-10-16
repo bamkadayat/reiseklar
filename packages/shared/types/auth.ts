@@ -96,7 +96,8 @@ export type ForgotPasswordResponse = z.infer<typeof ForgotPasswordResponseSchema
 
 // Reset Password
 export const ResetPasswordRequestSchema = z.object({
-  token: z.string().min(1, 'Reset token is required'),
+  email: z.string().email('Invalid email address'),
+  code: z.string().length(4, 'Code must be 4 digits').regex(/^\d{4}$/, 'Code must be numeric'),
   password: z
     .string()
     .min(8, 'Password must be at least 8 characters')

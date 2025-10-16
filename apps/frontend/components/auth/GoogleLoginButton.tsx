@@ -22,7 +22,7 @@ export function GoogleLoginButton({ disabled, onClick }: GoogleLoginButtonProps)
     <Button
       variant="outline"
       disabled={disabled}
-      className="w-full"
+      className="w-full h-12"
       onClick={handleGoogleLogin}
       type="button"
     >

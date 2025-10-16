@@ -303,32 +303,93 @@ export function JourneyCard({ journey, from, fromData, toData }: JourneyCardProp
               {formatTime(journey.endTime)}
             </span>
           </div>
+        </div>
 
-          {/* Show Details Button - Desktop only */}
+        {/* Action Buttons - Mobile: stacked, Desktop/Tablet: side by side */}
+        <div className="mt-3 sm:hidden space-y-2">
+          {/* Show Details Button - Mobile only (full width) */}
           <button
             onClick={() => setShowDetails(!showDetails)}
-            className="hidden sm:flex p-2 hover:bg-gray-100 rounded-md transition-colors flex-shrink-0 mt-1 ml-2"
+            className="w-full flex items-center justify-center gap-2 py-2.5 text-sm font-medium text-white bg-blue-900 hover:bg-blue-950 rounded-lg transition-colors"
           >
+            <span>{showDetails ? "Skjul detaljer" : "Vis detaljer"}</span>
             <ChevronRight
-              className={`w-5 h-5 text-gray-600 transition-transform ${
+              className={`w-4 h-4 text-white transition-transform ${
                 showDetails ? "rotate-90" : ""
               }`}
             />
           </button>
+
+          {/* Save Route Button - Mobile only (full width) */}
+          <Button
+            onClick={handleSaveTrip}
+            disabled={isSaving || isSaved}
+            className={`w-full ${
+              isSaved
+                ? "bg-green-600 hover:bg-green-600"
+                : "bg-blue-400 hover:bg-blue-500"
+            }`}
+          >
+            {isSaving ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                Saving...
+              </>
+            ) : isSaved ? (
+              <>
+                <Check className="w-4 h-4 mr-2" />
+                Saved!
+              </>
+            ) : (
+              <>
+                <Bookmark className="w-4 h-4 mr-2" />
+                Save Route
+              </>
+            )}
+          </Button>
         </div>
 
-        {/* Show Details Button - Mobile only (full width) */}
-        <button
-          onClick={() => setShowDetails(!showDetails)}
-          className="sm:hidden mt-3 w-full flex items-center justify-center gap-2 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
-        >
-          <span>{showDetails ? "Skjul detaljer" : "Vis detaljer"}</span>
-          <ChevronRight
-            className={`w-4 h-4 text-gray-600 transition-transform ${
-              showDetails ? "rotate-90" : ""
+        {/* Action Buttons - Tablet and Desktop: side by side */}
+        <div className="hidden sm:flex mt-3 gap-3">
+          <button
+            onClick={() => setShowDetails(!showDetails)}
+            className="flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-medium text-white bg-blue-900 hover:bg-blue-950 rounded-lg transition-colors"
+          >
+            <span>{showDetails ? "Skjul detaljer" : "Vis detaljer"}</span>
+            <ChevronRight
+              className={`w-4 h-4 text-white transition-transform ${
+                showDetails ? "rotate-90" : ""
+              }`}
+            />
+          </button>
+
+          <Button
+            onClick={handleSaveTrip}
+            disabled={isSaving || isSaved}
+            className={`flex-1 ${
+              isSaved
+                ? "bg-green-600 hover:bg-green-600"
+                : "bg-blue-400 hover:bg-blue-500"
             }`}
-          />
-        </button>
+          >
+            {isSaving ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                Saving...
+              </>
+            ) : isSaved ? (
+              <>
+                <Check className="w-4 h-4 mr-2" />
+                Saved!
+              </>
+            ) : (
+              <>
+                <Bookmark className="w-4 h-4 mr-2" />
+                Save Route
+              </>
+            )}
+          </Button>
+        </div>
 
         {/* Details section */}
         {showDetails && (
@@ -457,36 +518,6 @@ export function JourneyCard({ journey, from, fromData, toData }: JourneyCardProp
             ))}
           </div>
         )}
-
-        {/* Save Route Button */}
-        <div className="mt-4 pt-4 border-t border-gray-200">
-          <Button
-            onClick={handleSaveTrip}
-            disabled={isSaving || isSaved}
-            className={`w-full ${
-              isSaved
-                ? "bg-green-600 hover:bg-green-600"
-                : "bg-blue-600 hover:bg-blue-700"
-            }`}
-          >
-            {isSaving ? (
-              <>
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                Saving...
-              </>
-            ) : isSaved ? (
-              <>
-                <Check className="w-4 h-4 mr-2" />
-                Saved!
-              </>
-            ) : (
-              <>
-                <Bookmark className="w-4 h-4 mr-2" />
-                Save Route
-              </>
-            )}
-          </Button>
-        </div>
       </CardContent>
     </Card>
   );
