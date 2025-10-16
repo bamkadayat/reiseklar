@@ -22,7 +22,7 @@ Built with **Next.js 14**, **TypeScript**, and modern best practices.
 ### Smart Route Planning
 - Real-time journey search powered by **Entur API**
 - Filter by transport mode, accessibility needs, and departure time
-- Interactive map with stop markers and route visualization (Kartverket tiles)
+- Interactive map (Mapbox) with stop markers and route visualization
 
 ### Weather-Aware Routing
 - Live precipitation and wind data from **MET Norway**
@@ -58,7 +58,7 @@ Built with **Next.js 14**, **TypeScript**, and modern best practices.
 - TypeScript
 - TailwindCSS + shadcn/ui
 - Redux Toolkit + React Query
-- Leaflet / MapLibre
+- Mapbox / MapLibre
 
 </td>
 <td>
