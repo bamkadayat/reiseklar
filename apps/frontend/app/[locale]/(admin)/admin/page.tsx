@@ -1,9 +1,47 @@
+'use client';
+
 import { useTranslations } from 'next-intl';
 import { StatCard } from '@/components/dashboard/shared/StatCard';
 import { Users, Route, TrendingUp, Activity } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { adminService, AdminStats, AdminUser } from '@/lib/api/admin.service';
 
 export default function AdminDashboardPage() {
   const t = useTranslations('dashboard.admin');
+  const [stats, setStats] = useState<AdminStats | null>(null);
+  const [recentUsers, setRecentUsers] = useState<AdminUser[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [statsData, usersData] = await Promise.all([
+          adminService.getStats(),
+          adminService.getUsers(),
+        ]);
+        setStats(statsData);
+        // Get 5 most recent users
+        setRecentUsers(usersData.slice(0, 5));
+      } catch (error) {
+        console.error('Failed to fetch admin data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-norwegian-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 sm:space-y-8">
@@ -21,34 +59,30 @@ export default function AdminDashboardPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         <StatCard
           title={t('totalUsers')}
-          value="1,234"
+          value={stats?.totalUsers.toLocaleString() || '0'}
           icon={Users}
-          trend={{ value: 15, isPositive: true }}
-          description={t('thisMonth')}
+          description={`${stats?.newToday || 0} new today`}
           color="blue"
         />
         <StatCard
           title={t('activeRoutes')}
-          value="5,678"
+          value={stats?.totalTrips.toLocaleString() || '0'}
           icon={Route}
-          trend={{ value: 8, isPositive: true }}
-          description={t('thisWeek')}
+          description="Total trips created"
           color="green"
         />
         <StatCard
-          title={t('systemUptime')}
-          value="99.9%"
+          title="Active Users"
+          value={stats?.activeUsers.toLocaleString() || '0'}
           icon={Activity}
-          trend={{ value: 0.1, isPositive: true }}
-          description={t('last30Days')}
+          description="Email verified"
           color="purple"
         />
         <StatCard
-          title={t('avgResponseTime')}
-          value="245ms"
+          title="Admins"
+          value={stats?.admins.toLocaleString() || '0'}
           icon={TrendingUp}
-          trend={{ value: 12, isPositive: false }}
-          description={t('vsLastWeek')}
+          description={`${stats?.totalPlaces || 0} total places`}
           color="orange"
         />
       </div>
@@ -63,36 +97,63 @@ export default function AdminDashboardPage() {
             </h2>
           </div>
           <div className="divide-y divide-gray-200">
-            {[1, 2, 3, 4, 5].map((user) => (
-              <div
-                key={user}
-                className="px-6 py-4 hover:bg-gray-50 transition-colors"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-norwegian-blue rounded-full flex items-center justify-center text-white font-semibold">
-                      U{user}
-                    </div>
-                    <div>
-                      <h3 className="font-medium text-gray-900">
-                        User {user}
-                      </h3>
-                      <p className="text-sm text-gray-500">
-                        user{user}@example.com
-                      </p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm text-gray-600">
-                      {user}h ago
-                    </p>
-                    <span className="inline-block px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full mt-1">
-                      Active
-                    </span>
-                  </div>
-                </div>
+            {recentUsers.length === 0 ? (
+              <div className="px-6 py-8 text-center text-gray-500">
+                No users yet
               </div>
-            ))}
+            ) : (
+              recentUsers.map((user) => {
+                const joinDate = new Date(user.joinDate);
+                const now = new Date();
+                const diffMs = now.getTime() - joinDate.getTime();
+                const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+                const diffDays = Math.floor(diffHours / 24);
+
+                let timeAgo = '';
+                if (diffDays > 0) {
+                  timeAgo = `${diffDays}d ago`;
+                } else if (diffHours > 0) {
+                  timeAgo = `${diffHours}h ago`;
+                } else {
+                  timeAgo = 'Just now';
+                }
+
+                return (
+                  <div
+                    key={user.id}
+                    className="px-6 py-4 hover:bg-gray-50 transition-colors"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-norwegian-blue rounded-full flex items-center justify-center text-white font-semibold">
+                          {user.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                          <h3 className="font-medium text-gray-900">
+                            {user.name}
+                          </h3>
+                          <p className="text-sm text-gray-500">
+                            {user.email}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm text-gray-600">
+                          {timeAgo}
+                        </p>
+                        <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full mt-1 ${
+                          user.status === 'Active'
+                            ? 'bg-green-100 text-green-700'
+                            : 'bg-gray-100 text-gray-700'
+                        }`}>
+                          {user.status}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
 

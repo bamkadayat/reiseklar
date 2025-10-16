@@ -1,47 +1,81 @@
+'use client';
+
 import { useTranslations } from 'next-intl';
-import { Search, Filter, MoreVertical, UserPlus, Mail, Ban } from 'lucide-react';
+import { Search, Filter, MoreVertical, UserPlus, Mail, Ban, Trash2, Shield } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { adminService, AdminUser } from '@/lib/api/admin.service';
 
 export default function AdminUsersPage() {
   const t = useTranslations('dashboard.admin.users');
+  const [users, setUsers] = useState<AdminUser[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<AdminUser[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const users = [
-    {
-      id: 1,
-      name: 'John Doe',
-      email: 'john.doe@example.com',
-      role: 'User',
-      status: 'Active',
-      joinDate: 'Jan 15, 2024',
-      trips: 45,
-    },
-    {
-      id: 2,
-      name: 'Jane Smith',
-      email: 'jane.smith@example.com',
-      role: 'User',
-      status: 'Active',
-      joinDate: 'Jan 20, 2024',
-      trips: 32,
-    },
-    {
-      id: 3,
-      name: 'Bob Johnson',
-      email: 'bob.johnson@example.com',
-      role: 'User',
-      status: 'Inactive',
-      joinDate: 'Dec 10, 2023',
-      trips: 12,
-    },
-    {
-      id: 4,
-      name: 'Alice Williams',
-      email: 'alice.williams@example.com',
-      role: 'Admin',
-      status: 'Active',
-      joinDate: 'Nov 5, 2023',
-      trips: 78,
-    },
-  ];
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  useEffect(() => {
+    if (searchQuery.trim() === '') {
+      setFilteredUsers(users);
+    } else {
+      const query = searchQuery.toLowerCase();
+      setFilteredUsers(
+        users.filter(
+          (user) =>
+            user.name.toLowerCase().includes(query) ||
+            user.email.toLowerCase().includes(query)
+        )
+      );
+    }
+  }, [searchQuery, users]);
+
+  const fetchUsers = async () => {
+    try {
+      const data = await adminService.getUsers();
+      setUsers(data);
+      setFilteredUsers(data);
+    } catch (error) {
+      console.error('Failed to fetch users:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteUser = async (userId: string) => {
+    if (!confirm('Are you sure you want to delete this user?')) return;
+
+    try {
+      await adminService.deleteUser(userId);
+      await fetchUsers();
+    } catch (error: any) {
+      alert(error.message || 'Failed to delete user');
+    }
+  };
+
+  const handleToggleRole = async (userId: string, currentRole: 'USER' | 'ADMIN') => {
+    const newRole = currentRole === 'ADMIN' ? 'USER' : 'ADMIN';
+    if (!confirm(`Change user role to ${newRole}?`)) return;
+
+    try {
+      await adminService.updateUserRole(userId, newRole);
+      await fetchUsers();
+    } catch (error: any) {
+      alert(error.message || 'Failed to update user role');
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-norwegian-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading users...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 sm:space-y-8">
@@ -65,19 +99,25 @@ export default function AdminUsersPage() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="bg-white rounded-lg border border-gray-200 p-4">
           <p className="text-sm text-gray-600">{t('totalUsers')}</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">1,234</p>
+          <p className="text-2xl font-bold text-gray-900 mt-1">{users.length}</p>
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-4">
           <p className="text-sm text-gray-600">{t('activeUsers')}</p>
-          <p className="text-2xl font-bold text-green-600 mt-1">1,089</p>
+          <p className="text-2xl font-bold text-green-600 mt-1">
+            {users.filter((u) => u.status === 'Active').length}
+          </p>
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <p className="text-sm text-gray-600">{t('newToday')}</p>
-          <p className="text-2xl font-bold text-blue-600 mt-1">24</p>
+          <p className="text-sm text-gray-600">Total Trips</p>
+          <p className="text-2xl font-bold text-blue-600 mt-1">
+            {users.reduce((sum, u) => sum + u.trips, 0)}
+          </p>
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-4">
           <p className="text-sm text-gray-600">{t('admins')}</p>
-          <p className="text-2xl font-bold text-purple-600 mt-1">8</p>
+          <p className="text-2xl font-bold text-purple-600 mt-1">
+            {users.filter((u) => u.role === 'ADMIN').length}
+          </p>
         </div>
       </div>
 
@@ -89,6 +129,8 @@ export default function AdminUsersPage() {
             <input
               type="text"
               placeholder={t('searchUsers')}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent"
             />
           </div>
@@ -127,12 +169,12 @@ export default function AdminUsersPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {users.map((user) => (
+              {filteredUsers.map((user) => (
                 <tr key={user.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="w-10 h-10 bg-norwegian-blue rounded-full flex items-center justify-center text-white font-semibold">
-                        {user.name.charAt(0)}
+                        {user.name.charAt(0).toUpperCase()}
                       </div>
                       <div className="ml-4">
                         <div className="text-sm font-medium text-gray-900">
@@ -147,7 +189,7 @@ export default function AdminUsersPage() {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
                       className={`px-3 py-1 text-xs font-medium rounded-full ${
-                        user.role === 'Admin'
+                        user.role === 'ADMIN'
                           ? 'bg-purple-100 text-purple-700'
                           : 'bg-blue-100 text-blue-700'
                       }`}
@@ -167,15 +209,32 @@ export default function AdminUsersPage() {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {user.joinDate}
+                    {new Date(user.joinDate).toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                      year: 'numeric',
+                    })}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
                     {user.trips}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button className="text-norwegian-blue hover:text-norwegian-blue-600">
-                      <MoreVertical className="w-5 h-5" />
-                    </button>
+                    <div className="flex items-center justify-end gap-2">
+                      <button
+                        onClick={() => handleToggleRole(user.id, user.role)}
+                        className="p-1 text-purple-600 hover:text-purple-800"
+                        title={`Toggle role (current: ${user.role})`}
+                      >
+                        <Shield className="w-5 h-5" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteUser(user.id)}
+                        className="p-1 text-red-600 hover:text-red-800"
+                        title="Delete user"
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -185,12 +244,12 @@ export default function AdminUsersPage() {
 
         {/* Mobile Cards */}
         <div className="md:hidden divide-y divide-gray-200">
-          {users.map((user) => (
+          {filteredUsers.map((user) => (
             <div key={user.id} className="p-4 space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-norwegian-blue rounded-full flex items-center justify-center text-white font-semibold">
-                    {user.name.charAt(0)}
+                    {user.name.charAt(0).toUpperCase()}
                   </div>
                   <div>
                     <div className="text-sm font-medium text-gray-900">
@@ -199,15 +258,26 @@ export default function AdminUsersPage() {
                     <div className="text-xs text-gray-500">{user.email}</div>
                   </div>
                 </div>
-                <button className="text-gray-400">
-                  <MoreVertical className="w-5 h-5" />
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => handleToggleRole(user.id, user.role)}
+                    className="p-1 text-purple-600 hover:text-purple-800"
+                  >
+                    <Shield className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={() => handleDeleteUser(user.id)}
+                    className="p-1 text-red-600 hover:text-red-800"
+                  >
+                    <Trash2 className="w-5 h-5" />
+                  </button>
+                </div>
               </div>
               <div className="flex items-center justify-between text-sm">
                 <div className="flex gap-2">
                   <span
                     className={`px-2 py-1 text-xs font-medium rounded-full ${
-                      user.role === 'Admin'
+                      user.role === 'ADMIN'
                         ? 'bg-purple-100 text-purple-700'
                         : 'bg-blue-100 text-blue-700'
                     }`}

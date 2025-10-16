@@ -1,10 +1,10 @@
 'use client';
 
-import { ReactNode, useState } from 'react';
+import { ReactNode, useState, useEffect } from 'react';
 import { AdminSidebar } from '@/components/admin/layout/AdminSidebar';
 import { DashboardHeader } from '@/components/shared/layout/DashboardHeader';
-// import { useAuth } from '@/hooks/useAuth'; // TODO: Implement auth hook
-// import { redirect } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
 
 export default function AdminLayout({
   children,
@@ -12,17 +12,33 @@ export default function AdminLayout({
   children: ReactNode;
 }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { user, isCheckingAuth, isAuthenticated } = useAuth();
+  const router = useRouter();
 
-  // TODO: Implement proper authentication
-  // const { user, isLoading } = useAuth();
+  useEffect(() => {
+    if (!isCheckingAuth) {
+      if (!isAuthenticated) {
+        router.push('/signIn');
+      } else if (user?.role !== 'ADMIN') {
+        router.push('/');
+      }
+    }
+  }, [isCheckingAuth, isAuthenticated, user, router]);
 
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-  // }
+  if (isCheckingAuth) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-norwegian-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
-  // if (!user || user.role !== 'admin') {
-  //   redirect('/login');
-  // }
+  if (!isAuthenticated || user?.role !== 'ADMIN') {
+    return null;
+  }
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -37,9 +53,9 @@ export default function AdminLayout({
         {/* Header */}
         <DashboardHeader
           onMenuClick={() => setIsSidebarOpen(true)}
-          userName="Admin"
+          userName={user?.name || user?.email || 'Admin'}
           userRole="admin"
-          notificationCount={5}
+          notificationCount={0}
         />
 
         {/* Main Content Area */}

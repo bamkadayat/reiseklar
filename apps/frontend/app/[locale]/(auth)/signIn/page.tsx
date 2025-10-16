@@ -6,14 +6,19 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 export default function SignInPage() {
-  const { isAuthenticated, isCheckingAuth } = useAuth();
+  const { isAuthenticated, isCheckingAuth, user } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!isCheckingAuth && isAuthenticated) {
-      router.push('/user');
+    if (!isCheckingAuth && isAuthenticated && user) {
+      // Redirect based on user role
+      if (user.role === 'ADMIN') {
+        router.push('/admin');
+      } else {
+        router.push('/user');
+      }
     }
-  }, [isAuthenticated, isCheckingAuth, router]);
+  }, [isAuthenticated, isCheckingAuth, user, router]);
 
   if (isCheckingAuth) {
     return (
