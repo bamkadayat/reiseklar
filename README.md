@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🚆 Reiseklar
+# Reiseklar
 
 **Smart Commute Planner for Norway**
 
@@ -11,42 +11,43 @@
 
 Built with **Next.js 14**, **TypeScript**, and modern best practices.
 
-[Features](#-features) • [Tech Stack](#-tech-stack) • [Getting Started](#-getting-started) • [Architecture](#-architecture)
+[Features](#features) • [Tech Stack](#tech-stack) • [Getting Started](#getting-started) • [Architecture](#architecture) • [Database Schema](#database-schema)
 
 </div>
 
 ---
 
-## ✨ Features
+## Features
 
-### 🗺️ Smart Route Planning
+### Smart Route Planning
 - Real-time journey search powered by **Entur API**
 - Filter by transport mode, accessibility needs, and departure time
 - Interactive map with stop markers and route visualization (Kartverket tiles)
 
-### 🌦️ Weather-Aware Routing
+### Weather-Aware Routing
 - Live precipitation and wind data from **MET Norway**
 - Smart recommendations to leave earlier during bad weather
 - Weather overlays on route maps
 
-### 💾 Personalization
-- **Saved Trips** — Store frequent routes (home → work, etc.)
-- **Leave-by Alerts** — Get notified when it's time to go
+### Personalization
+- **Saved Places** — Store frequently used locations (home, work, etc.)
+- **Saved Trips** — Store frequent routes between saved places with accessibility preferences
+- **Departure Alerts** — Get notified when it's time to go based on saved trips
 - **Recent Searches** — Synced across devices when logged in
 
-### 📱 Progressive Web App
+### Progressive Web App
 - Installable on mobile and desktop
 - Offline access to your last trips
 - Push notifications for departure reminders
 
-### 🌍 Multilingual & Accessible
-- 🇳🇴 Norwegian (Bokmål) and 🇬🇧 English
-- ♿ Full keyboard navigation and WCAG-compliant
+### Multilingual & Accessible
+- Norwegian (Bokmal) and English language support
+- Full keyboard navigation and WCAG-compliant
 - Step-free journey filters for accessibility
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 <table>
 <tr>
@@ -96,7 +97,7 @@ Built with **Next.js 14**, **TypeScript**, and modern best practices.
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Node.js 20+
@@ -130,7 +131,7 @@ Backend API at `http://localhost:8080`
 
 ---
 
-## 📁 Architecture
+## Architecture
 
 ### Monorepo Structure
 
@@ -167,27 +168,74 @@ reiseklar/
 
 | Feature                    | Anonymous Users  | Logged-in Users |
 |----------------------------|------------------|-----------------|
-| Search routes              | ✅               | ✅              |
-| Interactive map            | ✅               | ✅              |
-| Step-by-step directions    | ✅               | ✅              |
-| Recent searches (local)    | ✅ localStorage  | ✅ Synced       |
-| **Save favorite trips**    | ❌ Login required | ✅             |
-| **Departure alerts**       | ❌ Login required | ✅             |
-| PWA offline mode           | ✅               | ✅              |
-| Cross-device sync          | ❌               | ✅              |
+| Search routes              | Yes              | Yes             |
+| Interactive map            | Yes              | Yes             |
+| Step-by-step directions    | Yes              | Yes             |
+| Recent searches (local)    | Yes (localStorage) | Yes (Synced)  |
+| **Save favorite places**   | No (Login required) | Yes          |
+| **Save favorite trips**    | No (Login required) | Yes          |
+| **Departure alerts**       | No (Login required) | Yes          |
+| PWA offline mode           | Yes              | Yes             |
+| Cross-device sync          | No               | Yes             |
 
 ---
 
-## 🔐 Authentication Flow
+## Database Schema
+
+The application uses PostgreSQL with Prisma ORM. Key models include:
+
+### User Model
+- **id**: Unique identifier (CUID)
+- **email**: Unique email address
+- **name**: Optional user name
+- **passwordHash**: Hashed password (optional for OAuth users)
+- **emailVerifiedAt**: Email verification timestamp
+- **role**: USER or ADMIN
+- **OAuth fields**: googleId, provider, avatar
+- **Relations**: trips, alerts, tokens, email verifications, password resets, places
+
+### Place Model
+- **id**: Unique identifier (CUID)
+- **userId**: Owner of the place
+- **label**: Custom label (e.g., "Home", "Work")
+- **lat/lon**: Geographic coordinates
+- **address**: Human-readable address
+- **Relations**: Can be used as origin or destination in trips
+
+### Trip Model
+- **id**: Unique identifier (CUID)
+- **userId**: Owner of the trip
+- **originId**: Reference to saved place (origin)
+- **destinationId**: Reference to saved place (destination)
+- **accessibility**: Accessibility preference (default: "none")
+- **Relations**: User, origin place, destination place, alerts
+
+### Alert Model
+- **id**: Unique identifier (CUID)
+- **userId**: Owner of the alert
+- **tripId**: Reference to saved trip
+- **thresholdMin**: Minutes before departure to alert (default: 5)
+- **channel**: Notification channel (e.g., email, push)
+- **Relations**: User, trip
+
+### Supporting Models
+- **RefreshToken**: JWT refresh token management with revocation support
+- **EmailVerification**: 4-digit PIN verification with attempt tracking and expiry
+- **PasswordReset**: Secure password reset token management
+
+---
+
+## Authentication Flow
 
 1. **Sign Up** — Email + password registration
-2. **Verification** — 4-digit PIN sent to email (10-min expiry)
+2. **Verification** — 4-digit PIN sent to email (10-min expiry, attempt tracking)
 3. **Login** — JWT access token (15 min) + refresh token (7 days)
 4. **Auto-refresh** — Silent token renewal before expiry
+5. **OAuth Support** — Google OAuth integration available
 
 ---
 
-## 🌐 Deployment
+## Deployment
 
 ### Frontend (Vercel)
 ```bash
@@ -205,7 +253,7 @@ gcloud builds submit --config cloudbuild.yaml
 
 ---
 
-## 🧪 Testing
+## Testing
 
 ```bash
 # Run all tests
@@ -223,13 +271,35 @@ pnpm typecheck
 # Linting
 pnpm lint
 ```
-## Run PRISMA STUDIO
-```
-npx prisma studio
-```
+
 ---
 
-## 📝 License
+## Database Management
+
+### Prisma Studio
+View and manage your database with Prisma Studio:
+```bash
+npx prisma studio
+```
+
+### Common Prisma Commands
+```bash
+# Generate Prisma Client
+pnpm prisma generate
+
+# Run migrations
+pnpm prisma migrate dev
+
+# Reset database
+pnpm prisma migrate reset
+
+# View database schema
+pnpm prisma db pull
+```
+
+---
+
+## License
 
 MIT © [Bam Kadayat]
 
@@ -237,6 +307,6 @@ MIT © [Bam Kadayat]
 
 <div align="center">
 
-Made with ❤️ in Norway
+Made in Norway
 
 </div>

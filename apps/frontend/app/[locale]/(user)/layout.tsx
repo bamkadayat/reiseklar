@@ -1,11 +1,10 @@
 'use client';
 
-import { ReactNode, useState } from 'react';
+import { ReactNode, useState, useEffect } from 'react';
 import { UserSidebar } from '@/components/user/layout/UserSidebar';
 import { DashboardHeader } from '@/components/shared/layout/DashboardHeader';
-import { useAppSelector } from '@/store/hooks';
-// import { useAuth } from '@/hooks/useAuth'; // TODO: Implement auth hook
-// import { redirect } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
 
 export default function UserLayout({
   children,
@@ -13,18 +12,29 @@ export default function UserLayout({
   children: ReactNode;
 }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { user } = useAppSelector((state) => state.auth);
+  const { user, isCheckingAuth, isAuthenticated } = useAuth();
+  const router = useRouter();
 
-  // TODO: Implement proper authentication
-  // const { user, isLoading } = useAuth();
+  useEffect(() => {
+    if (!isCheckingAuth && !isAuthenticated) {
+      router.push('/signIn');
+    }
+  }, [isCheckingAuth, isAuthenticated, router]);
 
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-  // }
+  if (isCheckingAuth) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-norwegian-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
-  // if (!user) {
-  //   redirect('/login');
-  // }
+  if (!isAuthenticated) {
+    return null;
+  }
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -39,9 +49,9 @@ export default function UserLayout({
         {/* Header */}
         <DashboardHeader
           onMenuClick={() => setIsSidebarOpen(true)}
-          userName={user?.name || 'User'}
+          userName={user?.name || user?.email || 'User'}
           userRole="user"
-          notificationCount={3}
+          notificationCount={0}
         />
 
         {/* Main Content Area */}

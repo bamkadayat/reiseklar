@@ -23,12 +23,12 @@ const DateInput = forwardRef<
     type="button"
     onClick={onClick}
     ref={ref}
-    className="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 rounded-xl px-4 py-3 hover:bg-gray-50 transition-colors"
+    className="w-full flex items-center justify-center gap-2 bg-white border border-gray-300 rounded-xl px-3 py-2 hover:bg-gray-50 transition-colors"
   >
-    <CalendarIcon className="h-5 w-5 text-gray-500 flex-shrink-0" />
+    <CalendarIcon className="h-4 w-4 text-gray-500 flex-shrink-0" />
     <div className="flex flex-col items-start">
-      <span className="text-xs text-gray-500">{label}</span>
-      <span className="text-base text-gray-900 font-medium">{value}</span>
+      <span className="text-[10px] text-gray-500">{label}</span>
+      <span className="text-sm text-gray-900 font-medium">{value}</span>
     </div>
   </button>
 ));
@@ -43,12 +43,12 @@ const TimeInput = forwardRef<
     type="button"
     onClick={onClick}
     ref={ref}
-    className="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 rounded-xl px-4 py-3 hover:bg-gray-50 transition-colors"
+    className="w-full flex items-center justify-center gap-2 bg-white border border-gray-300 rounded-xl px-3 py-2 hover:bg-gray-50 transition-colors"
   >
-    <Clock className="h-5 w-5 text-gray-500 flex-shrink-0" />
+    <Clock className="h-4 w-4 text-gray-500 flex-shrink-0" />
     <div className="flex flex-col items-start">
-      <span className="text-xs text-gray-500">Tidspunkt</span>
-      <span className="text-base text-gray-900 font-medium">{value}</span>
+      <span className="text-[10px] text-gray-500">Tidspunkt</span>
+      <span className="text-sm text-gray-900 font-medium">{value}</span>
     </div>
   </button>
 ));

@@ -167,9 +167,9 @@ export function JourneySearchModifier({
   };
 
   return (
-    <Card className="mb-6 overflow-visible shadow-none">
-      <CardContent className="p-6 overflow-visible">
-        <div className="space-y-4 overflow-visible">
+    <Card className="mb-4 overflow-visible shadow-none">
+      <CardContent className="p-4 overflow-visible">
+        <div className="space-y-3 overflow-visible">
           {/* From Location */}
           <div className="relative">
             <LocationAutocomplete
@@ -207,18 +207,17 @@ export function JourneySearchModifier({
           </div>
 
           {/* Date and Time Pickers */}
-          <div className="space-y-3">
+          <div className="space-y-2">
             {/* Nå button - full width */}
             <button
               type="button"
               onClick={() => setSelectedDateTime(new Date())}
-              className="w-full bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl py-3 font-medium transition-colors flex items-center justify-center gap-2"
+              className="w-full bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl py-2.5 font-medium transition-colors flex items-center justify-center gap-2"
             >
-              <span className="text-base">Nå</span>
+              <span className="text-sm">Nå</span>
             </button>
 
             {/* Date and Time stacked vertically */}
-
             <div className="w-full">
               <DateTimePicker
                 date={selectedDateTime}
@@ -241,31 +240,31 @@ export function JourneySearchModifier({
           <div className="flex gap-2">
             <button
               type="button"
-              className="flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl py-3 font-medium transition-colors flex flex-col items-center justify-center gap-1.5"
+              className="flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl py-2.5 font-medium transition-colors flex flex-col items-center justify-center gap-1"
             >
-              <Bus className="w-5 h-5 flex-shrink-0" />
-              <span className="text-xs leading-tight text-center whitespace-nowrap">{transitTime ? formatMinutesToTime(transitTime) : '...'}</span>
+              <Bus className="w-4 h-4 flex-shrink-0" />
+              <span className="text-[10px] leading-tight text-center whitespace-nowrap">{transitTime ? formatMinutesToTime(transitTime) : '...'}</span>
             </button>
             <button
               type="button"
-              className="flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl py-3 font-medium transition-colors flex flex-col items-center justify-center gap-1.5"
+              className="flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl py-2.5 font-medium transition-colors flex flex-col items-center justify-center gap-1"
             >
-              <Bike className="w-5 h-5 flex-shrink-0" />
-              <span className="text-xs leading-tight text-center whitespace-nowrap">{bikeTime ? formatMinutesToTime(bikeTime) : '...'}</span>
+              <Bike className="w-4 h-4 flex-shrink-0" />
+              <span className="text-[10px] leading-tight text-center whitespace-nowrap">{bikeTime ? formatMinutesToTime(bikeTime) : '...'}</span>
             </button>
             <button
               type="button"
-              className="flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl py-3 font-medium transition-colors flex flex-col items-center justify-center gap-1.5"
+              className="flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl py-2.5 font-medium transition-colors flex flex-col items-center justify-center gap-1"
             >
-              <Footprints className="w-5 h-5 flex-shrink-0" />
-              <span className="text-xs leading-tight text-center whitespace-nowrap">{walkTime ? formatMinutesToTime(walkTime) : '...'}</span>
+              <Footprints className="w-4 h-4 flex-shrink-0" />
+              <span className="text-[10px] leading-tight text-center whitespace-nowrap">{walkTime ? formatMinutesToTime(walkTime) : '...'}</span>
             </button>
           </div>
 
           {/* Search Button */}
           <Button
             onClick={handleSearch}
-            className="w-full py-6 bg-blue-700 hover:bg-blue-800 text-white rounded-xl text-lg font-semibold"
+            className="w-full py-4 bg-blue-700 hover:bg-blue-800 text-white rounded-xl text-base font-semibold"
           >
             Søk
           </Button>

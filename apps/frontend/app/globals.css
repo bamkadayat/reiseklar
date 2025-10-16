@@ -1,6 +1,51 @@
+@import 'leaflet/dist/leaflet.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Custom Map Styles */
+.map-label {
+  background: white !important;
+  border: 2px solid #e5e7eb !important;
+  border-radius: 6px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+  padding: 4px 10px !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  color: #1f2937 !important;
+  white-space: nowrap !important;
+}
+
+.map-label::before {
+  display: none !important;
+}
+
+/* Dark label style for better visibility */
+.map-label-dark {
+  background: #1f2937 !important;
+  border: 2px solid white !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+  padding: 6px 12px !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  color: white !important;
+  white-space: nowrap !important;
+}
+
+.map-label-dark::before {
+  display: none !important;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 8px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+}
+
+.leaflet-popup-tip {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
 
 @layer utilities {
   .text-balance {

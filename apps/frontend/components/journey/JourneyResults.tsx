@@ -6,6 +6,7 @@ import { JourneyCard } from './JourneyCard';
 import { JourneyCardSkeleton } from './JourneyCardSkeleton';
 import { AlternativeRoutes } from './AlternativeRoutes';
 import { JourneySearchModifier } from './JourneySearchModifier';
+import { JourneyMap } from './JourneyMap';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
 interface JourneyResultsProps {
@@ -43,6 +44,7 @@ export function JourneyResults({
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+  const [selectedJourneyIndex, setSelectedJourneyIndex] = useState<number>(0);
 
   // Current search parameters
   const [searchParams, setSearchParams] = useState({
@@ -93,18 +95,29 @@ export function JourneyResults({
                   mode
                   distance
                   duration
+                  pointsOnLink {
+                    points
+                  }
                   fromPlace {
                     name
+                    latitude
+                    longitude
                     quay {
                       name
                       publicCode
+                      latitude
+                      longitude
                     }
                   }
                   toPlace {
                     name
+                    latitude
+                    longitude
                     quay {
                       name
                       publicCode
+                      latitude
+                      longitude
                     }
                   }
                   fromEstimatedCall {
@@ -113,6 +126,8 @@ export function JourneyResults({
                     quay {
                       name
                       publicCode
+                      latitude
+                      longitude
                     }
                   }
                   toEstimatedCall {
@@ -121,6 +136,8 @@ export function JourneyResults({
                     quay {
                       name
                       publicCode
+                      latitude
+                      longitude
                     }
                   }
                   intermediateEstimatedCalls {
@@ -131,6 +148,8 @@ export function JourneyResults({
                     quay {
                       name
                       publicCode
+                      latitude
+                      longitude
                     }
                   }
                   line {
@@ -179,11 +198,11 @@ export function JourneyResults({
   }, [searchParams]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 py-4 lg:py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div className="min-h-screen">
+      <div className="max-w-[1600px] mx-auto px-4 py-4 lg:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Mobile: Compact Search Header (shown on mobile only) */}
-          <div className="lg:hidden">
+          <div className="lg:hidden lg:col-span-12">
             <button
               onClick={() => setIsSearchExpanded(!isSearchExpanded)}
               className="w-full bg-white rounded-xl p-4 shadow-sm border border-gray-200 hover:bg-gray-50 transition-colors"
@@ -246,8 +265,9 @@ export function JourneyResults({
           </div>
 
           {/* Desktop: Left Sidebar - Search Modifier (hidden on mobile) */}
-          <div className="hidden lg:block lg:col-span-1">
-            <JourneySearchModifier
+          <div className="hidden lg:block lg:col-span-3">
+            <div className="sticky top-0 pt-4">
+              <JourneySearchModifier
               initialFrom={searchParams.startLabel}
               initialTo={searchParams.stopLabel}
               initialFromId={searchParams.startId}
@@ -269,45 +289,71 @@ export function JourneyResults({
                   dateTime: params.dateTime,
                 });
               }}
-            />
+              />
+            </div>
           </div>
 
-          {/* Main Content - Journey Results */}
-          <div className="lg:col-span-2 space-y-4">
-            {isLoading ? (
-              <>
-                <JourneyCardSkeleton />
-                <JourneyCardSkeleton />
-                <JourneyCardSkeleton />
-              </>
-            ) : error ? (
-              <div className="bg-white rounded-xl p-8 text-center">
-                <h2 className="text-xl font-bold text-gray-900 mb-2">Something went wrong</h2>
-                <p className="text-gray-600">{error}</p>
-              </div>
-            ) : journeys.length === 0 ? (
-              <div className="bg-white rounded-xl p-8 text-center">
-                <p className="text-gray-600">No journeys found</p>
-              </div>
-            ) : (
-              journeys.map((journey, index) => (
-                <JourneyCard
-                  key={index}
-                  journey={journey}
-                  from={searchParams.startLabel}
-                  fromData={{
-                    label: searchParams.startLabel,
-                    lat: searchParams.startLat,
-                    lon: searchParams.startLon,
-                  }}
-                  toData={{
-                    label: searchParams.stopLabel,
-                    lat: searchParams.stopLat,
-                    lon: searchParams.stopLon,
-                  }}
-                />
-              ))
+          {/* Main Content - Map and Journey Results */}
+          <div className="lg:col-span-9 space-y-4">
+            {/* Map - shown above journey cards on all screens */}
+            {!isLoading && journeys.length > 0 && (
+              <JourneyMap
+                journey={journeys[selectedJourneyIndex]}
+                startLat={searchParams.startLat}
+                startLon={searchParams.startLon}
+                startLabel={searchParams.startLabel}
+                stopLat={searchParams.stopLat}
+                stopLon={searchParams.stopLon}
+                stopLabel={searchParams.stopLabel}
+              />
             )}
+
+            {/* Journey Results */}
+            <div className="space-y-4">
+              {isLoading ? (
+                <>
+                  <JourneyCardSkeleton />
+                  <JourneyCardSkeleton />
+                  <JourneyCardSkeleton />
+                </>
+              ) : error ? (
+                <div className="bg-white rounded-xl p-8 text-center">
+                  <h2 className="text-xl font-bold text-gray-900 mb-2">Something went wrong</h2>
+                  <p className="text-gray-600">{error}</p>
+                </div>
+              ) : journeys.length === 0 ? (
+                <div className="bg-white rounded-xl p-8 text-center">
+                  <p className="text-gray-600">No journeys found</p>
+                </div>
+              ) : (
+                journeys.map((journey, index) => (
+                  <div
+                    key={index}
+                    onClick={() => setSelectedJourneyIndex(index)}
+                    className={`cursor-pointer transition-all ${
+                      selectedJourneyIndex === index
+                        ? 'ring-2 ring-blue-500 rounded-xl'
+                        : ''
+                    }`}
+                  >
+                    <JourneyCard
+                      journey={journey}
+                      from={searchParams.startLabel}
+                      fromData={{
+                        label: searchParams.startLabel,
+                        lat: searchParams.startLat,
+                        lon: searchParams.startLon,
+                      }}
+                      toData={{
+                        label: searchParams.stopLabel,
+                        lat: searchParams.stopLat,
+                        lon: searchParams.stopLon,
+                      }}
+                    />
+                  </div>
+                ))
+              )}
+            </div>
           </div>
         </div>
       </div>

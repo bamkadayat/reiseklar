@@ -24,7 +24,7 @@ type SignInFormData = z.infer<typeof signInSchema>;
 
 export function SignInForm() {
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
 
   const {
@@ -40,8 +40,11 @@ export function SignInForm() {
     try {
       await login(data.email, data.password);
 
-      // Redirect to user dashboard after successful login
-      router.push('/user');
+      // Small delay to ensure user state is updated
+      setTimeout(() => {
+        // The redirect will be handled by the page's useEffect
+        // which checks the user role
+      }, 100);
     } catch (error) {
       console.error('Login error:', error);
       setError('email', {
