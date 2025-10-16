@@ -1,17 +1,8 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-
-interface Stop {
-  name: string;
-  lat: number;
-  lon: number;
-  quay?: {
-    publicCode?: string;
-  };
-}
+import mapboxgl from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 interface Leg {
   mode: string;
@@ -48,14 +39,6 @@ interface JourneyMapProps {
   stopLabel: string;
 }
 
-// Fix for default marker icons in Next.js
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-});
-
 export function JourneyMap({
   journey,
   startLat,
@@ -65,54 +48,36 @@ export function JourneyMap({
   stopLon,
   stopLabel,
 }: JourneyMapProps) {
-  const mapRef = useRef<L.Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<mapboxgl.Map | null>(null);
 
   useEffect(() => {
     if (!mapContainerRef.current) return;
 
-    // Initialize map
-    if (!mapRef.current) {
-      mapRef.current = L.map(mapContainerRef.current, {
-        center: [startLat, startLon],
-        zoom: 12,
-        zoomControl: true,
-        scrollWheelZoom: true,
-      });
+    const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
-      // Add Mapbox tiles (same as Ruter uses)
-      const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
-
-      if (mapboxToken) {
-        // Use Mapbox Light style (clean, neutral look with better contrast)
-        L.tileLayer(`https://api.mapbox.com/styles/v1/mapbox/light-v11/tiles/{z}/{x}/{y}?access_token=${mapboxToken}`, {
-          attribution: '&copy; <a href="https://www.mapbox.com/">Mapbox</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-          tileSize: 512,
-          zoomOffset: -1,
-          maxZoom: 19,
-        }).addTo(mapRef.current);
-      } else {
-        // Fallback to OpenStreetMap if no token
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-          maxZoom: 19,
-        }).addTo(mapRef.current);
-      }
+    if (!mapboxToken) {
+      console.error('NEXT_PUBLIC_MAPBOX_TOKEN is required for Mapbox GL JS');
+      return;
     }
+
+    mapboxgl.accessToken = mapboxToken;
+
+    // Initialize map
+    mapRef.current = new mapboxgl.Map({
+      container: mapContainerRef.current,
+      style: 'mapbox://styles/mapbox/light-v11',
+      center: [startLon, startLat],
+      zoom: 12,
+    });
 
     const map = mapRef.current;
 
-    // Clear existing layers (except tile layer)
-    map.eachLayer((layer) => {
-      if (layer instanceof L.Marker || layer instanceof L.Polyline) {
-        map.removeLayer(layer);
-      }
-    });
-
-    // Create custom icons with enhanced visibility (darker, more prominent)
-    const startIcon = L.divIcon({
-      className: 'custom-div-icon',
-      html: `
+    map.on('load', () => {
+      // Create start marker (A)
+      const startEl = document.createElement('div');
+      startEl.className = 'custom-marker';
+      startEl.innerHTML = `
         <div style="position: relative;">
           <div style="
             background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
@@ -150,14 +115,28 @@ export function JourneyMap({
             border: 2px solid white;
           ">Start</div>
         </div>
-      `,
-      iconSize: [52, 52],
-      iconAnchor: [26, 52],
-    });
+      `;
 
-    const stopIcon = L.divIcon({
-      className: 'custom-div-icon',
-      html: `
+      new mapboxgl.Marker({ element: startEl, anchor: 'bottom' })
+        .setLngLat([startLon, startLat])
+        .setPopup(
+          new mapboxgl.Popup({ offset: 25 }).setHTML(`
+            <div style="font-family: system-ui, -apple-system, sans-serif;">
+              <div style="font-weight: 700; font-size: 14px; color: #059669; margin-bottom: 4px;">
+                START
+              </div>
+              <div style="font-size: 13px; color: #374151;">
+                ${startLabel}
+              </div>
+            </div>
+          `)
+        )
+        .addTo(map);
+
+      // Create end marker (B)
+      const endEl = document.createElement('div');
+      endEl.className = 'custom-marker';
+      endEl.innerHTML = `
         <div style="position: relative;">
           <div style="
             background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
@@ -195,244 +174,312 @@ export function JourneyMap({
             border: 2px solid white;
           ">End</div>
         </div>
-      `,
-      iconSize: [52, 52],
-      iconAnchor: [26, 52],
-    });
+      `;
 
-    const transitStopIcon = L.divIcon({
-      className: 'custom-div-icon',
-      html: `
-        <div style="
-          background-color: #1e40af;
-          width: 16px;
-          height: 16px;
-          border-radius: 50%;
-          border: 3px solid white;
-          box-shadow: 0 3px 8px rgba(0,0,0,0.4), 0 1px 3px rgba(0,0,0,0.3);
-        "></div>
-      `,
-      iconSize: [22, 22],
-      iconAnchor: [11, 11],
-    });
-
-    // Add start marker with better popup
-    const startMarker = L.marker([startLat, startLon], { icon: startIcon })
-      .addTo(map)
-      .bindPopup(`
-        <div style="font-family: system-ui, -apple-system, sans-serif;">
-          <div style="font-weight: 700; font-size: 14px; color: #059669; margin-bottom: 4px;">
-            START
-          </div>
-          <div style="font-size: 13px; color: #374151;">
-            ${startLabel}
-          </div>
-        </div>
-      `, {
-        offset: [0, -40]
-      });
-
-    // Add end marker with better popup
-    const endMarker = L.marker([stopLat, stopLon], { icon: stopIcon })
-      .addTo(map)
-      .bindPopup(`
-        <div style="font-family: system-ui, -apple-system, sans-serif;">
-          <div style="font-weight: 700; font-size: 14px; color: #dc2626; margin-bottom: 4px;">
-            DESTINATION
-          </div>
-          <div style="font-size: 13px; color: #374151;">
-            ${stopLabel}
-          </div>
-        </div>
-      `, {
-        offset: [0, -40]
-      });
-
-    // Add permanent tooltips (always visible labels with dark background)
-    startMarker.bindTooltip(startLabel, {
-      permanent: true,
-      direction: 'top',
-      offset: [0, -60],
-      className: 'map-label-dark',
-    }).openTooltip();
-
-    endMarker.bindTooltip(stopLabel, {
-      permanent: true,
-      direction: 'top',
-      offset: [0, -60],
-      className: 'map-label-dark',
-    }).openTooltip();
-
-    // Collect all points for bounds
-    const allPoints: L.LatLngExpression[] = [[startLat, startLon], [stopLat, stopLon]];
-
-    // Process each leg
-    journey.legs?.forEach((leg, index) => {
-      if (leg.mode !== 'foot') {
-        // Add markers for transit stops
-        if (leg.fromPlace?.latitude && leg.fromPlace?.longitude) {
-          const fromLat = leg.fromPlace.latitude;
-          const fromLon = leg.fromPlace.longitude;
-
-          const fromMarker = L.marker([fromLat, fromLon], { icon: transitStopIcon })
-            .addTo(map)
-            .bindPopup(`
-              <div style="font-family: system-ui, -apple-system, sans-serif; min-width: 150px;">
-                <div style="font-weight: 700; font-size: 13px; color: #1f2937; margin-bottom: 4px;">
-                  ${leg.fromPlace.name}
-                </div>
-                ${leg.fromPlace.quay?.publicCode ? `
-                  <div style="font-size: 12px; color: #6b7280;">
-                    Platform <span style="
-                      background: #3b82f6;
-                      color: white;
-                      padding: 2px 6px;
-                      border-radius: 4px;
-                      font-weight: 600;
-                    ">${leg.fromPlace.quay.publicCode}</span>
-                  </div>
-                ` : ''}
+      new mapboxgl.Marker({ element: endEl, anchor: 'bottom' })
+        .setLngLat([stopLon, stopLat])
+        .setPopup(
+          new mapboxgl.Popup({ offset: 25 }).setHTML(`
+            <div style="font-family: system-ui, -apple-system, sans-serif;">
+              <div style="font-weight: 700; font-size: 14px; color: #dc2626; margin-bottom: 4px;">
+                DESTINATION
               </div>
-            `);
-
-          // Add tooltip on hover for transit stops
-          fromMarker.bindTooltip(leg.fromPlace.name, {
-            permanent: false,
-            direction: 'top',
-            offset: [0, -10],
-            className: 'map-label',
-          });
-
-          allPoints.push([fromLat, fromLon]);
-        }
-
-        if (leg.toPlace?.latitude && leg.toPlace?.longitude) {
-          const toLat = leg.toPlace.latitude;
-          const toLon = leg.toPlace.longitude;
-
-          const toMarker = L.marker([toLat, toLon], { icon: transitStopIcon })
-            .addTo(map)
-            .bindPopup(`
-              <div style="font-family: system-ui, -apple-system, sans-serif; min-width: 150px;">
-                <div style="font-weight: 700; font-size: 13px; color: #1f2937; margin-bottom: 4px;">
-                  ${leg.toPlace.name}
-                </div>
-                ${leg.toPlace.quay?.publicCode ? `
-                  <div style="font-size: 12px; color: #6b7280;">
-                    Platform <span style="
-                      background: #3b82f6;
-                      color: white;
-                      padding: 2px 6px;
-                      border-radius: 4px;
-                      font-weight: 600;
-                    ">${leg.toPlace.quay.publicCode}</span>
-                  </div>
-                ` : ''}
+              <div style="font-size: 13px; color: #374151;">
+                ${stopLabel}
               </div>
-            `);
+            </div>
+          `)
+        )
+        .addTo(map);
 
-          // Add tooltip on hover for transit stops
-          toMarker.bindTooltip(leg.toPlace.name, {
-            permanent: false,
-            direction: 'top',
-            offset: [0, -10],
-            className: 'map-label',
-          });
+      // Collect all coordinates for bounds
+      const allCoordinates: [number, number][] = [
+        [startLon, startLat],
+        [stopLon, stopLat],
+      ];
 
-          allPoints.push([toLat, toLon]);
-        }
+      // Process each leg
+      journey.legs?.forEach((leg, legIndex) => {
+        if (leg.mode !== 'foot') {
+          // Add markers for transit stops
+          if (leg.fromPlace?.latitude && leg.fromPlace?.longitude) {
+            const fromEl = document.createElement('div');
+            fromEl.className = 'transit-stop-marker';
+            fromEl.innerHTML = `
+              <div style="
+                background-color: #1e40af;
+                width: 16px;
+                height: 16px;
+                border-radius: 50%;
+                border: 3px solid white;
+                box-shadow: 0 3px 8px rgba(0,0,0,0.4), 0 1px 3px rgba(0,0,0,0.3);
+              "></div>
+            `;
 
-        // Draw route line for transit legs
-        if (leg.pointsOnLink?.points) {
-          // Decode polyline (if Entur provides encoded polyline)
-          const coordinates = decodePolyline(leg.pointsOnLink.points);
+            new mapboxgl.Marker({ element: fromEl })
+              .setLngLat([leg.fromPlace.longitude, leg.fromPlace.latitude])
+              .setPopup(
+                new mapboxgl.Popup({ offset: 15 }).setHTML(`
+                  <div style="font-family: system-ui, -apple-system, sans-serif; min-width: 150px;">
+                    <div style="font-weight: 700; font-size: 13px; color: #1f2937; margin-bottom: 4px;">
+                      ${leg.fromPlace.name}
+                    </div>
+                    ${leg.fromPlace.quay?.publicCode ? `
+                      <div style="font-size: 12px; color: #6b7280;">
+                        Platform <span style="
+                          background: #3b82f6;
+                          color: white;
+                          padding: 2px 6px;
+                          border-radius: 4px;
+                          font-weight: 600;
+                        ">${leg.fromPlace.quay.publicCode}</span>
+                      </div>
+                    ` : ''}
+                  </div>
+                `)
+              )
+              .addTo(map);
 
-          if (coordinates.length > 0) {
+            allCoordinates.push([leg.fromPlace.longitude, leg.fromPlace.latitude]);
+          }
+
+          if (leg.toPlace?.latitude && leg.toPlace?.longitude) {
+            const toEl = document.createElement('div');
+            toEl.className = 'transit-stop-marker';
+            toEl.innerHTML = `
+              <div style="
+                background-color: #1e40af;
+                width: 16px;
+                height: 16px;
+                border-radius: 50%;
+                border: 3px solid white;
+                box-shadow: 0 3px 8px rgba(0,0,0,0.4), 0 1px 3px rgba(0,0,0,0.3);
+              "></div>
+            `;
+
+            new mapboxgl.Marker({ element: toEl })
+              .setLngLat([leg.toPlace.longitude, leg.toPlace.latitude])
+              .setPopup(
+                new mapboxgl.Popup({ offset: 15 }).setHTML(`
+                  <div style="font-family: system-ui, -apple-system, sans-serif; min-width: 150px;">
+                    <div style="font-weight: 700; font-size: 13px; color: #1f2937; margin-bottom: 4px;">
+                      ${leg.toPlace.name}
+                    </div>
+                    ${leg.toPlace.quay?.publicCode ? `
+                      <div style="font-size: 12px; color: #6b7280;">
+                        Platform <span style="
+                          background: #3b82f6;
+                          color: white;
+                          padding: 2px 6px;
+                          border-radius: 4px;
+                          font-weight: 600;
+                        ">${leg.toPlace.quay.publicCode}</span>
+                      </div>
+                    ` : ''}
+                  </div>
+                `)
+              )
+              .addTo(map);
+
+            allCoordinates.push([leg.toPlace.longitude, leg.toPlace.latitude]);
+          }
+
+          // Draw route line for transit legs
+          if (leg.pointsOnLink?.points) {
+            const coordinates = decodePolyline(leg.pointsOnLink.points);
             const color = getModeColor(leg.mode);
 
-            // Draw outline for better visibility
-            L.polyline(coordinates, {
-              color: '#ffffff',
-              weight: 8,
-              opacity: 0.8,
-            }).addTo(map);
+            // Add source and layer for the route
+            const sourceId = `route-${legIndex}`;
+            const outlineLayerId = `route-outline-${legIndex}`;
+            const lineLayerId = `route-line-${legIndex}`;
 
-            // Draw main line
-            L.polyline(coordinates, {
-              color: color,
-              weight: 5,
-              opacity: 1,
-            }).addTo(map);
+            map.addSource(sourceId, {
+              type: 'geojson',
+              data: {
+                type: 'Feature',
+                properties: {},
+                geometry: {
+                  type: 'LineString',
+                  coordinates: coordinates.map(([lat, lon]) => [lon, lat]),
+                },
+              },
+            });
 
-            allPoints.push(...coordinates);
+            // Add white outline
+            map.addLayer({
+              id: outlineLayerId,
+              type: 'line',
+              source: sourceId,
+              layout: {
+                'line-join': 'round',
+                'line-cap': 'round',
+              },
+              paint: {
+                'line-color': '#ffffff',
+                'line-width': 8,
+                'line-opacity': 0.8,
+              },
+            });
+
+            // Add colored line
+            map.addLayer({
+              id: lineLayerId,
+              type: 'line',
+              source: sourceId,
+              layout: {
+                'line-join': 'round',
+                'line-cap': 'round',
+              },
+              paint: {
+                'line-color': color,
+                'line-width': 5,
+                'line-opacity': 1,
+              },
+            });
+
+            allCoordinates.push(...coordinates.map(([lat, lon]) => [lon, lat] as [number, number]));
+          } else if (
+            leg.fromPlace?.latitude &&
+            leg.fromPlace?.longitude &&
+            leg.toPlace?.latitude &&
+            leg.toPlace?.longitude
+          ) {
+            // Fallback: draw straight line if no polyline data
+            const color = getModeColor(leg.mode);
+            const sourceId = `route-straight-${legIndex}`;
+            const outlineLayerId = `route-straight-outline-${legIndex}`;
+            const lineLayerId = `route-straight-line-${legIndex}`;
+
+            map.addSource(sourceId, {
+              type: 'geojson',
+              data: {
+                type: 'Feature',
+                properties: {},
+                geometry: {
+                  type: 'LineString',
+                  coordinates: [
+                    [leg.fromPlace.longitude, leg.fromPlace.latitude],
+                    [leg.toPlace.longitude, leg.toPlace.latitude],
+                  ],
+                },
+              },
+            });
+
+            // Add white outline
+            map.addLayer({
+              id: outlineLayerId,
+              type: 'line',
+              source: sourceId,
+              layout: {
+                'line-join': 'round',
+                'line-cap': 'round',
+              },
+              paint: {
+                'line-color': '#ffffff',
+                'line-width': 8,
+                'line-opacity': 0.8,
+                'line-dasharray': [2, 2],
+              },
+            });
+
+            // Add colored dashed line
+            map.addLayer({
+              id: lineLayerId,
+              type: 'line',
+              source: sourceId,
+              layout: {
+                'line-join': 'round',
+                'line-cap': 'round',
+              },
+              paint: {
+                'line-color': color,
+                'line-width': 5,
+                'line-opacity': 1,
+                'line-dasharray': [2, 2],
+              },
+            });
           }
-        } else if (leg.fromPlace?.latitude && leg.fromPlace?.longitude &&
-                   leg.toPlace?.latitude && leg.toPlace?.longitude) {
-          // Fallback: draw straight line if no polyline data
-          const color = getModeColor(leg.mode);
+        } else {
+          // Walking leg - dashed line
+          if (
+            leg.fromPlace?.latitude &&
+            leg.fromPlace?.longitude &&
+            leg.toPlace?.latitude &&
+            leg.toPlace?.longitude
+          ) {
+            const sourceId = `walk-${legIndex}`;
+            const outlineLayerId = `walk-outline-${legIndex}`;
+            const lineLayerId = `walk-line-${legIndex}`;
 
-          // Draw outline
-          L.polyline([
-            [leg.fromPlace.latitude, leg.fromPlace.longitude],
-            [leg.toPlace.latitude, leg.toPlace.longitude]
-          ], {
-            color: '#ffffff',
-            weight: 8,
-            opacity: 0.8,
-            dashArray: '10, 10',
-          }).addTo(map);
+            map.addSource(sourceId, {
+              type: 'geojson',
+              data: {
+                type: 'Feature',
+                properties: {},
+                geometry: {
+                  type: 'LineString',
+                  coordinates: [
+                    [leg.fromPlace.longitude, leg.fromPlace.latitude],
+                    [leg.toPlace.longitude, leg.toPlace.latitude],
+                  ],
+                },
+              },
+            });
 
-          // Draw main line
-          L.polyline([
-            [leg.fromPlace.latitude, leg.fromPlace.longitude],
-            [leg.toPlace.latitude, leg.toPlace.longitude]
-          ], {
-            color: color,
-            weight: 5,
-            opacity: 1,
-            dashArray: '10, 10',
-          }).addTo(map);
+            // Add white outline
+            map.addLayer({
+              id: outlineLayerId,
+              type: 'line',
+              source: sourceId,
+              layout: {
+                'line-join': 'round',
+                'line-cap': 'round',
+              },
+              paint: {
+                'line-color': '#ffffff',
+                'line-width': 6,
+                'line-opacity': 0.8,
+                'line-dasharray': [1, 2],
+              },
+            });
+
+            // Add gray dashed line
+            map.addLayer({
+              id: lineLayerId,
+              type: 'line',
+              source: sourceId,
+              layout: {
+                'line-join': 'round',
+                'line-cap': 'round',
+              },
+              paint: {
+                'line-color': '#6b7280',
+                'line-width': 4,
+                'line-opacity': 0.9,
+                'line-dasharray': [1, 2],
+              },
+            });
+          }
         }
-      } else {
-        // Walking leg - dashed line with outline
-        if (leg.fromPlace?.latitude && leg.fromPlace?.longitude &&
-            leg.toPlace?.latitude && leg.toPlace?.longitude) {
-          // Outline
-          L.polyline([
-            [leg.fromPlace.latitude, leg.fromPlace.longitude],
-            [leg.toPlace.latitude, leg.toPlace.longitude]
-          ], {
-            color: '#ffffff',
-            weight: 6,
-            opacity: 0.8,
-            dashArray: '8, 12',
-          }).addTo(map);
+      });
 
-          // Main dashed line
-          L.polyline([
-            [leg.fromPlace.latitude, leg.fromPlace.longitude],
-            [leg.toPlace.latitude, leg.toPlace.longitude]
-          ], {
-            color: '#6b7280',
-            weight: 4,
-            opacity: 0.9,
-            dashArray: '8, 12',
-          }).addTo(map);
-        }
+      // Fit map to show all points
+      if (allCoordinates.length > 0) {
+        const bounds = allCoordinates.reduce(
+          (bounds, coord) => bounds.extend(coord as mapboxgl.LngLatLike),
+          new mapboxgl.LngLatBounds(allCoordinates[0], allCoordinates[0])
+        );
+
+        map.fitBounds(bounds, {
+          padding: 50,
+        });
       }
     });
 
-    // Fit map to show all points
-    if (allPoints.length > 0) {
-      const bounds = L.latLngBounds(allPoints);
-      map.fitBounds(bounds, { padding: [50, 50] });
-    }
-
     return () => {
-      // Cleanup on unmount
       if (mapRef.current) {
         mapRef.current.remove();
-        mapRef.current = null;
       }
     };
   }, [journey, startLat, startLon, startLabel, stopLat, stopLon, stopLabel]);
@@ -442,7 +489,6 @@ export function JourneyMap({
       <div
         ref={mapContainerRef}
         className="w-full h-[500px] lg:h-[600px] rounded-xl overflow-hidden shadow-md border-2 border-gray-200"
-        style={{ zIndex: 0 }}
       />
 
       {/* Map Legend */}
@@ -495,8 +541,8 @@ function getModeColor(mode: string): string {
 }
 
 // Decode polyline (Google's encoded polyline algorithm)
-function decodePolyline(encoded: string): L.LatLngExpression[] {
-  const points: L.LatLngExpression[] = [];
+function decodePolyline(encoded: string): [number, number][] {
+  const points: [number, number][] = [];
   let index = 0;
   let lat = 0;
   let lng = 0;
