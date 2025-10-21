@@ -7,7 +7,7 @@ import { NewsSection } from '@/components/landing/NewsSection';
 export default function Home() {
   return (
     <>
-      <div className="w-full min-h-[40vh] flex items-center justify-center bg-gradient-to-br from-blue-900 via-indigo-950 to-blue-950 px-4 py-16 sm:py-20 overflow-visible">
+      <div className="w-full min-h-[50vh] flex items-center justify-center px-4 py-16 sm:py-20 overflow-visible" style={{ backgroundImage: 'url(/images/hero-bg.svg)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
         <HeroSection />
       </div>
       <div className="w-full max-w-5xl mx-auto px-4 py-12">
