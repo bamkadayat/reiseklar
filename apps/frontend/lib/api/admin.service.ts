@@ -1,51 +1,14 @@
 import { apiClient } from './client';
-
-export interface AdminUser {
-  id: string;
-  name: string;
-  email: string;
-  role: 'USER' | 'ADMIN';
-  status: string;
-  joinDate: string;
-  trips: number;
-  places: number;
-  provider?: string;
-  avatar?: string;
-}
-
-export interface AdminStats {
-  totalUsers: number;
-  activeUsers: number;
-  newToday: number;
-  admins: number;
-  totalTrips: number;
-  totalPlaces: number;
-}
-
-interface GetUsersResponse {
-  success: boolean;
-  users: AdminUser[];
-}
-
-interface GetStatsResponse {
-  success: boolean;
-  stats: AdminStats;
-}
-
-interface UpdateUserRoleResponse {
-  success: boolean;
-  user: {
-    id: string;
-    email: string;
-    name: string;
-    role: 'USER' | 'ADMIN';
-  };
-}
-
-interface DeleteUserResponse {
-  success: boolean;
-  message: string;
-}
+import type {
+  AdminUser,
+  AdminStats,
+  SystemHealth,
+  GetUsersResponse,
+  GetStatsResponse,
+  GetSystemHealthResponse,
+  UpdateUserRoleResponse,
+  DeleteUserResponse,
+} from '@reiseklar/shared';
 
 export const adminService = {
   /**
@@ -62,6 +25,14 @@ export const adminService = {
   async getStats(): Promise<AdminStats> {
     const response = await apiClient.get<GetStatsResponse>('/api/admin/stats');
     return response.stats;
+  },
+
+  /**
+   * Get system health metrics
+   */
+  async getSystemHealth(): Promise<SystemHealth> {
+    const response = await apiClient.get<GetSystemHealthResponse>('/api/admin/health');
+    return response.health;
   },
 
   /**

@@ -398,6 +398,144 @@ export class UserController {
       });
     }
   }
+
+  // GET /api/users/dashboard/stats - Get user dashboard statistics
+  async getDashboardStats(req: AuthRequest, res: Response) {
+    try {
+      if (!req.userId) {
+        return res.status(401).json({
+          success: false,
+          error: 'Unauthorized',
+        });
+      }
+
+      // Get total trips count
+      const totalTrips = await prisma.trip.count({
+        where: { userId: req.userId },
+      });
+
+      // Get trips from this month
+      const now = new Date();
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      const tripsThisMonth = await prisma.trip.count({
+        where: {
+          userId: req.userId,
+          createdAt: { gte: startOfMonth },
+        },
+      });
+
+      // Get trips from this week
+      const startOfWeek = new Date(now);
+      startOfWeek.setDate(now.getDate() - now.getDay());
+      startOfWeek.setHours(0, 0, 0, 0);
+      const tripsThisWeek = await prisma.trip.count({
+        where: {
+          userId: req.userId,
+          createdAt: { gte: startOfWeek },
+        },
+      });
+
+      // Get unique places count
+      const places = await prisma.place.count({
+        where: { userId: req.userId },
+      });
+
+      // Calculate estimated time saved (assuming 5 min saved per trip)
+      const timeSavedHours = (tripsThisWeek * 5) / 60;
+
+      // Calculate estimated CO2 saved (assuming 0.5kg per trip)
+      const co2SavedKg = tripsThisMonth * 0.5;
+
+      // Calculate efficiency (percentage of trips this month vs target of 30)
+      const efficiency = Math.min(Math.round((tripsThisMonth / 30) * 100), 100);
+
+      // Calculate trend compared to last month
+      const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 1);
+      const tripsLastMonth = await prisma.trip.count({
+        where: {
+          userId: req.userId,
+          createdAt: { gte: lastMonthStart, lt: lastMonthEnd },
+        },
+      });
+
+      const tripsTrend =
+        tripsLastMonth > 0
+          ? Math.round(
+              ((tripsThisMonth - tripsLastMonth) / tripsLastMonth) * 100
+            )
+          : tripsThisMonth > 0
+          ? 100
+          : 0;
+
+      res.status(200).json({
+        success: true,
+        stats: {
+          totalTrips,
+          tripsThisMonth,
+          tripsThisWeek,
+          places,
+          timeSaved: timeSavedHours.toFixed(1),
+          co2Saved: co2SavedKg.toFixed(1),
+          efficiency,
+          tripsTrend,
+        },
+      });
+    } catch (error) {
+      console.error('Error fetching dashboard stats:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Internal server error',
+      });
+    }
+  }
+
+  // GET /api/users/dashboard/recent-trips - Get recent trips with details
+  async getRecentTrips(req: AuthRequest, res: Response) {
+    try {
+      if (!req.userId) {
+        return res.status(401).json({
+          success: false,
+          error: 'Unauthorized',
+        });
+      }
+
+      const limit = parseInt(req.query.limit as string) || 5;
+
+      const trips = await prisma.trip.findMany({
+        where: { userId: req.userId },
+        include: {
+          origin: true,
+          destination: true,
+        },
+        orderBy: { createdAt: 'desc' },
+        take: limit,
+      });
+
+      const formattedTrips = trips.map((trip) => ({
+        id: trip.id,
+        origin: trip.origin.label,
+        destination: trip.destination.label,
+        createdAt: trip.createdAt.toISOString(),
+        // Calculate estimated duration (placeholder - you can enhance this)
+        estimatedDuration: '15 min',
+        // Calculate transport mode (placeholder - you can enhance this)
+        transportMode: 'Train',
+        status: 'Completed',
+      }));
+
+      res.status(200).json({
+        success: true,
+        data: formattedTrips,
+      });
+    } catch (error) {
+      console.error('Error fetching recent trips:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Internal server error',
+      });
+    }
+  }
 }
 
 export const userController = new UserController();

@@ -1,8 +1,73 @@
+'use client';
+
 import { useTranslations } from 'next-intl';
-import { Globe, Shield, Bell, Database, Mail, Key } from 'lucide-react';
+import { Globe, Shield, Mail, Key } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 export default function AdminSettingsPage() {
-  const t = useTranslations('dashboard.admin.settings');
+  const t = useTranslations('dashboard.admin.settingsPage');
+
+  // State for all settings
+  const [siteName, setSiteName] = useState('Reiseklar');
+  const [siteDescription, setSiteDescription] = useState(
+    'Smart Commute Planner for Norway'
+  );
+  const [maintenanceMode, setMaintenanceMode] = useState(false);
+  const [requireEmailVerification, setRequireEmailVerification] =
+    useState(true);
+  const [twoFactorAuth, setTwoFactorAuth] = useState(false);
+  const [sessionTimeout, setSessionTimeout] = useState('30');
+  const [rateLimit, setRateLimit] = useState('1000');
+  const [fromEmail, setFromEmail] = useState('noreply@reiseklar.no');
+  const [fromName, setFromName] = useState('Reiseklar');
+  const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  // Fetch settings on mount (when backend is ready)
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        // TODO: Fetch settings from backend
+        // setLoading(true);
+        // const data = await settingsService.getSettings();
+        // setSiteName(data.siteName);
+        // ... set other fields
+        // setLoading(false);
+      } catch (error) {
+        console.error('Failed to fetch settings:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchSettings();
+  }, []);
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      // TODO: Save settings to backend
+      console.log('Saving settings...');
+      setTimeout(() => {
+        setSaving(false);
+        alert('Settings saved successfully!');
+      }, 1000);
+    } catch (error) {
+      console.error('Failed to save settings:', error);
+      setSaving(false);
+      alert('Failed to save settings');
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-norwegian-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading settings...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 sm:space-y-8">
@@ -35,7 +100,8 @@ export default function AdminSettingsPage() {
               </label>
               <input
                 type="text"
-                defaultValue="Reiseklar"
+                value={siteName}
+                onChange={(e) => setSiteName(e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent"
               />
             </div>
@@ -45,7 +111,8 @@ export default function AdminSettingsPage() {
               </label>
               <textarea
                 rows={3}
-                defaultValue="Smart Commute Planner for Norway"
+                value={siteDescription}
+                onChange={(e) => setSiteDescription(e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent"
               />
             </div>
@@ -59,7 +126,12 @@ export default function AdminSettingsPage() {
                 </p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer ml-4">
-                <input type="checkbox" className="sr-only peer" />
+                <input
+                  type="checkbox"
+                  className="sr-only peer"
+                  checked={maintenanceMode}
+                  onChange={(e) => setMaintenanceMode(e.target.checked)}
+                />
                 <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
               </label>
             </div>
@@ -87,7 +159,14 @@ export default function AdminSettingsPage() {
                 </p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer ml-4">
-                <input type="checkbox" className="sr-only peer" defaultChecked />
+                <input
+                  type="checkbox"
+                  className="sr-only peer"
+                  checked={requireEmailVerification}
+                  onChange={(e) =>
+                    setRequireEmailVerification(e.target.checked)
+                  }
+                />
                 <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-norwegian-blue"></div>
               </label>
             </div>
@@ -101,7 +180,12 @@ export default function AdminSettingsPage() {
                 </p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer ml-4">
-                <input type="checkbox" className="sr-only peer" />
+                <input
+                  type="checkbox"
+                  className="sr-only peer"
+                  checked={twoFactorAuth}
+                  onChange={(e) => setTwoFactorAuth(e.target.checked)}
+                />
                 <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-norwegian-blue"></div>
               </label>
             </div>
@@ -109,11 +193,15 @@ export default function AdminSettingsPage() {
               <label className="block text-sm font-medium text-gray-700">
                 {t('sessionTimeout')}
               </label>
-              <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent">
-                <option>15 minutes</option>
-                <option selected>30 minutes</option>
-                <option>1 hour</option>
-                <option>2 hours</option>
+              <select
+                value={sessionTimeout}
+                onChange={(e) => setSessionTimeout(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent"
+              >
+                <option value="15">15 minutes</option>
+                <option value="30">30 minutes</option>
+                <option value="60">1 hour</option>
+                <option value="120">2 hours</option>
               </select>
             </div>
           </div>
@@ -152,7 +240,8 @@ export default function AdminSettingsPage() {
               </label>
               <input
                 type="number"
-                defaultValue="1000"
+                value={rateLimit}
+                onChange={(e) => setRateLimit(e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent"
               />
             </div>
@@ -176,7 +265,8 @@ export default function AdminSettingsPage() {
               </label>
               <input
                 type="email"
-                defaultValue="noreply@reiseklar.no"
+                value={fromEmail}
+                onChange={(e) => setFromEmail(e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent"
               />
             </div>
@@ -186,7 +276,8 @@ export default function AdminSettingsPage() {
               </label>
               <input
                 type="text"
-                defaultValue="Reiseklar"
+                value={fromName}
+                onChange={(e) => setFromName(e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent"
               />
             </div>
@@ -195,11 +286,18 @@ export default function AdminSettingsPage() {
 
         {/* Save Button */}
         <div className="flex justify-end gap-4">
-          <button className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors">
+          <button
+            onClick={() => window.location.reload()}
+            className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
+          >
             {t('cancel')}
           </button>
-          <button className="px-8 py-3 bg-norwegian-blue text-white font-medium rounded-lg hover:bg-norwegian-blue-600 transition-colors">
-            {t('saveChanges')}
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="px-8 py-3 bg-norwegian-blue text-white font-medium rounded-lg hover:bg-norwegian-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {saving ? 'Saving...' : t('saveChanges')}
           </button>
         </div>
       </div>

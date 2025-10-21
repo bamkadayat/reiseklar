@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
-import { MapPin, Loader2, Navigation, X } from 'lucide-react';
+import { MapPin, Loader2, Navigation, X, CheckCircle2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { EnturLocation } from '@reiseklar/shared';
 
@@ -229,11 +229,18 @@ export function LocationAutocomplete({
 
   return (
     <div ref={wrapperRef} className="flex-1 relative">
-      <div className="absolute left-4 top-1/2 -translate-y-1/2 z-10">
+      <div className="absolute left-4 top-1/2 -translate-y-1/2 z-10 flex items-center gap-1">
         {icon === 'circle' ? (
-          <div className="w-3 h-3 rounded-full border-2 border-red-800"></div>
+          <div className={`w-3 h-3 rounded-full border-2 transition-colors ${
+            hasSelected ? 'border-blue-900 bg-blue-900' : 'border-red-800'
+          }`}></div>
         ) : (
-          <MapPin className="w-5 h-5 text-red-800" />
+          <MapPin className={`w-5 h-5 transition-colors ${
+            hasSelected ? 'text-blue-900' : 'text-red-800'
+          }`} />
+        )}
+        {hasSelected && (
+          <CheckCircle2 className="w-4 h-4 text-blue-900 animate-in zoom-in duration-200" />
         )}
       </div>
       <Input
@@ -241,13 +248,14 @@ export function LocationAutocomplete({
         placeholder={placeholder}
         value={value}
         onChange={(e) => {
-          onChange(e.target.value);
+          const newValue = e.target.value;
+          onChange(newValue);
           // Reset hasSelected flag when user starts typing again
           if (hasSelected) {
             setHasSelected(false);
           }
           // Ensure dropdown opens when user is typing
-          if (e.target.value.length >= 2) {
+          if (newValue.length >= 2 || newValue.length === 0) {
             setIsOpen(true);
           }
         }}
@@ -267,7 +275,11 @@ export function LocationAutocomplete({
             setIsOpen(false);
           }, 200);
         }}
-        className="w-full pl-10 pr-10 py-6 bg-white border border-gray-300 rounded-xl focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:border-blue-500 text-gray-900 text-base transition-all"
+        className={`w-full pr-10 py-6 bg-white border rounded-xl text-gray-900 text-base transition-all ${
+          hasSelected
+            ? 'pl-14 border-blue-800 focus-visible:ring-2 focus-visible:ring-blue-900 focus-visible:border-blue-900'
+            : 'pl-10 border-gray-300 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:border-blue-500'
+        }`}
         autoComplete="off"
       />
 
@@ -280,22 +292,23 @@ export function LocationAutocomplete({
             setHasSelected(false);
             setLocations([]);
           }}
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-10 hover:bg-gray-100 rounded-full p-1 transition-colors"
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-10 hover:bg-red-100 rounded-full p-1.5 transition-all hover:scale-110"
+          title="Clear"
         >
-          <X className="w-4 h-4 text-gray-500 hover:text-gray-700" />
+          <X className="w-4 h-4 text-gray-500 hover:text-red-600" />
         </button>
       )}
 
       {/* Loading indicator */}
       {isLoading && (
-        <div className="absolute right-4 top-1/2 -translate-y-1/2 z-10">
-          <Loader2 className="w-4 h-4 text-gray-400 animate-spin" />
+        <div className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-1">
+          <Loader2 className="w-5 h-5 text-blue-600 animate-spin" />
         </div>
       )}
 
       {/* Dropdown */}
       {isOpen && isFocused && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg border border-gray-200 max-h-64 overflow-y-auto z-50">
+        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg border border-gray-200 max-h-80 overflow-y-auto z-50 animate-in fade-in slide-in-from-top-2 duration-200">
           {/* Your Position Option */}
           <button
             onMouseDown={(e) => {
@@ -303,20 +316,28 @@ export function LocationAutocomplete({
               handleUseMyPosition();
             }}
             disabled={isGettingLocation}
-            className="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors flex items-center gap-3 border-b border-gray-100"
+            className="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors flex items-center gap-3 border-b border-gray-100 disabled:opacity-70"
           >
             {isGettingLocation ? (
-              <Loader2 className="w-4 h-4 text-blue-600 animate-spin flex-shrink-0" />
+              <Loader2 className="w-5 h-5 text-blue-600 animate-spin flex-shrink-0" />
             ) : (
-              <Navigation className="w-4 h-4 text-blue-600 flex-shrink-0" />
+              <Navigation className="w-5 h-5 text-blue-600 flex-shrink-0" />
             )}
             <span className="text-gray-900 font-medium">
               {isGettingLocation ? 'Getting your location...' : t('yourPosition') || 'Your position'}
             </span>
           </button>
 
+          {/* Loading State */}
+          {isLoading && value.length >= 2 && (
+            <div className="w-full px-4 py-8 flex flex-col items-center justify-center gap-3">
+              <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+              <p className="text-sm text-gray-500">Searching for &quot;{value}&quot;...</p>
+            </div>
+          )}
+
           {/* Search Results */}
-          {locations.length > 0 && locations.map((location) => (
+          {!isLoading && locations.length > 0 && locations.map((location) => (
             <button
               key={location.id}
               onMouseDown={(e) => {
@@ -325,15 +346,31 @@ export function LocationAutocomplete({
               }}
               className="w-full px-4 py-3 text-left hover:bg-gray-100 transition-colors flex items-center gap-3 last:rounded-b-xl"
             >
-              <MapPin className="w-4 h-4 text-gray-400 flex-shrink-0" />
-              <div className="flex flex-col">
-                <span className="text-gray-900 font-medium">{location.name}</span>
+              <MapPin className="w-5 h-5 text-gray-400 flex-shrink-0" />
+              <div className="flex flex-col min-w-0">
+                <span className="text-gray-900 font-medium truncate">{location.name}</span>
                 {location.label !== location.name && (
-                  <span className="text-sm text-gray-500">{location.label}</span>
+                  <span className="text-sm text-gray-500 truncate">{location.label}</span>
                 )}
               </div>
             </button>
           ))}
+
+          {/* No Results State */}
+          {!isLoading && value.length >= 2 && locations.length === 0 && (
+            <div className="w-full px-4 py-8 text-center">
+              <MapPin className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+              <p className="text-gray-600 font-medium mb-1">No locations found</p>
+              <p className="text-sm text-gray-500">Try searching for a different place</p>
+            </div>
+          )}
+
+          {/* Help Text when empty */}
+          {!isLoading && value.length < 2 && (
+            <div className="px-4 py-6 text-center">
+              <p className="text-sm text-gray-500">Type at least 2 characters to search</p>
+            </div>
+          )}
         </div>
       )}
 
