@@ -14,6 +14,23 @@ router.get('/users', (req, res) => adminController.getUsers(req, res));
 // Get dashboard stats
 router.get('/stats', (req, res) => adminController.getStats(req, res));
 
+// Get system health
+router.get('/health', (req, res) => adminController.getSystemHealth(req, res));
+
+// Analytics routes
+router.get('/analytics/metrics', (req, res) =>
+  adminController.getAnalyticsMetrics(req, res)
+);
+router.get('/analytics/user-growth', (req, res) =>
+  adminController.getUserGrowthChart(req, res)
+);
+router.get('/analytics/route-usage', (req, res) =>
+  adminController.getRouteUsage(req, res)
+);
+router.get('/analytics/popular-routes', (req, res) =>
+  adminController.getPopularRoutes(req, res)
+);
+
 // Update user role
 router.patch('/users/:userId/role', (req, res) =>
   adminController.updateUserRole(req, res)

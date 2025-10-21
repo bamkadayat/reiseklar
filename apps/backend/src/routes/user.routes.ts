@@ -34,4 +34,15 @@ router.get('/trips', (req, res) => userController.getTrips(req, res));
 // DELETE /api/users/trips/:id - Delete a trip
 router.delete('/trips/:id', (req, res) => userController.deleteTrip(req, res));
 
+// Dashboard routes
+// GET /api/users/dashboard/stats - Get dashboard statistics
+router.get('/dashboard/stats', (req, res) =>
+  userController.getDashboardStats(req, res)
+);
+
+// GET /api/users/dashboard/recent-trips - Get recent trips
+router.get('/dashboard/recent-trips', (req, res) =>
+  userController.getRecentTrips(req, res)
+);
+
 export default router;

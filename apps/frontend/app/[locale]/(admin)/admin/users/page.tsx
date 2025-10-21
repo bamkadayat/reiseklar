@@ -1,12 +1,13 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Search, Filter, MoreVertical, UserPlus, Mail, Ban, Trash2, Shield } from 'lucide-react';
+import { Search, Filter, MoreVertical, UserPlus, Mail, Ban, Trash2, Shield, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { adminService, AdminUser } from '@/lib/api/admin.service';
+import { adminService } from '@/lib/api/admin.service';
+import type { AdminUser } from '@reiseklar/shared';
 
 export default function AdminUsersPage() {
-  const t = useTranslations('dashboard.admin.users');
+  const t = useTranslations('dashboard.admin.usersPage');
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(true);
@@ -20,12 +21,13 @@ export default function AdminUsersPage() {
     if (searchQuery.trim() === '') {
       setFilteredUsers(users);
     } else {
-      const query = searchQuery.toLowerCase();
+      const query = searchQuery.toLowerCase().trim();
       setFilteredUsers(
         users.filter(
           (user) =>
-            user.name.toLowerCase().includes(query) ||
-            user.email.toLowerCase().includes(query)
+            (user.name?.toLowerCase() || '').includes(query) ||
+            (user.email?.toLowerCase() || '').includes(query) ||
+            (user.role?.toLowerCase() || '').includes(query)
         )
       );
     }
@@ -108,7 +110,7 @@ export default function AdminUsersPage() {
           </p>
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <p className="text-sm text-gray-600">Total Trips</p>
+          <p className="text-sm text-gray-600">{t('totalTrips')}</p>
           <p className="text-2xl font-bold text-blue-600 mt-1">
             {users.reduce((sum, u) => sum + u.trips, 0)}
           </p>
@@ -131,14 +133,29 @@ export default function AdminUsersPage() {
               placeholder={t('searchUsers')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent"
+              className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent"
             />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 hover:bg-gray-100 rounded-full p-1 transition-colors"
+                title="Clear search"
+              >
+                <X className="w-4 h-4 text-gray-500 hover:text-gray-700" />
+              </button>
+            )}
           </div>
           <button className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
             <Filter className="w-5 h-5" />
             {t('filters')}
           </button>
         </div>
+        {/* Search Results Info */}
+        {searchQuery && (
+          <div className="mt-3 text-sm text-gray-600">
+            Found {filteredUsers.length} user{filteredUsers.length !== 1 ? 's' : ''} matching &quot;{searchQuery}&quot;
+          </div>
+        )}
       </div>
 
       {/* Users Table */}
@@ -169,8 +186,31 @@ export default function AdminUsersPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {filteredUsers.map((user) => (
-                <tr key={user.id} className="hover:bg-gray-50">
+              {filteredUsers.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="px-6 py-12 text-center">
+                    <div className="flex flex-col items-center justify-center text-gray-500">
+                      <Search className="w-12 h-12 text-gray-300 mb-3" />
+                      <p className="text-lg font-medium text-gray-900 mb-1">No users found</p>
+                      <p className="text-sm">
+                        {searchQuery
+                          ? `No users match "${searchQuery}". Try a different search.`
+                          : 'No users available.'}
+                      </p>
+                      {searchQuery && (
+                        <button
+                          onClick={() => setSearchQuery('')}
+                          className="mt-4 px-4 py-2 bg-norwegian-blue text-white rounded-lg hover:bg-norwegian-blue-600 transition-colors"
+                        >
+                          Clear search
+                        </button>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                filteredUsers.map((user) => (
+                  <tr key={user.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="w-10 h-10 bg-norwegian-blue rounded-full flex items-center justify-center text-white font-semibold">
@@ -237,15 +277,37 @@ export default function AdminUsersPage() {
                     </div>
                   </td>
                 </tr>
-              ))}
+              ))
+              )}
             </tbody>
           </table>
         </div>
 
         {/* Mobile Cards */}
         <div className="md:hidden divide-y divide-gray-200">
-          {filteredUsers.map((user) => (
-            <div key={user.id} className="p-4 space-y-3">
+          {filteredUsers.length === 0 ? (
+            <div className="p-8 text-center">
+              <div className="flex flex-col items-center justify-center text-gray-500">
+                <Search className="w-12 h-12 text-gray-300 mb-3" />
+                <p className="text-lg font-medium text-gray-900 mb-1">No users found</p>
+                <p className="text-sm">
+                  {searchQuery
+                    ? `No users match "${searchQuery}". Try a different search.`
+                    : 'No users available.'}
+                </p>
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="mt-4 px-4 py-2 bg-norwegian-blue text-white rounded-lg hover:bg-norwegian-blue-600 transition-colors"
+                  >
+                    Clear search
+                  </button>
+                )}
+              </div>
+            </div>
+          ) : (
+            filteredUsers.map((user) => (
+              <div key={user.id} className="p-4 space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-norwegian-blue rounded-full flex items-center justify-center text-white font-semibold">
@@ -297,7 +359,8 @@ export default function AdminUsersPage() {
                 <span className="text-xs text-gray-500">{user.trips} trips</span>
               </div>
             </div>
-          ))}
+          ))
+          )}
         </div>
       </div>
     </div>

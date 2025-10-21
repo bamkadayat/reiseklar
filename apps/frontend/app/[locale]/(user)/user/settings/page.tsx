@@ -1,8 +1,67 @@
+'use client';
+
 import { useTranslations } from 'next-intl';
-import { Bell, Lock, Globe, Palette, Shield } from 'lucide-react';
+import { Bell, Lock, Palette, Shield } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 export default function UserSettingsPage() {
-  const t = useTranslations('dashboard.user.settings');
+  const t = useTranslations('dashboard.user.settingsPage');
+
+  // State for all settings
+  const [emailNotifications, setEmailNotifications] = useState(true);
+  const [pushNotifications, setPushNotifications] = useState(true);
+  const [smsAlerts, setSmsAlerts] = useState(false);
+  const [twoFactorAuth, setTwoFactorAuth] = useState(false);
+  const [language, setLanguage] = useState('en');
+  const [theme, setTheme] = useState('light');
+  const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  // Fetch user settings on mount (when backend is ready)
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        // TODO: Fetch user settings from backend
+        // setLoading(true);
+        // const data = await userService.getSettings();
+        // setEmailNotifications(data.emailNotifications);
+        // ... set other fields
+        // setLoading(false);
+      } catch (error) {
+        console.error('Failed to fetch settings:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchSettings();
+  }, []);
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      // TODO: Save settings to backend
+      console.log('Saving user settings...');
+      setTimeout(() => {
+        setSaving(false);
+        alert('Settings saved successfully!');
+      }, 1000);
+    } catch (error) {
+      console.error('Failed to save settings:', error);
+      setSaving(false);
+      alert('Failed to save settings');
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-norwegian-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading settings...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 sm:space-y-8">
@@ -39,7 +98,12 @@ export default function UserSettingsPage() {
                 </p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer ml-4">
-                <input type="checkbox" className="sr-only peer" defaultChecked />
+                <input
+                  type="checkbox"
+                  className="sr-only peer"
+                  checked={emailNotifications}
+                  onChange={(e) => setEmailNotifications(e.target.checked)}
+                />
                 <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-norwegian-blue"></div>
               </label>
             </div>
@@ -53,7 +117,12 @@ export default function UserSettingsPage() {
                 </p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer ml-4">
-                <input type="checkbox" className="sr-only peer" defaultChecked />
+                <input
+                  type="checkbox"
+                  className="sr-only peer"
+                  checked={pushNotifications}
+                  onChange={(e) => setPushNotifications(e.target.checked)}
+                />
                 <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-norwegian-blue"></div>
               </label>
             </div>
@@ -65,7 +134,12 @@ export default function UserSettingsPage() {
                 </p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer ml-4">
-                <input type="checkbox" className="sr-only peer" />
+                <input
+                  type="checkbox"
+                  className="sr-only peer"
+                  checked={smsAlerts}
+                  onChange={(e) => setSmsAlerts(e.target.checked)}
+                />
                 <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-norwegian-blue"></div>
               </label>
             </div>
@@ -119,7 +193,12 @@ export default function UserSettingsPage() {
                 </p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer ml-4">
-                <input type="checkbox" className="sr-only peer" />
+                <input
+                  type="checkbox"
+                  className="sr-only peer"
+                  checked={twoFactorAuth}
+                  onChange={(e) => setTwoFactorAuth(e.target.checked)}
+                />
                 <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-norwegian-blue"></div>
               </label>
             </div>
@@ -141,28 +220,46 @@ export default function UserSettingsPage() {
               <label className="block text-sm font-medium text-gray-700">
                 {t('language')}
               </label>
-              <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent">
-                <option>English</option>
-                <option>Norsk (Bokmål)</option>
+              <select
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent"
+              >
+                <option value="en">English</option>
+                <option value="nb">Norsk (Bokmål)</option>
               </select>
             </div>
             <div className="space-y-2 border-t border-gray-100 pt-4">
               <label className="block text-sm font-medium text-gray-700">
                 {t('theme')}
               </label>
-              <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent">
-                <option>{t('light')}</option>
-                <option>{t('dark')}</option>
-                <option>{t('system')}</option>
+              <select
+                value={theme}
+                onChange={(e) => setTheme(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent"
+              >
+                <option value="light">{t('light')}</option>
+                <option value="dark">{t('dark')}</option>
+                <option value="system">{t('system')}</option>
               </select>
             </div>
           </div>
         </div>
 
         {/* Save Button */}
-        <div className="flex justify-end">
-          <button className="px-8 py-3 bg-norwegian-blue text-white font-medium rounded-lg hover:bg-norwegian-blue-600 transition-colors">
-            {t('saveChanges')}
+        <div className="flex justify-end gap-4">
+          <button
+            onClick={() => window.location.reload()}
+            className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="px-8 py-3 bg-norwegian-blue text-white font-medium rounded-lg hover:bg-norwegian-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {saving ? 'Saving...' : t('saveChanges')}
           </button>
         </div>
       </div>

@@ -4,24 +4,28 @@ import { useTranslations } from 'next-intl';
 import { StatCard } from '@/components/dashboard/shared/StatCard';
 import { Users, Route, TrendingUp, Activity } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { adminService, AdminStats, AdminUser } from '@/lib/api/admin.service';
+import { adminService } from '@/lib/api/admin.service';
+import type { AdminStats, AdminUser, SystemHealth } from '@reiseklar/shared';
 
 export default function AdminDashboardPage() {
   const t = useTranslations('dashboard.admin');
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [recentUsers, setRecentUsers] = useState<AdminUser[]>([]);
+  const [systemHealth, setSystemHealth] = useState<SystemHealth>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [statsData, usersData] = await Promise.all([
+        const [statsData, usersData, healthData] = await Promise.all([
           adminService.getStats(),
           adminService.getUsers(),
+          adminService.getSystemHealth(),
         ]);
         setStats(statsData);
         // Get 5 most recent users
         setRecentUsers(usersData.slice(0, 5));
+        setSystemHealth(healthData);
       } catch (error) {
         console.error('Failed to fetch admin data:', error);
       } finally {
@@ -165,70 +169,46 @@ export default function AdminDashboardPage() {
             </h2>
           </div>
           <div className="p-6 space-y-4">
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-gray-700">
-                  API Server
-                </span>
-                <span className="text-sm font-semibold text-green-600">
-                  Healthy
-                </span>
+            {systemHealth.length === 0 ? (
+              <div className="text-center text-gray-500 py-4">
+                No health data available
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div
-                  className="bg-green-600 h-2 rounded-full"
-                  style={{ width: '98%' }}
-                ></div>
-              </div>
-            </div>
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-gray-700">
-                  Database
-                </span>
-                <span className="text-sm font-semibold text-green-600">
-                  Healthy
-                </span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div
-                  className="bg-green-600 h-2 rounded-full"
-                  style={{ width: '95%' }}
-                ></div>
-              </div>
-            </div>
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-gray-700">
-                  Cache Server
-                </span>
-                <span className="text-sm font-semibold text-yellow-600">
-                  Warning
-                </span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div
-                  className="bg-yellow-600 h-2 rounded-full"
-                  style={{ width: '78%' }}
-                ></div>
-              </div>
-            </div>
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-gray-700">
-                  Storage
-                </span>
-                <span className="text-sm font-semibold text-green-600">
-                  Healthy
-                </span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div
-                  className="bg-green-600 h-2 rounded-full"
-                  style={{ width: '92%' }}
-                ></div>
-              </div>
-            </div>
+            ) : (
+              systemHealth.map((metric) => {
+                const statusColor =
+                  metric.status === 'Healthy'
+                    ? 'text-green-600'
+                    : metric.status === 'Warning'
+                    ? 'text-yellow-600'
+                    : 'text-red-600';
+
+                const barColor =
+                  metric.status === 'Healthy'
+                    ? 'bg-green-600'
+                    : metric.status === 'Warning'
+                    ? 'bg-yellow-600'
+                    : 'bg-red-600';
+
+                return (
+                  <div key={metric.name}>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium text-gray-700">
+                        {metric.name}
+                      </span>
+                      <span className={`text-sm font-semibold ${statusColor}`}>
+                        {metric.status}
+                      </span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div
+                        className={`${barColor} h-2 rounded-full transition-all duration-500`}
+                        style={{ width: `${metric.percentage}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
       </div>
