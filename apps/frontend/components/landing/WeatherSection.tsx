@@ -223,7 +223,7 @@ export function WeatherSection() {
               <div className="text-blue-500 mb-3">
                 {getWeatherIcon(weather.current.condition)}
               </div>
-              <p className="text-xs uppercase tracking-wide text-gray-500 mb-1">{t('today')}</p>
+              <p className="text-xs uppercase tracking-wide text-gray-600 mb-1">{t('today')}</p>
               <p className="text-2xl sm:text-3xl font-bold text-gray-900">
                 {weather.current.temperature}°
               </p>
@@ -231,8 +231,8 @@ export function WeatherSection() {
 
             {/* Wind */}
             <div className="flex flex-col items-start">
-              <Wind className="w-6 h-6 sm:w-8 sm:h-8 text-gray-400 mb-3" />
-              <p className="text-xs uppercase tracking-wide text-gray-500 mb-1">{t('wind')}</p>
+              <Wind className="w-6 h-6 sm:w-8 sm:h-8 text-gray-500 mb-3" aria-hidden="true" />
+              <p className="text-xs uppercase tracking-wide text-gray-600 mb-1">{t('wind')}</p>
               <p className="text-lg sm:text-xl font-bold text-gray-900">
                 {weather.current.windSpeed}
                 <span className="text-sm font-normal text-gray-500 ml-1">m/s</span>
@@ -241,8 +241,8 @@ export function WeatherSection() {
 
             {/* Humidity */}
             <div className="flex flex-col items-start">
-              <Droplets className="w-6 h-6 sm:w-8 sm:h-8 text-gray-400 mb-3" />
-              <p className="text-xs uppercase tracking-wide text-gray-500 mb-1">{t('humidity')}</p>
+              <Droplets className="w-6 h-6 sm:w-8 sm:h-8 text-gray-500 mb-3" aria-hidden="true" />
+              <p className="text-xs uppercase tracking-wide text-gray-600 mb-1">{t('humidity')}</p>
               <p className="text-lg sm:text-xl font-bold text-gray-900">
                 {weather.current.humidity}
                 <span className="text-sm font-normal text-gray-500 ml-1">%</span>
@@ -267,13 +267,13 @@ export function WeatherSection() {
                   <div className="text-base font-bold text-gray-900 mb-2">{hour.temperature}°</div>
                   {hour.precipitation > 0 && (
                     <div className="flex items-center gap-1 mb-1.5">
-                      <Droplets className="w-3 h-3 text-blue-400" />
+                      <Droplets className="w-3 h-3 text-blue-500" aria-hidden="true" />
                       <span className="text-xs text-blue-600 font-medium">{hour.precipitation}</span>
                     </div>
                   )}
                   <div className="flex items-center gap-1 mt-auto">
-                    <Wind className="w-3 h-3 text-gray-400" />
-                    <span className="text-xs text-gray-500">{hour.windSpeed}</span>
+                    <Wind className="w-3 h-3 text-gray-500" aria-hidden="true" />
+                    <span className="text-xs text-gray-600">{hour.windSpeed}</span>
                   </div>
                 </div>
               ))}

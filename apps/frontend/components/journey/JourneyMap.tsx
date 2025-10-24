@@ -488,7 +488,7 @@ export function JourneyMap({
     <div className="relative">
       <div
         ref={mapContainerRef}
-        className="w-full h-[500px] lg:h-[600px] rounded-xl overflow-hidden shadow-md border-2 border-gray-200"
+        className="w-full h-[300px] lg:h-[400px] rounded-xl overflow-hidden shadow-md border-2 border-gray-200"
       />
 
       {/* Map Legend */}

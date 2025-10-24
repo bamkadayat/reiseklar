@@ -34,6 +34,7 @@ export function LocationAutocomplete({
   const [isGettingLocation, setIsGettingLocation] = useState(false);
   const [hasSelected, setHasSelected] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
+  const [geoError, setGeoError] = useState<string>('');
   const wrapperRef = useRef<HTMLDivElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -115,9 +116,22 @@ export function LocationAutocomplete({
         setIsOpen(false);
       }
     }
+
+    function handleEscapeKey(event: KeyboardEvent) {
+      if (event.key === 'Escape' && isOpen) {
+        setIsOpen(false);
+        setIsFocused(false);
+      }
+    }
+
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+    document.addEventListener('keydown', handleEscapeKey);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscapeKey);
+    };
+  }, [isOpen]);
 
   const handleSelect = (location: EnturLocation) => {
     onChange(location.label, {
@@ -215,20 +229,55 @@ export function LocationAutocomplete({
               errorMessage += 'An unknown error occurred.';
           }
 
-          alert(errorMessage);
+          setGeoError(errorMessage);
           setIsGettingLocation(false);
           setIsOpen(false);
           setIsFocused(false);
+          // Auto-clear error after 5 seconds
+          setTimeout(() => setGeoError(''), 5000);
         }
       );
     } else {
-      alert('Geolocation is not supported by your browser');
+      setGeoError('Geolocation is not supported by your browser');
       setIsGettingLocation(false);
+      // Auto-clear error after 5 seconds
+      setTimeout(() => setGeoError(''), 5000);
     }
   };
 
   return (
     <div ref={wrapperRef} className="flex-1 relative">
+      {/* Geolocation error message */}
+      {geoError && (
+        <div
+          role="alert"
+          aria-live="polite"
+          className="absolute -top-14 left-0 right-0 z-50 p-2 bg-red-50 border border-red-200 rounded-lg shadow-lg animate-in fade-in slide-in-from-top-1 duration-200"
+        >
+          <div className="flex items-start gap-2">
+            <svg
+              className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              aria-hidden="true"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <p className="text-xs text-red-800 flex-1">{geoError}</p>
+            <button
+              onClick={() => setGeoError('')}
+              className="text-red-600 hover:text-red-800"
+              aria-label="Dismiss error"
+            >
+              <X className="w-3 h-3" aria-hidden="true" />
+            </button>
+          </div>
+        </div>
+      )}
       <div className="absolute left-4 top-1/2 -translate-y-1/2 z-10 flex items-center gap-1">
         {icon === 'circle' ? (
           <div className={`w-3 h-3 rounded-full border-2 transition-colors ${
@@ -275,12 +324,17 @@ export function LocationAutocomplete({
             setIsOpen(false);
           }, 200);
         }}
-        className={`w-full pr-10 py-6 bg-white border rounded-xl text-gray-900 text-base transition-all ${
+        className={`w-full pr-10 py-6 bg-white border rounded-xl text-gray-900 text-base transition-all placeholder:font-bold placeholder:text-lg ${
           hasSelected
             ? 'pl-14 border-blue-800 focus-visible:ring-2 focus-visible:ring-blue-900 focus-visible:border-blue-900'
             : 'pl-10 border-gray-300 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:border-blue-500'
         }`}
         autoComplete="off"
+        role="combobox"
+        aria-expanded={isOpen && isFocused}
+        aria-haspopup="listbox"
+        aria-controls="location-listbox"
+        aria-label={placeholder}
       />
 
       {/* Clear button (when value exists and not loading) */}
@@ -293,35 +347,44 @@ export function LocationAutocomplete({
             setLocations([]);
           }}
           className="absolute right-4 top-1/2 -translate-y-1/2 z-10 hover:bg-red-100 rounded-full p-1.5 transition-all hover:scale-110"
-          title="Clear"
+          title="Clear location"
+          aria-label="Clear location input"
         >
-          <X className="w-4 h-4 text-gray-500 hover:text-red-600" />
+          <X className="w-4 h-4 text-gray-500 hover:text-red-600" aria-hidden="true" />
         </button>
       )}
 
       {/* Loading indicator */}
       {isLoading && (
-        <div className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-1">
-          <Loader2 className="w-5 h-5 text-blue-600 animate-spin" />
+        <div className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-1" aria-live="polite" aria-label="Loading locations">
+          <Loader2 className="w-5 h-5 text-blue-600 animate-spin" aria-hidden="true" />
         </div>
       )}
 
       {/* Dropdown */}
       {isOpen && isFocused && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg border border-gray-200 max-h-80 overflow-y-auto z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+        <div
+          id="location-listbox"
+          role="listbox"
+          className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg border border-gray-200 max-h-80 overflow-y-auto z-50 animate-in fade-in slide-in-from-top-2 duration-200"
+          aria-label="Location suggestions"
+        >
           {/* Your Position Option */}
           <button
+            role="option"
+            aria-selected={false}
             onMouseDown={(e) => {
               e.preventDefault(); // Prevent input blur
               handleUseMyPosition();
             }}
             disabled={isGettingLocation}
             className="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors flex items-center gap-3 border-b border-gray-100 disabled:opacity-70"
+            aria-label={isGettingLocation ? 'Getting your location...' : 'Use your current position'}
           >
             {isGettingLocation ? (
-              <Loader2 className="w-5 h-5 text-blue-600 animate-spin flex-shrink-0" />
+              <Loader2 className="w-5 h-5 text-blue-600 animate-spin flex-shrink-0" aria-hidden="true" />
             ) : (
-              <Navigation className="w-5 h-5 text-blue-600 flex-shrink-0" />
+              <Navigation className="w-5 h-5 text-blue-600 flex-shrink-0" aria-hidden="true" />
             )}
             <span className="text-gray-900 font-medium">
               {isGettingLocation ? 'Getting your location...' : t('yourPosition') || 'Your position'}
@@ -340,13 +403,16 @@ export function LocationAutocomplete({
           {!isLoading && locations.length > 0 && locations.map((location) => (
             <button
               key={location.id}
+              role="option"
+              aria-selected={false}
               onMouseDown={(e) => {
                 e.preventDefault(); // Prevent input blur
                 handleSelect(location);
               }}
               className="w-full px-4 py-3 text-left hover:bg-gray-100 transition-colors flex items-center gap-3 last:rounded-b-xl"
+              aria-label={`Select ${location.label}`}
             >
-              <MapPin className="w-5 h-5 text-gray-400 flex-shrink-0" />
+              <MapPin className="w-5 h-5 text-gray-400 flex-shrink-0" aria-hidden="true" />
               <div className="flex flex-col min-w-0">
                 <span className="text-gray-900 font-medium truncate">{location.name}</span>
                 {location.label !== location.name && (
@@ -359,16 +425,16 @@ export function LocationAutocomplete({
           {/* No Results State */}
           {!isLoading && value.length >= 2 && locations.length === 0 && (
             <div className="w-full px-4 py-8 text-center">
-              <MapPin className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-              <p className="text-gray-600 font-medium mb-1">No locations found</p>
-              <p className="text-sm text-gray-500">Try searching for a different place</p>
+              <MapPin className="w-12 h-12 text-gray-400 mx-auto mb-3" aria-hidden="true" />
+              <p className="text-gray-700 font-medium mb-1">No locations found</p>
+              <p className="text-sm text-gray-600">Try searching for a different place</p>
             </div>
           )}
 
           {/* Help Text when empty */}
           {!isLoading && value.length < 2 && (
             <div className="px-4 py-6 text-center">
-              <p className="text-sm text-gray-500">Type at least 2 characters to search</p>
+              <p className="text-sm text-gray-600">Type at least 2 characters to search</p>
             </div>
           )}
         </div>
