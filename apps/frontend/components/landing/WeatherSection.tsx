@@ -254,7 +254,7 @@ export function WeatherSection() {
         {/* Hourly Forecast - Next 24 Hours */}
         <div className='md:mb-6'>
           <h3 className="text-sm font-semibold text-gray-900 mb-3 uppercase tracking-wide">Next 24 Hours</h3>
-          <div className="bg-white rounded-xl p-4 shadow-sm overflow-x-auto">
+          <div className="bg-white rounded-xl p-4 shadow-sm overflow-x-auto" tabIndex={0} role="region" aria-label="Hourly weather forecast, scroll to see more">
             <div className="flex gap-4">
               {weather.hourlyToday.filter((_, index) => index % 2 === 0).map((hour, index) => (
                 <div key={index} className="flex flex-col items-center min-w-[56px] pb-1">

@@ -20,6 +20,7 @@ interface JourneySearchModifierProps {
   initialFromLon?: number;
   initialToLat?: number;
   initialToLon?: number;
+  initialDateTime?: Date;
   onSearch?: (params: {
     startId: string;
     startLabel: string;
@@ -66,6 +67,7 @@ export function JourneySearchModifier({
   initialFromLon,
   initialToLat,
   initialToLon,
+  initialDateTime,
   onSearch,
 }: JourneySearchModifierProps) {
   const router = useRouter();
@@ -93,10 +95,11 @@ export function JourneySearchModifier({
         }
       : undefined
   );
-  const [selectedDateTime, setSelectedDateTime] = useState(new Date());
+  const [selectedDateTime, setSelectedDateTime] = useState(initialDateTime || new Date());
   const [transitTime, setTransitTime] = useState<number | null>(null);
   const [bikeTime, setBikeTime] = useState<number | null>(null);
   const [walkTime, setWalkTime] = useState<number | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   // Calculate distance and times when locations are available
   useEffect(() => {
@@ -131,9 +134,10 @@ export function JourneySearchModifier({
 
   const handleSearch = () => {
     if (!fromData || !toData) {
-      alert("Please select both origin and destination");
+      setErrorMessage("Please select both origin and destination");
       return;
     }
+    setErrorMessage('');
 
     // If onSearch callback is provided, use it (no page reload)
     if (onSearch) {
@@ -169,6 +173,41 @@ export function JourneySearchModifier({
   return (
     <Card className="mb-4 overflow-visible shadow-none">
       <CardContent className="p-4 overflow-visible">
+        {/* Error message banner */}
+        {errorMessage && (
+          <div
+            role="alert"
+            aria-live="assertive"
+            className="mb-3 p-2 bg-red-50 border border-red-200 rounded-lg flex items-start gap-2 animate-in fade-in slide-in-from-top-1 duration-200"
+          >
+            <svg
+              className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              aria-hidden="true"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <p className="text-xs text-red-800 font-medium flex-1">{errorMessage}</p>
+            <button
+              onClick={() => setErrorMessage('')}
+              className="text-red-600 hover:text-red-800"
+              aria-label="Dismiss error message"
+            >
+              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                <path
+                  fillRule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+          </div>
+        )}
         <div className="space-y-3 overflow-visible">
           {/* From Location */}
           <div className="relative">

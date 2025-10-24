@@ -120,7 +120,7 @@ export class AuthService {
     }
 
     // Mark as verified
-    await prisma.$transaction([
+    const [updatedUser] = await prisma.$transaction([
       prisma.user.update({
         where: { id: user.id },
         data: { emailVerifiedAt: new Date() },
@@ -132,23 +132,31 @@ export class AuthService {
     ]);
 
     // Generate tokens
-    const tokens = generateTokenPair({ userId: user.id, email: user.email });
+    const tokens = generateTokenPair({ userId: updatedUser.id, email: updatedUser.email });
 
     // Store refresh token
     const tokenHash = await hashPassword(tokens.refreshToken);
     await prisma.refreshToken.create({
       data: {
-        userId: user.id,
+        userId: updatedUser.id,
         tokenHash,
       },
     });
 
     return {
       user: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        role: user.role,
+        id: updatedUser.id,
+        email: updatedUser.email,
+        name: updatedUser.name,
+        role: updatedUser.role,
+        emailVerifiedAt: updatedUser.emailVerifiedAt?.toISOString() || null,
+        googleId: updatedUser.googleId,
+        provider: updatedUser.provider,
+        avatar: updatedUser.avatar,
+        theme: updatedUser.theme,
+        language: updatedUser.language,
+        createdAt: updatedUser.createdAt.toISOString(),
+        updatedAt: updatedUser.updatedAt.toISOString(),
       },
       ...tokens,
     };
@@ -235,6 +243,14 @@ export class AuthService {
         email: user.email,
         name: user.name,
         role: user.role,
+        emailVerifiedAt: user.emailVerifiedAt?.toISOString() || null,
+        googleId: user.googleId,
+        provider: user.provider,
+        avatar: user.avatar,
+        theme: user.theme,
+        language: user.language,
+        createdAt: user.createdAt.toISOString(),
+        updatedAt: user.updatedAt.toISOString(),
       },
       ...tokens,
     };
@@ -314,6 +330,8 @@ export class AuthService {
         googleId: true,
         provider: true,
         avatar: true,
+        theme: true,
+        language: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -327,7 +345,10 @@ export class AuthService {
   }
 
   // Update user profile
-  async updateUserProfile(userId: string, data: { name?: string }) {
+  async updateUserProfile(
+    userId: string,
+    data: { name?: string; theme?: string; language?: string }
+  ) {
     const user = await prisma.user.findUnique({
       where: { id: userId },
     });
@@ -340,6 +361,8 @@ export class AuthService {
       where: { id: userId },
       data: {
         name: data.name !== undefined ? data.name : user.name,
+        theme: data.theme !== undefined ? data.theme : user.theme,
+        language: data.language !== undefined ? data.language : user.language,
       },
       select: {
         id: true,
@@ -350,6 +373,8 @@ export class AuthService {
         googleId: true,
         provider: true,
         avatar: true,
+        theme: true,
+        language: true,
         createdAt: true,
         updatedAt: true,
       },

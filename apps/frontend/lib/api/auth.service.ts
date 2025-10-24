@@ -180,7 +180,11 @@ export const authService = {
   /**
    * Update current user profile
    */
-  async updateProfile(data: { name?: string }): Promise<User> {
+  async updateProfile(data: {
+    name?: string;
+    theme?: 'light' | 'dark' | 'system';
+    language?: 'en' | 'nb';
+  }): Promise<User> {
     const response = await apiClient.put<ApiResponse<User>>('/api/users/me', data);
 
     if (!response.success || !response.data) {

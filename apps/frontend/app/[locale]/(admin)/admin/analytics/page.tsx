@@ -51,7 +51,7 @@ export default function AdminAnalyticsPage() {
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-norwegian-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading analytics...</p>
+          <p className="text-gray-600 dark:text-gray-400">Loading analytics...</p>
         </div>
       </div>
     );
@@ -61,10 +61,10 @@ export default function AdminAnalyticsPage() {
     <div className="space-y-6 sm:space-y-8">
       {/* Page Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
           {t('title')}
         </h1>
-        <p className="mt-2 text-sm sm:text-base text-gray-600">
+        <p className="mt-2 text-sm sm:text-base text-gray-600 dark:text-gray-400">
           {t('description')}
         </p>
       </div>
@@ -78,7 +78,7 @@ export default function AdminAnalyticsPage() {
             className={`px-4 py-2 rounded-lg font-medium transition-colors ${
               period === selectedPeriod
                 ? 'bg-norwegian-blue text-white'
-                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
             }`}
           >
             {period === '7d' && t('last7Days')}
@@ -140,12 +140,12 @@ export default function AdminAnalyticsPage() {
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* User Growth Chart */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
               {t('userGrowthChart')}
             </h2>
-            <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+            <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
               Last 12 months
             </span>
           </div>
@@ -160,16 +160,16 @@ export default function AdminAnalyticsPage() {
                       className="w-full bg-norwegian-blue rounded-t hover:bg-blue-700 transition-colors cursor-pointer group relative"
                       style={{ height: `${height}%` }}
                     >
-                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-900 text-white text-xs py-1 px-2 rounded whitespace-nowrap">
+                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-900 dark:bg-gray-700 text-white text-xs py-1 px-2 rounded whitespace-nowrap">
                         {dataPoint.count} users
                       </div>
                     </div>
-                    <span className="text-xs text-gray-500">{dataPoint.month}</span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">{dataPoint.month}</span>
                   </div>
                 );
               })
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-gray-400">
+              <div className="w-full h-full flex items-center justify-center text-gray-400 dark:text-gray-500">
                 No data available
               </div>
             )}
@@ -177,12 +177,12 @@ export default function AdminAnalyticsPage() {
         </div>
 
         {/* Route Usage Chart */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
               {t('routeUsage')}
             </h2>
-            <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+            <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
               By transport mode
             </span>
           </div>
@@ -212,20 +212,20 @@ export default function AdminAnalyticsPage() {
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
                         <div className={`w-3 h-3 rounded-full ${color}`}></div>
-                        <span className="text-sm font-medium text-gray-700">
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                           {item.name}
                         </span>
                       </div>
                       <div className="flex items-center gap-3">
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
                           {item.count.toLocaleString()} trips
                         </span>
-                        <span className="text-sm font-semibold text-gray-900 w-12 text-right">
+                        <span className="text-sm font-semibold text-gray-900 dark:text-white w-12 text-right">
                           {item.value}%
                         </span>
                       </div>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 overflow-hidden">
                       <div
                         className={`${color} h-2.5 rounded-full transition-all duration-500 group-hover:opacity-80`}
                         style={{ width: `${item.value}%` }}
@@ -235,7 +235,7 @@ export default function AdminAnalyticsPage() {
                 );
               })
             ) : (
-              <div className="flex items-center justify-center h-32 text-gray-400">
+              <div className="flex items-center justify-center h-32 text-gray-400 dark:text-gray-500">
                 No route usage data available
               </div>
             )}
@@ -244,50 +244,50 @@ export default function AdminAnalyticsPage() {
       </div>
 
       {/* Popular Routes */}
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-gray-900">
+      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
             {t('popularRoutes')}
           </h2>
-          <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+          <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
             Top 10 routes
           </span>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
+            <thead className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   #
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   {t('route')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   {t('users')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   {t('avgDuration')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   {t('trend')}
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
+            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
               {popularRoutes.length > 0 ? (
                 popularRoutes.map((item, i) => (
-                  <tr key={i} className="hover:bg-gray-50 transition-colors">
+                  <tr key={i} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div
                         className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
                           i === 0
-                            ? 'bg-yellow-100 text-yellow-700'
+                            ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
                             : i === 1
-                            ? 'bg-gray-100 text-gray-700'
+                            ? 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
                             : i === 2
-                            ? 'bg-orange-100 text-orange-700'
-                            : 'bg-blue-50 text-blue-700'
+                            ? 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400'
+                            : 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
                         }`}
                       >
                         {i + 1}
@@ -295,29 +295,29 @@ export default function AdminAnalyticsPage() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex flex-col">
-                        <span className="text-sm font-medium text-gray-900">
+                        <span className="text-sm font-medium text-gray-900 dark:text-white">
                           {item.route}
                         </span>
-                        <span className="text-xs text-gray-500">{item.mode}</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">{item.mode}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm text-gray-900 font-medium">
+                        <span className="text-sm text-gray-900 dark:text-white font-medium">
                           {item.count.toLocaleString()}
                         </span>
-                        <span className="text-xs text-gray-500">trips</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">trips</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
                       {item.duration}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
                         className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                           item.trend > 0
-                            ? 'bg-green-100 text-green-800'
-                            : 'bg-red-100 text-red-800'
+                            ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400'
+                            : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400'
                         }`}
                       >
                         {item.trend > 0 ? '↑' : '↓'} {Math.abs(item.trend)}%
@@ -328,7 +328,7 @@ export default function AdminAnalyticsPage() {
               ) : (
                 <tr>
                   <td colSpan={5} className="px-6 py-12">
-                    <div className="flex items-center justify-center text-gray-400">
+                    <div className="flex items-center justify-center text-gray-400 dark:text-gray-500">
                       No popular routes data available
                     </div>
                   </td>

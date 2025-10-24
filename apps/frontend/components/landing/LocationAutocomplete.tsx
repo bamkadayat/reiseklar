@@ -366,6 +366,7 @@ export function LocationAutocomplete({
         <div
           id="location-listbox"
           role="listbox"
+          tabIndex={0}
           className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg border border-gray-200 max-h-80 overflow-y-auto z-50 animate-in fade-in slide-in-from-top-2 duration-200"
           aria-label="Location suggestions"
         >

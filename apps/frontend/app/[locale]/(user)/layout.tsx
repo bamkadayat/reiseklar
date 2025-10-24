@@ -4,6 +4,7 @@ import { ReactNode, useState, useEffect } from 'react';
 import { UserSidebar } from '@/components/user/layout/UserSidebar';
 import { DashboardHeader } from '@/components/shared/layout/DashboardHeader';
 import { useAuth } from '@/contexts/AuthContext';
+import { ThemeProvider } from '@/contexts/ThemeContext';
 import { useRouter } from 'next/navigation';
 
 export default function UserLayout({
@@ -37,30 +38,32 @@ export default function UserLayout({
   }
 
   return (
-    <div className="flex h-screen bg-gray-50">
-      {/* Sidebar */}
-      <UserSidebar
-        isOpen={isSidebarOpen}
-        onClose={() => setIsSidebarOpen(false)}
-      />
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Header */}
-        <DashboardHeader
-          onMenuClick={() => setIsSidebarOpen(true)}
-          userName={user?.name || user?.email || 'User'}
-          userRole="user"
-          notificationCount={0}
+    <ThemeProvider initialTheme={user?.theme}>
+      <div className="flex h-screen bg-gray-50 dark:bg-gray-900 overflow-hidden">
+        {/* Sidebar */}
+        <UserSidebar
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
         />
 
-        {/* Main Content Area */}
-        <main className="flex-1 overflow-y-auto">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-            {children}
-          </div>
-        </main>
+        {/* Main Content */}
+        <div className="flex-1 flex flex-col min-w-0">
+          {/* Header */}
+          <DashboardHeader
+            onMenuClick={() => setIsSidebarOpen(true)}
+            userName={user?.name || user?.email || 'User'}
+            userRole="user"
+            notificationCount={0}
+          />
+
+          {/* Main Content Area */}
+          <main className="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900">
+            <div className="max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+              {children}
+            </div>
+          </main>
+        </div>
       </div>
-    </div>
+    </ThemeProvider>
   );
 }

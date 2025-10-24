@@ -107,7 +107,7 @@ export function Navbar() {
                   className="flex items-center gap-2 text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-base px-4 py-2 rounded-lg hover:bg-gray-50 transition-all duration-200"
                 >
                   <User className="w-5 h-5" />
-                  <span className="hidden lg:inline">{user?.name || 'Dashboard'}</span>
+                  <span className="hidden lg:inline">Dashboard</span>
                 </Link>
 
                 {/* Logout Button */}
@@ -251,7 +251,7 @@ export function Navbar() {
                     className="flex items-center gap-3 text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-base px-4 py-3 rounded-xl hover:bg-gray-50 transition-all duration-200 active:scale-95"
                   >
                     <User className="w-5 h-5" />
-                    <span>{user?.name || 'Dashboard'}</span>
+                    <span>Dashboard</span>
                   </Link>
 
                   {/* Logout Button */}

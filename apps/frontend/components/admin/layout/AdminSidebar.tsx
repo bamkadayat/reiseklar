@@ -1,7 +1,7 @@
 'use client';
 
-import { LayoutDashboard, Users, BarChart3, Settings } from 'lucide-react';
-import { Sidebar, SidebarItem } from '@/components/shared/layout/Sidebar';
+import { LayoutDashboard, Users, BarChart3, Settings, ArrowLeft } from 'lucide-react';
+import { Sidebar, SidebarItem, SidebarSection } from '@/components/shared/layout/Sidebar';
 import { useTranslations } from 'next-intl';
 import { useState, useEffect } from 'react';
 import { adminService } from '@/lib/api/admin.service';
@@ -28,39 +28,61 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
     fetchUserCount();
   }, []);
 
-  const menuItems: SidebarItem[] = [
+  const sections: SidebarSection[] = [
     {
-      icon: LayoutDashboard,
-      label: t('overview'),
-      href: '/admin',
+      header: 'ADMIN',
+      items: [
+        {
+          icon: LayoutDashboard,
+          label: t('overview'),
+          href: '/admin',
+        },
+        {
+          icon: Users,
+          label: t('users'),
+          href: '/admin/users',
+          badge: userCount > 0 ? userCount.toString() : undefined,
+        },
+        {
+          icon: BarChart3,
+          label: t('analytics'),
+          href: '/admin/analytics',
+        },
+      ],
     },
     {
-      icon: Users,
-      label: t('users'),
-      href: '/admin/users',
-      badge: userCount > 0 ? userCount.toString() : undefined,
+      header: 'SYSTEM',
+      items: [
+        {
+          icon: Settings,
+          label: t('settings'),
+          href: '/admin/settings',
+        },
+      ],
     },
+  ];
+
+  const bottomItems: SidebarItem[] = [
     {
-      icon: BarChart3,
-      label: t('analytics'),
-      href: '/admin/analytics',
-    },
-    {
-      icon: Settings,
-      label: t('settings'),
-      href: '/admin/settings',
+      icon: ArrowLeft,
+      label: 'Go to Homepage',
+      href: '/',
     },
   ];
 
   return (
     <Sidebar
-      items={menuItems}
+      sections={sections}
+      bottomItems={bottomItems}
       isOpen={isOpen}
       onClose={onClose}
       logo={{
         text: 'Reiseklar',
         subtitle: t('adminPanel'),
       }}
+      showLanguageSwitcher={true}
+      showNotifications={false}
+      notificationCount={0}
     />
   );
 }

@@ -23,12 +23,13 @@ const DateInput = forwardRef<
     type="button"
     onClick={onClick}
     ref={ref}
-    className="w-full flex items-center justify-center gap-2 bg-white border border-gray-300 rounded-xl px-3 py-2 hover:bg-gray-50 transition-colors"
+    className="w-full h-full flex items-center justify-center gap-2 bg-white border border-gray-300 rounded-xl px-4 py-3 hover:bg-gray-50 transition-colors"
+    aria-label={`Select ${label}: ${value}`}
   >
-    <CalendarIcon className="h-4 w-4 text-gray-500 flex-shrink-0" />
+    <CalendarIcon className="h-5 w-5 text-gray-500 flex-shrink-0" aria-hidden="true" />
     <div className="flex flex-col items-start">
       <span className="text-[10px] text-gray-500">{label}</span>
-      <span className="text-sm text-gray-900 font-medium">{value}</span>
+      <span className="text-base text-gray-900 font-medium">{value}</span>
     </div>
   </button>
 ));
@@ -43,12 +44,13 @@ const TimeInput = forwardRef<
     type="button"
     onClick={onClick}
     ref={ref}
-    className="w-full flex items-center justify-center gap-2 bg-white border border-gray-300 rounded-xl px-3 py-2 hover:bg-gray-50 transition-colors"
+    className="w-full h-full flex items-center justify-center gap-2 bg-white border border-gray-300 rounded-xl px-4 py-3 hover:bg-gray-50 transition-colors"
+    aria-label={`Select time: ${value}`}
   >
-    <Clock className="h-4 w-4 text-gray-500 flex-shrink-0" />
+    <Clock className="h-5 w-5 text-gray-500 flex-shrink-0" aria-hidden="true" />
     <div className="flex flex-col items-start">
       <span className="text-[10px] text-gray-500">Tidspunkt</span>
-      <span className="text-sm text-gray-900 font-medium">{value}</span>
+      <span className="text-base text-gray-900 font-medium">{value}</span>
     </div>
   </button>
 ));
@@ -69,7 +71,7 @@ export function DateTimePicker({
   // Only date picker without "Nå" button
   if (showOnlyDate) {
     return (
-      <div className="w-full">
+      <div className="w-full h-full">
         <DatePicker
           selected={date}
           onChange={(newDate) => {
@@ -81,7 +83,7 @@ export function DateTimePicker({
           minDate={new Date()}
           customInput={<DateInput label={label} />}
           calendarClassName="shadow-lg border border-gray-200"
-          wrapperClassName="w-full"
+          wrapperClassName="w-full h-full"
         />
       </div>
     );
@@ -94,10 +96,11 @@ export function DateTimePicker({
         <button
           type="button"
           onClick={handleNowClick}
-          className="w-full bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl py-3 font-medium transition-colors flex items-center justify-center gap-2"
+          className="w-full h-full bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl font-medium transition-colors flex items-center justify-center gap-2"
+          aria-label="Set departure time to now"
         >
-          <Clock className="h-4 w-4 text-gray-500" />
-          <span className="text-sm">Nå</span>
+          <Clock className="h-5 w-5 text-gray-500" aria-hidden="true" />
+          <span className="text-base">Nå</span>
         </button>
 
         <DatePicker
@@ -118,7 +121,7 @@ export function DateTimePicker({
 
   if (showOnlyTime) {
     return (
-      <div className="w-full">
+      <div className="w-full h-full">
         <DatePicker
           selected={date}
           onChange={(newDate) => {
@@ -134,7 +137,7 @@ export function DateTimePicker({
           timeFormat="HH:mm"
           customInput={<TimeInput />}
           calendarClassName="shadow-lg border border-gray-200"
-          wrapperClassName="w-full"
+          wrapperClassName="w-full h-full"
         />
       </div>
     );
@@ -148,9 +151,10 @@ export function DateTimePicker({
         <button
           type="button"
           onClick={handleNowClick}
-          className="w-24 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl font-medium transition-colors flex items-center justify-center gap-2 px-4 py-3"
+          className="w-24 h-full bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl font-medium transition-colors flex items-center justify-center gap-2 px-4"
+          aria-label="Set departure time to now"
         >
-          <Clock className="h-5 w-5 text-gray-500 flex-shrink-0" />
+          <Clock className="h-5 w-5 text-gray-500 flex-shrink-0" aria-hidden="true" />
           <span className="text-base">Nå</span>
         </button>
 
