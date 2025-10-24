@@ -64,6 +64,34 @@ export default function RootLayout({
         {/* Preconnect to external domains for better performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Theme initialization script - runs before React hydration to prevent flash */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  // Only apply dark mode on dashboard pages (user and admin)
+                  const path = window.location.pathname;
+                  const isDashboardPage = path.includes('/user') || path.includes('/admin');
+
+                  if (isDashboardPage) {
+                    const theme = localStorage.getItem('dashboard-theme') || 'system';
+                    const isDark = theme === 'dark' ||
+                      (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                    if (isDark) {
+                      document.documentElement.classList.add('dark');
+                    } else {
+                      document.documentElement.classList.remove('dark');
+                    }
+                  } else {
+                    // Always remove dark class from public pages
+                    document.documentElement.classList.remove('dark');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
       </head>
       <body suppressHydrationWarning>{children}</body>
     </html>

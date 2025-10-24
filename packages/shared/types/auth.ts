@@ -18,6 +18,8 @@ export const UserSchema = z.object({
   googleId: z.string().nullable().optional(),
   provider: z.enum(['local', 'google']).nullable().optional(),
   avatar: z.string().nullable().optional(),
+  theme: z.enum(['light', 'dark', 'system']).nullable().optional(),
+  language: z.enum(['en', 'nb']).nullable().optional(),
   createdAt: z.string(),
   updatedAt: z.string(),
 });

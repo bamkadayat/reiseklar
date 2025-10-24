@@ -149,7 +149,7 @@ export function SearchForm() {
         {showDateTime && (
           <>
             {/* Desktop Layout */}
-            <div className="hidden md:flex gap-3 items-end animate-in fade-in slide-in-from-top-2 duration-300 mt-5">
+            <div className="hidden md:flex gap-3 items-stretch animate-in fade-in slide-in-from-top-2 duration-300 mt-5">
               <DateTimePicker
                 date={departureDate}
                 onDateChange={setDepartureDate}
@@ -159,7 +159,7 @@ export function SearchForm() {
               {/* Search Button */}
               <Button
                 onClick={handleSearch}
-                className="flex-shrink-0 px-[50px] py-8 bg-blue-700 text-white hover:bg-blue-800 transition-colors font-medium text-base rounded-xl"
+                className="flex-shrink-0 px-[50px] h-auto bg-blue-700 text-white hover:bg-blue-800 transition-colors font-medium text-base rounded-xl"
                 aria-label={`${t('button')} - Search for travel routes`}
               >
                 {t('button')}
@@ -169,7 +169,7 @@ export function SearchForm() {
             {/* Mobile Layout */}
             <div className="flex md:hidden flex-col gap-3 animate-in fade-in slide-in-from-top-2 duration-300">
               {/* First row: Nå and Reisedato */}
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-3 h-14">
                 <DateTimePicker
                   date={departureDate}
                   onDateChange={setDepartureDate}
@@ -179,7 +179,7 @@ export function SearchForm() {
               </div>
 
               {/* Second row: Tidspunkt and Søk button */}
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-3 h-14">
                 <DateTimePicker
                   date={departureDate}
                   onDateChange={setDepartureDate}
@@ -189,7 +189,7 @@ export function SearchForm() {
 
                 <Button
                   onClick={handleSearch}
-                  className="py-8 bg-blue-700 text-white hover:bg-blue-800 transition-colors font-medium text-base rounded-xl"
+                  className="h-full bg-blue-700 text-white hover:bg-blue-800 transition-colors font-medium text-base rounded-xl"
                   aria-label={`${t('button')} - Search for travel routes`}
                 >
                   {t('button')}

@@ -18,7 +18,7 @@ export default function Home() {
 
       <main id="main-content">
         <section
-          className="relative w-screen min-h-[50vh] flex items-center justify-center px-4 py-16 sm:py-20 overflow-visible bg-[#012B6A]"
+          className="relative w-full min-h-[50vh] flex items-center justify-center px-4 py-16 sm:py-20 overflow-hidden bg-[#012B6A]"
           aria-label="Search for travel routes"
         >
           {/* Background image with proper optimization */}

@@ -159,7 +159,7 @@
       "planNewRoute": "Planlegg ny rute",
       "planNewRouteDesc": "Finn den beste ruten for reisen din",
       "savedRoutes": "Lagrede ruter",
-      "savedRoutesDesc": "Få rask tilgang til favorittrutene dine",
+      "savedRoutesDesc": "",
       "ecoStats": "Øko-statistikk",
       "ecoStatsDesc": "Se din miljøpåvirkning",
       "profilePage": {
@@ -190,7 +190,7 @@
       },
       "routesPage": {
         "title": "Mine ruter",
-        "description": "Administrer og se dine lagrede ruter",
+        "description": "",
         "addRoute": "Legg til rute",
         "totalRoutes": "Totale ruter",
         "favorites": "Favoritter",

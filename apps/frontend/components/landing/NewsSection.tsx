@@ -133,7 +133,7 @@ export function NewsSection() {
         </div>
 
         {/* News Items */}
-        <div className="flex-1 overflow-y-auto space-y-3">
+        <div className="flex-1 overflow-y-auto space-y-3" tabIndex={0} role="region" aria-label="Latest news articles, scroll to see more">
           {news.map((item, index) => (
             <a
               key={index}

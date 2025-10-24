@@ -2,7 +2,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { ConditionalNavbar } from '@/components/shared/navigation/ConditionalNavbar';
-import { Footer } from '@/components/shared/layout/Footer';
+import { ConditionalFooter } from '@/components/shared/layout/ConditionalFooter';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { ReduxProvider } from '@/components/providers/ReduxProvider';
 import { AppInitializer } from '@/components/AppInitializer';
@@ -40,7 +40,7 @@ export default async function LocaleLayout({
                   <main className="flex-1">
                     {children}
                   </main>
-                  <Footer />
+                  <ConditionalFooter />
                 </div>
               </AuthProvider>
             </AppInitializer>

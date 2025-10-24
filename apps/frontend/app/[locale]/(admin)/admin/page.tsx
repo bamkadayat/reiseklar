@@ -41,7 +41,7 @@ export default function AdminDashboardPage() {
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-norwegian-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading dashboard...</p>
+          <p className="text-gray-600 dark:text-gray-400">Loading dashboard...</p>
         </div>
       </div>
     );
@@ -51,10 +51,10 @@ export default function AdminDashboardPage() {
     <div className="space-y-6 sm:space-y-8">
       {/* Welcome Section */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
           {t('welcome')}
         </h1>
-        <p className="mt-2 text-sm sm:text-base text-gray-600">
+        <p className="mt-2 text-sm sm:text-base text-gray-600 dark:text-gray-400">
           {t('welcomeMessage')}
         </p>
       </div>
@@ -94,15 +94,15 @@ export default function AdminDashboardPage() {
       {/* Recent Activity & User Growth */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Users */}
-        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
               {t('recentUsers')}
             </h2>
           </div>
-          <div className="divide-y divide-gray-200">
+          <div className="divide-y divide-gray-200 dark:divide-gray-700">
             {recentUsers.length === 0 ? (
-              <div className="px-6 py-8 text-center text-gray-500">
+              <div className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
                 No users yet
               </div>
             ) : (
@@ -125,7 +125,7 @@ export default function AdminDashboardPage() {
                 return (
                   <div
                     key={user.id}
-                    className="px-6 py-4 hover:bg-gray-50 transition-colors"
+                    className="px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
@@ -133,22 +133,22 @@ export default function AdminDashboardPage() {
                           {user.name.charAt(0).toUpperCase()}
                         </div>
                         <div>
-                          <h3 className="font-medium text-gray-900">
+                          <h3 className="font-medium text-gray-900 dark:text-white">
                             {user.name}
                           </h3>
-                          <p className="text-sm text-gray-500">
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
                             {user.email}
                           </p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-gray-600 dark:text-gray-300">
                           {timeAgo}
                         </p>
                         <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full mt-1 ${
                           user.status === 'Active'
-                            ? 'bg-green-100 text-green-700'
-                            : 'bg-gray-100 text-gray-700'
+                            ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
+                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
                         }`}>
                           {user.status}
                         </span>
@@ -162,25 +162,25 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* System Health */}
-        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
               {t('systemHealth')}
             </h2>
           </div>
           <div className="p-6 space-y-4">
             {systemHealth.length === 0 ? (
-              <div className="text-center text-gray-500 py-4">
+              <div className="text-center text-gray-500 dark:text-gray-400 py-4">
                 No health data available
               </div>
             ) : (
               systemHealth.map((metric) => {
                 const statusColor =
                   metric.status === 'Healthy'
-                    ? 'text-green-600'
+                    ? 'text-green-600 dark:text-green-400'
                     : metric.status === 'Warning'
-                    ? 'text-yellow-600'
-                    : 'text-red-600';
+                    ? 'text-yellow-600 dark:text-yellow-400'
+                    : 'text-red-600 dark:text-red-400';
 
                 const barColor =
                   metric.status === 'Healthy'
@@ -192,14 +192,14 @@ export default function AdminDashboardPage() {
                 return (
                   <div key={metric.name}>
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-gray-700">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                         {metric.name}
                       </span>
                       <span className={`text-sm font-semibold ${statusColor}`}>
                         {metric.status}
                       </span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                       <div
                         className={`${barColor} h-2 rounded-full transition-all duration-500`}
                         style={{ width: `${metric.percentage}%` }}
@@ -215,22 +215,22 @@ export default function AdminDashboardPage() {
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <button className="p-6 bg-white border-2 border-norwegian-blue rounded-lg hover:bg-norwegian-blue hover:text-white transition-all group text-left">
+        <button className="p-6 bg-white dark:bg-gray-800 border-2 border-norwegian-blue rounded-lg hover:bg-norwegian-blue hover:text-white transition-all group text-left">
           <Users className="w-8 h-8 mb-3 text-norwegian-blue group-hover:text-white" />
-          <h3 className="font-semibold mb-1">{t('manageUsers')}</h3>
-          <p className="text-sm text-gray-600 group-hover:text-white/90">
+          <h3 className="font-semibold mb-1 text-gray-900 dark:text-white group-hover:text-white">{t('manageUsers')}</h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400 group-hover:text-white/90">
             {t('manageUsersDesc')}
           </p>
         </button>
-        <button className="p-6 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-all text-left">
-          <Activity className="w-8 h-8 mb-3 text-green-600" />
-          <h3 className="font-semibold mb-1">{t('viewAnalytics')}</h3>
-          <p className="text-sm text-gray-600">{t('viewAnalyticsDesc')}</p>
+        <button className="p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow-md transition-all text-left">
+          <Activity className="w-8 h-8 mb-3 text-green-600 dark:text-green-400" />
+          <h3 className="font-semibold mb-1 text-gray-900 dark:text-white">{t('viewAnalytics')}</h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400">{t('viewAnalyticsDesc')}</p>
         </button>
-        <button className="p-6 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-all text-left">
-          <Route className="w-8 h-8 mb-3 text-purple-600" />
-          <h3 className="font-semibold mb-1">{t('routeManagement')}</h3>
-          <p className="text-sm text-gray-600">{t('routeManagementDesc')}</p>
+        <button className="p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow-md transition-all text-left">
+          <Route className="w-8 h-8 mb-3 text-purple-600 dark:text-purple-400" />
+          <h3 className="font-semibold mb-1 text-gray-900 dark:text-white">{t('routeManagement')}</h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400">{t('routeManagementDesc')}</p>
         </button>
       </div>
     </div>

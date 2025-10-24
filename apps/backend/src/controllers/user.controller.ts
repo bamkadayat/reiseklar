@@ -45,10 +45,28 @@ export class UserController {
         });
       }
 
-      const { name } = req.body;
+      const { name, theme, language } = req.body;
+
+      // Validate theme if provided
+      if (theme && !['light', 'dark', 'system'].includes(theme)) {
+        return res.status(400).json({
+          success: false,
+          error: 'Invalid theme. Must be one of: light, dark, system',
+        });
+      }
+
+      // Validate language if provided
+      if (language && !['en', 'nb'].includes(language)) {
+        return res.status(400).json({
+          success: false,
+          error: 'Invalid language. Must be one of: en, nb',
+        });
+      }
 
       const updatedUser = await authService.updateUserProfile(req.userId, {
         name,
+        theme,
+        language,
       });
 
       res.status(200).json({

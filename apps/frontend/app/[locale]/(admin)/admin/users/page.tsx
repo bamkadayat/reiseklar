@@ -73,7 +73,7 @@ export default function AdminUsersPage() {
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-norwegian-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading users...</p>
+          <p className="text-gray-600 dark:text-gray-400">Loading users...</p>
         </div>
       </div>
     );
@@ -84,10 +84,10 @@ export default function AdminUsersPage() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
             {t('title')}
           </h1>
-          <p className="mt-2 text-sm sm:text-base text-gray-600">
+          <p className="mt-2 text-sm sm:text-base text-gray-600 dark:text-gray-400">
             {t('description')}
           </p>
         </div>
@@ -99,99 +99,99 @@ export default function AdminUsersPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <p className="text-sm text-gray-600">{t('totalUsers')}</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">{users.length}</p>
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+          <p className="text-sm text-gray-600 dark:text-gray-400">{t('totalUsers')}</p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">{users.length}</p>
         </div>
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <p className="text-sm text-gray-600">{t('activeUsers')}</p>
-          <p className="text-2xl font-bold text-green-600 mt-1">
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+          <p className="text-sm text-gray-600 dark:text-gray-400">{t('activeUsers')}</p>
+          <p className="text-2xl font-bold text-green-600 dark:text-green-400 mt-1">
             {users.filter((u) => u.status === 'Active').length}
           </p>
         </div>
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <p className="text-sm text-gray-600">{t('totalTrips')}</p>
-          <p className="text-2xl font-bold text-blue-600 mt-1">
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+          <p className="text-sm text-gray-600 dark:text-gray-400">{t('totalTrips')}</p>
+          <p className="text-2xl font-bold text-blue-600 dark:text-blue-400 mt-1">
             {users.reduce((sum, u) => sum + u.trips, 0)}
           </p>
         </div>
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <p className="text-sm text-gray-600">{t('admins')}</p>
-          <p className="text-2xl font-bold text-purple-600 mt-1">
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+          <p className="text-sm text-gray-600 dark:text-gray-400">{t('admins')}</p>
+          <p className="text-2xl font-bold text-purple-600 dark:text-purple-400 mt-1">
             {users.filter((u) => u.role === 'ADMIN').length}
           </p>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-lg border border-gray-200 p-4">
+      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
             <input
               type="text"
               placeholder={t('searchUsers')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent"
+              className="w-full pl-10 pr-10 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 hover:bg-gray-100 rounded-full p-1 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-full p-1 transition-colors"
                 title="Clear search"
               >
-                <X className="w-4 h-4 text-gray-500 hover:text-gray-700" />
+                <X className="w-4 h-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200" />
               </button>
             )}
           </div>
-          <button className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+          <button className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-gray-900 dark:text-white">
             <Filter className="w-5 h-5" />
             {t('filters')}
           </button>
         </div>
         {/* Search Results Info */}
         {searchQuery && (
-          <div className="mt-3 text-sm text-gray-600">
+          <div className="mt-3 text-sm text-gray-600 dark:text-gray-400">
             Found {filteredUsers.length} user{filteredUsers.length !== 1 ? 's' : ''} matching &quot;{searchQuery}&quot;
           </div>
         )}
       </div>
 
       {/* Users Table */}
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
         {/* Desktop Table */}
         <div className="hidden md:block overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
+            <thead className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   {t('user')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   {t('role')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   {t('status')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   {t('joinDate')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   {t('trips')}
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   {t('actions')}
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
+            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
               {filteredUsers.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-6 py-12 text-center">
-                    <div className="flex flex-col items-center justify-center text-gray-500">
-                      <Search className="w-12 h-12 text-gray-300 mb-3" />
-                      <p className="text-lg font-medium text-gray-900 mb-1">No users found</p>
+                    <div className="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400">
+                      <Search className="w-12 h-12 text-gray-300 dark:text-gray-600 mb-3" />
+                      <p className="text-lg font-medium text-gray-900 dark:text-white mb-1">No users found</p>
                       <p className="text-sm">
                         {searchQuery
                           ? `No users match "${searchQuery}". Try a different search.`
@@ -210,17 +210,17 @@ export default function AdminUsersPage() {
                 </tr>
               ) : (
                 filteredUsers.map((user) => (
-                  <tr key={user.id} className="hover:bg-gray-50">
+                  <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="w-10 h-10 bg-norwegian-blue rounded-full flex items-center justify-center text-white font-semibold">
                         {user.name.charAt(0).toUpperCase()}
                       </div>
                       <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">
+                        <div className="text-sm font-medium text-gray-900 dark:text-white">
                           {user.name}
                         </div>
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm text-gray-500 dark:text-gray-400">
                           {user.email}
                         </div>
                       </div>
@@ -230,8 +230,8 @@ export default function AdminUsersPage() {
                     <span
                       className={`px-3 py-1 text-xs font-medium rounded-full ${
                         user.role === 'ADMIN'
-                          ? 'bg-purple-100 text-purple-700'
-                          : 'bg-blue-100 text-blue-700'
+                          ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
+                          : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
                       }`}
                     >
                       {user.role}
@@ -241,35 +241,35 @@ export default function AdminUsersPage() {
                     <span
                       className={`px-3 py-1 text-xs font-medium rounded-full ${
                         user.status === 'Active'
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-gray-100 text-gray-700'
+                          ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
+                          : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
                       }`}
                     >
                       {user.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                     {new Date(user.joinDate).toLocaleDateString('en-US', {
                       month: 'short',
                       day: 'numeric',
                       year: 'numeric',
                     })}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white font-medium">
                     {user.trips}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex items-center justify-end gap-2">
                       <button
                         onClick={() => handleToggleRole(user.id, user.role)}
-                        className="p-1 text-purple-600 hover:text-purple-800"
+                        className="p-1 text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300"
                         title={`Toggle role (current: ${user.role})`}
                       >
                         <Shield className="w-5 h-5" />
                       </button>
                       <button
                         onClick={() => handleDeleteUser(user.id)}
-                        className="p-1 text-red-600 hover:text-red-800"
+                        className="p-1 text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300"
                         title="Delete user"
                       >
                         <Trash2 className="w-5 h-5" />
@@ -284,12 +284,12 @@ export default function AdminUsersPage() {
         </div>
 
         {/* Mobile Cards */}
-        <div className="md:hidden divide-y divide-gray-200">
+        <div className="md:hidden divide-y divide-gray-200 dark:divide-gray-700">
           {filteredUsers.length === 0 ? (
             <div className="p-8 text-center">
-              <div className="flex flex-col items-center justify-center text-gray-500">
-                <Search className="w-12 h-12 text-gray-300 mb-3" />
-                <p className="text-lg font-medium text-gray-900 mb-1">No users found</p>
+              <div className="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400">
+                <Search className="w-12 h-12 text-gray-300 dark:text-gray-600 mb-3" />
+                <p className="text-lg font-medium text-gray-900 dark:text-white mb-1">No users found</p>
                 <p className="text-sm">
                   {searchQuery
                     ? `No users match "${searchQuery}". Try a different search.`
@@ -314,22 +314,22 @@ export default function AdminUsersPage() {
                     {user.name.charAt(0).toUpperCase()}
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-gray-900">
+                    <div className="text-sm font-medium text-gray-900 dark:text-white">
                       {user.name}
                     </div>
-                    <div className="text-xs text-gray-500">{user.email}</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">{user.email}</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => handleToggleRole(user.id, user.role)}
-                    className="p-1 text-purple-600 hover:text-purple-800"
+                    className="p-1 text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300"
                   >
                     <Shield className="w-5 h-5" />
                   </button>
                   <button
                     onClick={() => handleDeleteUser(user.id)}
-                    className="p-1 text-red-600 hover:text-red-800"
+                    className="p-1 text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300"
                   >
                     <Trash2 className="w-5 h-5" />
                   </button>
@@ -340,8 +340,8 @@ export default function AdminUsersPage() {
                   <span
                     className={`px-2 py-1 text-xs font-medium rounded-full ${
                       user.role === 'ADMIN'
-                        ? 'bg-purple-100 text-purple-700'
-                        : 'bg-blue-100 text-blue-700'
+                        ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
+                        : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
                     }`}
                   >
                     {user.role}
@@ -349,14 +349,14 @@ export default function AdminUsersPage() {
                   <span
                     className={`px-2 py-1 text-xs font-medium rounded-full ${
                       user.status === 'Active'
-                        ? 'bg-green-100 text-green-700'
-                        : 'bg-gray-100 text-gray-700'
+                        ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
                     }`}
                   >
                     {user.status}
                   </span>
                 </div>
-                <span className="text-xs text-gray-500">{user.trips} trips</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">{user.trips} trips</span>
               </div>
             </div>
           ))

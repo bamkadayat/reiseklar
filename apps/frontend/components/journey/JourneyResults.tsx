@@ -245,6 +245,7 @@ export function JourneyResults({
                   initialFromLon={searchParams.startLon}
                   initialToLat={searchParams.stopLat}
                   initialToLon={searchParams.stopLon}
+                  initialDateTime={searchParams.dateTime}
                   onSearch={(params) => {
                     setSearchParams({
                       startId: params.startId,
@@ -276,6 +277,7 @@ export function JourneyResults({
               initialFromLon={searchParams.startLon}
               initialToLat={searchParams.stopLat}
               initialToLon={searchParams.stopLon}
+              initialDateTime={searchParams.dateTime}
               onSearch={(params) => {
                 setSearchParams({
                   startId: params.startId,

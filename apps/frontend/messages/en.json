@@ -159,7 +159,7 @@
       "planNewRoute": "Plan New Route",
       "planNewRouteDesc": "Find the best route for your journey",
       "savedRoutes": "Saved Routes",
-      "savedRoutesDesc": "Access your favorite routes quickly",
+      "savedRoutesDesc": "",
       "ecoStats": "Eco Stats",
       "ecoStatsDesc": "View your environmental impact",
       "profilePage": {
@@ -190,7 +190,7 @@
       },
       "routesPage": {
         "title": "My Routes",
-        "description": "Manage and view your saved routes",
+        "description": "",
         "addRoute": "Add Route",
         "totalRoutes": "Total Routes",
         "favorites": "Favorites",
