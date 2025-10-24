@@ -7,7 +7,7 @@
 [![Live Demo](https://img.shields.io/badge/demo-reiseklar.dev-blue?style=for-the-badge)](https://reiseklar.dev)
 [![API](https://img.shields.io/badge/api-api.reiseklar.dev-green?style=for-the-badge)](https://api.reiseklar.dev)
 
-*Reiseklar* ("ready to travel" in Norwegian) helps commuters in Norway plan daily routes using real-time data from **Entur** and weather insights from **MET Norway**.
+*Reiseklar* ("ready to travel" in Norwegian) helps commuters in Norway plan daily routes using real-time data from **Entur** and weather insights from **Yr**.
 
 Built with **Next.js 14**, **TypeScript**, and modern best practices.
 
@@ -25,7 +25,7 @@ Built with **Next.js 14**, **TypeScript**, and modern best practices.
 - Interactive map (Mapbox) with stop markers and route visualization
 
 ### Weather-Aware Routing
-- Live precipitation and wind data from **MET Norway**
+- Live precipitation and wind data from **Yr**
 - Smart recommendations to leave earlier during bad weather
 - Weather overlays on route maps
 
@@ -77,7 +77,7 @@ Built with **Next.js 14**, **TypeScript**, and modern best practices.
 
 **APIs & Integrations**
 - Entur (Norway public transport)
-- MET Norway (Weather)
+- Yr (Weather)
 - Kartverket (Maps)
 - Mailgun (Transactional email)
 
