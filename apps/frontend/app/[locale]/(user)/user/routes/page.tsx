@@ -93,10 +93,10 @@ export default function UserRoutesPage() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
             {t('title')}
           </h1>
-          <p className="mt-2 text-sm sm:text-base text-gray-600">
+          <p className="mt-2 text-sm sm:text-base text-gray-600 dark:text-gray-400">
             {t('description')}
           </p>
         </div>
@@ -111,17 +111,17 @@ export default function UserRoutesPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <p className="text-sm text-gray-600">{t('totalRoutes')}</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">{trips.length}</p>
+        <div className="bg-transparent rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+          <p className="text-sm text-gray-600 dark:text-gray-400">{t('totalRoutes')}</p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">{trips.length}</p>
         </div>
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <p className="text-sm text-gray-600">Recent</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">{trips.slice(0, 5).length}</p>
+        <div className="bg-transparent rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+          <p className="text-sm text-gray-600 dark:text-gray-400">Recent</p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">{trips.slice(0, 5).length}</p>
         </div>
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <p className="text-sm text-gray-600">This Month</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">
+        <div className="bg-transparent rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+          <p className="text-sm text-gray-600 dark:text-gray-400">This Month</p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
             {trips.filter(t => {
               const tripDate = new Date(t.createdAt);
               const now = new Date();
@@ -129,9 +129,9 @@ export default function UserRoutesPage() {
             }).length}
           </p>
         </div>
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <p className="text-sm text-gray-600">Places</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">
+        <div className="bg-transparent rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+          <p className="text-sm text-gray-600 dark:text-gray-400">Places</p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
             {new Set([...trips.map(t => t.originId), ...trips.map(t => t.destinationId)]).size}
           </p>
         </div>
@@ -140,15 +140,15 @@ export default function UserRoutesPage() {
       {/* Loading State */}
       {isLoading && (
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-8 h-8 animate-spin text-norwegian-blue" />
+          <Loader2 className="w-8 h-8 animate-spin text-norwegian-blue dark:text-blue-400" />
         </div>
       )}
 
       {/* Error State */}
       {error && !isLoading && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-          <p className="text-red-600 font-medium mb-2">Error loading routes</p>
-          <p className="text-red-500 text-sm mb-4">{error}</p>
+        <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg p-6 text-center">
+          <p className="text-red-600 dark:text-red-400 font-medium mb-2">Error loading routes</p>
+          <p className="text-red-500 dark:text-red-400 text-sm mb-4">{error}</p>
           <button
             onClick={fetchTrips}
             className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
@@ -160,10 +160,10 @@ export default function UserRoutesPage() {
 
       {/* Empty State */}
       {!isLoading && !error && trips.length === 0 && (
-        <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
-          <Route className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">No saved routes yet</h3>
-          <p className="text-gray-600 mb-6">Search for a route and click &quot;Save Route&quot; to save it here.</p>
+        <div className="bg-transparent rounded-lg border border-gray-200 dark:border-gray-700 p-12 text-center">
+          <Route className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">No saved routes yet</h3>
+          <p className="text-gray-600 dark:text-gray-400 mb-6">Search for a route and click &quot;Save Route&quot; to save it here.</p>
           <button
             onClick={() => router.push('/')}
             className="inline-flex items-center gap-2 px-6 py-3 bg-norwegian-blue text-white font-medium rounded-lg hover:bg-norwegian-blue-600 transition-colors"
@@ -180,21 +180,21 @@ export default function UserRoutesPage() {
           {trips.map((trip) => (
             <div
               key={trip.id}
-              className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow"
+              className="bg-transparent rounded-lg border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md dark:hover:shadow-gray-800/50 transition-shadow"
             >
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 {/* Route Info */}
                 <div className="flex-1 space-y-3">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 bg-norwegian-blue/10 rounded-lg">
-                        <Route className="w-5 h-5 text-norwegian-blue" />
+                      <div className="p-2 bg-norwegian-blue/10 dark:bg-blue-500/20 rounded-lg">
+                        <Route className="w-5 h-5 text-norwegian-blue dark:text-blue-400" />
                       </div>
                       <div>
-                        <h3 className="text-lg font-semibold text-gray-900">
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                           {trip.origin?.label} → {trip.destination?.label}
                         </h3>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
                           Saved {new Date(trip.createdAt).toLocaleDateString('en-US', {
                             month: 'short',
                             day: 'numeric',
@@ -207,14 +207,14 @@ export default function UserRoutesPage() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div className="flex items-center gap-2">
-                      <MapPin className="w-4 h-4 text-gray-400" />
-                      <span className="text-sm text-gray-700">
+                      <MapPin className="w-4 h-4 text-gray-400 dark:text-gray-500" />
+                      <span className="text-sm text-gray-700 dark:text-gray-300">
                         {trip.origin?.label}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <MapPin className="w-4 h-4 text-gray-400" />
-                      <span className="text-sm text-gray-700">
+                      <MapPin className="w-4 h-4 text-gray-400 dark:text-gray-500" />
+                      <span className="text-sm text-gray-700 dark:text-gray-300">
                         {trip.destination?.label}
                       </span>
                     </div>
@@ -226,7 +226,7 @@ export default function UserRoutesPage() {
                   <button
                     onClick={() => handleDeleteClick(trip)}
                     disabled={deletingId === trip.id}
-                    className="flex-1 sm:flex-none px-4 py-2 text-red-600 border border-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 sm:flex-none px-4 py-2 text-red-600 dark:text-red-400 border border-red-600 dark:border-red-500 rounded-lg hover:bg-red-600 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {deletingId === trip.id ? (
                       <Loader2 className="w-4 h-4 mx-auto animate-spin" />

@@ -76,7 +76,7 @@ export default function UserProfilePage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-blue-600 dark:text-blue-400" />
       </div>
     );
   }
@@ -87,7 +87,7 @@ export default function UserProfilePage() {
       <div className="space-y-6 max-w-3xl">
         <Card>
           <CardContent className="p-6">
-            <p className="text-red-600">Error loading profile: {fetchError}</p>
+            <p className="text-red-600 dark:text-red-400">Error loading profile: {fetchError}</p>
             <Button onClick={refetch} className="mt-4">
               Retry
             </Button>
@@ -103,7 +103,7 @@ export default function UserProfilePage() {
       <div className="space-y-6 max-w-3xl">
         <Card>
           <CardContent className="p-6">
-            <p className="text-gray-600">Please log in to view your profile.</p>
+            <p className="text-gray-600 dark:text-gray-400">Please log in to view your profile.</p>
           </CardContent>
         </Card>
       </div>
@@ -114,7 +114,7 @@ export default function UserProfilePage() {
     <div className="space-y-6 max-w-3xl">
       {/* Greeting Header */}
       <div>
-        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">
+        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">
           {mounted ? greeting : '\u00A0'}, {user.name || 'User'}
         </h1>
       </div>
@@ -130,7 +130,7 @@ export default function UserProfilePage() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-blue-600 hover:text-blue-700"
+                className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
                 onClick={() => setIsEditing(true)}
               >
                 <Edit className="w-4 h-4 mr-1" />
@@ -142,21 +142,21 @@ export default function UserProfilePage() {
         <CardContent className="space-y-4">
           {!isEditing ? (
             <div>
-              <p className="text-sm text-gray-600 mb-1">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
                 {t('personalInfo.fullName')}
               </p>
-              <p className="text-base text-gray-900">{user.name || 'Not set'}</p>
+              <p className="text-base text-gray-900 dark:text-white">{user.name || 'Not set'}</p>
             </div>
           ) : (
             <div className="space-y-4">
               {saveError && (
-                <div className="p-3 bg-red-50 border border-red-200 rounded-md">
-                  <p className="text-sm text-red-600">{saveError}</p>
+                <div className="p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-md">
+                  <p className="text-sm text-red-600 dark:text-red-400">{saveError}</p>
                 </div>
               )}
               <div>
-                <Label htmlFor="fullName" className="text-sm text-gray-600">
-                  {t('personalInfo.fullName')} <span className="text-red-600">*</span>
+                <Label htmlFor="fullName" className="text-sm text-gray-600 dark:text-gray-400">
+                  {t('personalInfo.fullName')} <span className="text-red-600 dark:text-red-400">*</span>
                 </Label>
                 <Input
                   id="fullName"
@@ -204,14 +204,14 @@ export default function UserProfilePage() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div>
-            <p className="text-sm text-gray-600 mb-1">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
               {t('loginSecurity.email')}
             </p>
-            <p className="text-base text-gray-900 mb-2">{user.email}</p>
+            <p className="text-base text-gray-900 dark:text-white mb-2">{user.email}</p>
             {user.emailVerifiedAt && (
               <div className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-green-600" />
-                <span className="text-sm text-gray-900">{t('loginSecurity.confirmed')}</span>
+                <CheckCircle className="w-4 h-4 text-green-600 dark:text-green-400" />
+                <span className="text-sm text-gray-900 dark:text-white">{t('loginSecurity.confirmed')}</span>
               </div>
             )}
           </div>
@@ -226,10 +226,10 @@ export default function UserProfilePage() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-sm text-gray-600 leading-relaxed">
+          <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
             {t('deleteProfile.description')}
           </p>
-          <Button variant="destructive" className="bg-red-50 text-red-600 hover:bg-red-100 border-0">
+          <Button variant="destructive" className="bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/50 border-0">
             {t('deleteProfile.button')}
           </Button>
         </CardContent>

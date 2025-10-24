@@ -28,7 +28,8 @@ export function DashboardHeader({
     try {
       setIsLoggingOut(true);
       await logout();
-      router.push('/signIn');
+      // Force a full page reload to clear dark mode and reset state
+      window.location.href = '/signIn';
     } catch (error) {
       console.error('Logout error:', error);
       setIsLoggingOut(false);
