@@ -492,7 +492,7 @@ export function JourneyMap({
       />
 
       {/* Map Legend */}
-      <div className="absolute bottom-4 right-4 bg-white rounded-lg shadow-lg p-3 z-[1000] border border-gray-200">
+      <div className="absolute bottom-4 right-4 bg-white rounded-lg shadow-lg p-3 z-10 border border-gray-200">
         <div className="text-xs font-semibold text-gray-700 mb-2">Legend</div>
         <div className="space-y-1.5 text-xs">
           <div className="flex items-center gap-2">

@@ -17,7 +17,16 @@ const config: Config = {
   				100: '#CCE0FF',
   				500: '#01286d',
   				600: '#01286d',
-  				700: '#01286d',
+  				700: '#012050',
+  			},
+  			'klar-red': {
+  				DEFAULT: '#7f1d1d',
+  				50: '#fef2f2',
+  				100: '#fee2e2',
+  				500: '#991b1b',
+  				600: '#7f1d1d',
+  				700: '#6b1414',
+  				900: '#7f1d1d',
   			},
   			'sky-blue': {
   				DEFAULT: '#4AA3FF',
@@ -25,6 +34,11 @@ const config: Config = {
   			},
   			'red-accent': {
   				DEFAULT: '#D72828',
+  			},
+  			'transit-red': {
+  				DEFAULT: '#7f1d1d',
+  				light: '#991b1b',
+  				dark: '#6b1414',
   			},
   			'neutral-light': {
   				DEFAULT: '#F9FAFB',

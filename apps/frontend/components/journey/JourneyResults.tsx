@@ -95,6 +95,10 @@ export function JourneyResults({
                   mode
                   distance
                   duration
+                  aimedStartTime
+                  aimedEndTime
+                  expectedStartTime
+                  expectedEndTime
                   pointsOnLink {
                     points
                   }
@@ -215,14 +219,18 @@ export function JourneyResults({
                     <span className="font-semibold text-gray-900">{searchParams.stopLabel}</span>
                   </div>
                   <div className="text-xs text-gray-500 mt-1">
-                    {searchParams.dateTime.toLocaleDateString('no-NO', {
-                      day: '2-digit',
-                      month: '2-digit',
-                      year: 'numeric'
-                    })} • {searchParams.dateTime.toLocaleTimeString('no-NO', {
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
+                    {searchParams.dateTime instanceof Date && !isNaN(searchParams.dateTime.getTime()) ? (
+                      <>
+                        {searchParams.dateTime.toLocaleDateString('no-NO', {
+                          day: '2-digit',
+                          month: '2-digit',
+                          year: 'numeric'
+                        })} • {searchParams.dateTime.toLocaleTimeString('no-NO', {
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                      </>
+                    ) : 'Now'}
                   </div>
                 </div>
                 {isSearchExpanded ? (
@@ -331,12 +339,21 @@ export function JourneyResults({
                 journeys.map((journey, index) => (
                   <div
                     key={index}
+                    role="button"
+                    tabIndex={0}
                     onClick={() => setSelectedJourneyIndex(index)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setSelectedJourneyIndex(index);
+                      }
+                    }}
                     className={`cursor-pointer transition-all ${
                       selectedJourneyIndex === index
                         ? 'ring-2 ring-blue-500 rounded-xl'
                         : ''
                     }`}
+                    aria-label={`Select journey option ${index + 1}`}
                   >
                     <JourneyCard
                       journey={journey}

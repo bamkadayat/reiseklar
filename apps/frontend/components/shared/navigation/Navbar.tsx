@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { useState, useEffect } from "react";
-import { FiUserPlus } from "react-icons/fi";
+import { BiLogIn, BiUserPlus } from "react-icons/bi";
 import { LogOut, User, X } from "lucide-react";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useAuth } from "@/contexts/AuthContext";
@@ -71,16 +71,16 @@ export function Navbar() {
           <Link href="/" className="flex items-center gap-2 py-2 group">
             <div className="relative">
               <Image
-                src="/images/logo.png"
+                src="/images/logo.webp"
                 alt="Reiseklar Logo"
                 width={40}
                 height={50}
-                priority
+                loading="eager"
                 className="object-contain transition-transform duration-300 group-hover:scale-110"
               />
             </div>
             <span className="text-2xl md:text-3xl font-bold text-norwegian-blue transition-all duration-300 group-hover:tracking-wide">
-              Reise<span className="text-red-900">klar</span>
+              Reise<span className="text-klar-red">klar</span>
             </span>
           </Link>
 
@@ -127,19 +127,7 @@ export function Navbar() {
                   href="/signIn"
                   className="flex items-center gap-2 text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-base px-4 py-2 rounded-lg hover:bg-gray-50 transition-all duration-200"
                 >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                    />
-                  </svg>
+                  <BiLogIn className="w-5 h-5" />
                   <span className="hidden lg:inline">{t("login")}</span>
                 </Link>
 
@@ -148,7 +136,7 @@ export function Navbar() {
                   href="/signUp"
                   className="flex items-center gap-2 text-norwegian-blue px-4 py-2 rounded-lg hover:bg-neutral-light font-medium text-base transition-all duration-200 border border-norwegian-blue/20 hover:border-norwegian-blue/40 shadow-sm hover:shadow-md"
                 >
-                  <FiUserPlus className="w-5 h-5" />
+                  <BiUserPlus className="w-5 h-5" />
                   <span className="hidden lg:inline">{t("register")}</span>
                 </Link>
               </>
@@ -272,19 +260,7 @@ export function Navbar() {
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="flex items-center gap-3 text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-base px-4 py-3 rounded-xl hover:bg-gray-50 transition-all duration-200 active:scale-95"
                   >
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                      />
-                    </svg>
+                    <BiLogIn className="w-5 h-5" />
                     <span>{t("signIn")}</span>
                   </Link>
 
@@ -294,7 +270,7 @@ export function Navbar() {
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="flex items-center justify-center gap-2 text-white bg-norwegian-blue hover:bg-norwegian-blue-600 font-medium text-base px-4 py-3 rounded-xl transition-all duration-200 mt-4 shadow-md hover:shadow-lg active:scale-95"
                   >
-                    <FiUserPlus className="w-5 h-5" />
+                    <BiUserPlus className="w-5 h-5" />
                     <span>{t("signUp")}</span>
                   </Link>
                 </>

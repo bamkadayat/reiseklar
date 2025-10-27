@@ -1,0 +1,219 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Welcome" />
+
+<style>
+  {`
+    .hero {
+      background: linear-gradient(135deg, #003366 0%, #0066cc 100%);
+      color: white;
+      padding: 3rem 2rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+    }
+    .hero h1 {
+      margin: 0 0 1rem 0;
+      font-size: 2.5rem;
+      font-weight: bold;
+    }
+    .hero p {
+      margin: 0;
+      font-size: 1.25rem;
+      opacity: 0.9;
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    .feature-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 1.5rem;
+      background: #f9fafb;
+    }
+    .feature-card h3 {
+      margin: 0 0 0.5rem 0;
+      color: #003366;
+    }
+    .stats {
+      display: flex;
+      gap: 2rem;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #003366;
+    }
+    .stat-label {
+      color: #6b7280;
+      font-size: 0.875rem;
+    }
+  `}
+</style>
+
+<div className="hero">
+  <h1>🚀 Reiseklar Component Library</h1>
+  <p>Interactive documentation for Norwegian journey planning components</p>
+</div>
+
+## Welcome to Storybook!
+
+This is the complete component library for **Reiseklar**, a modern journey planning application built with Next.js 15, React 19, and TypeScript.
+
+<div className="stats">
+  <div className="stat">
+    <div className="stat-number">39</div>
+    <div className="stat-label">Components</div>
+  </div>
+  <div className="stat">
+    <div className="stat-number">40+</div>
+    <div className="stat-label">Stories</div>
+  </div>
+  <div className="stat">
+    <div className="stat-number">65</div>
+    <div className="stat-label">Tests</div>
+  </div>
+  <div className="stat">
+    <div className="stat-number">100%</div>
+    <div className="stat-label">Accessible</div>
+  </div>
+</div>
+
+## What You'll Find Here
+
+<div className="feature-grid">
+  <div className="feature-card">
+    <h3>🎨 UI Components</h3>
+    <p>Buttons, inputs, cards, labels and more - all following shadcn/ui patterns with Tailwind CSS.</p>
+  </div>
+
+  <div className="feature-card">
+    <h3>📝 Form Components</h3>
+    <p>Complex form inputs including date pickers, location search with autocomplete, and validation.</p>
+  </div>
+
+  <div className="feature-card">
+    <h3>♿ Accessibility</h3>
+    <p>WCAG 2.1 AA compliant with proper ARIA labels, keyboard navigation, and screen reader support.</p>
+  </div>
+
+  <div className="feature-card">
+    <h3>🧪 Well-Tested</h3>
+    <p>65+ tests with Vitest and React Testing Library ensuring component reliability.</p>
+  </div>
+</div>
+
+## Quick Navigation
+
+### 🎯 Start Here
+- **[UI/Button](/?path=/docs/ui-button--docs)** - Learn about the primary action component
+- **[UI/Input](/?path=/docs/ui-input--docs)** - Explore text input variations
+- **[Forms/DateTimePicker](/?path=/docs/forms-datetimepicker--docs)** - See the responsive date/time picker
+
+### 📚 Documentation
+- **[Welcome](/?path=/docs/welcome--docs)** - This page
+- **[Navigation Overview](/?path=/docs/navigation-overview--docs)** - Navigation system docs
+- **[README](/?path=/docs/readme--docs)** - Complete setup guide
+
+## Key Features
+
+### 🌍 Internationalization
+All components support English and Norwegian languages using `next-intl`.
+
+### 📱 Responsive Design
+Components adapt seamlessly between desktop, tablet, and mobile views.
+
+### 🎨 Theming
+Built on Tailwind CSS with customizable design tokens:
+- Primary: Norwegian Blue (`#003366`)
+- Accent: Red (`#b91c1c`)
+- Grayscale: Full gray palette
+
+### ⚡ Performance
+- Tree-shakeable components
+- Optimized bundle size
+- Lazy loading support
+- Server component compatible
+
+## How to Use This Storybook
+
+### 1. Browse Components
+Use the sidebar to navigate through component categories.
+
+### 2. Try Interactive Controls
+Click on any story and use the **Controls** tab to modify props in real-time.
+
+### 3. Test Accessibility
+Open the **Accessibility** tab to run automated WCAG checks.
+
+### 4. Copy Code
+View the **Code** snippet in each story to see implementation examples.
+
+### 5. Read Documentation
+Check the **Docs** tab for detailed component documentation and guidelines.
+
+## Tech Stack
+
+This component library is built with:
+
+- **React 19** - Latest React features
+- **Next.js 15** - App Router and Server Components
+- **TypeScript 5.6** - Type safety
+- **Tailwind CSS 3.4** - Utility-first CSS
+- **Radix UI** - Accessible primitives
+- **Storybook 9** - Component documentation
+- **Vitest** - Fast unit testing
+
+## Development Commands
+
+```bash
+# Run Storybook
+pnpm storybook
+
+# Build Storybook
+pnpm build-storybook
+
+# Run tests
+pnpm test
+
+# Run tests with UI
+pnpm test:ui
+```
+
+## Project Context
+
+**Reiseklar** (Norwegian for "Travel Ready") is a journey planning application that:
+- Integrates with Entur API for Norwegian public transport
+- Provides real-time weather information
+- Supports user authentication and profiles
+- Offers admin analytics dashboard
+- Enables saving favorite routes and trips
+
+## Contributing
+
+When adding new components:
+
+1. Create component in `/components`
+2. Add TypeScript types
+3. Write unit tests
+4. Create Storybook stories
+5. Document accessibility features
+6. Test with keyboard and screen readers
+
+## Resources
+
+- [GitHub Repository](https://github.com/yourusername/reiseklar)
+- [Storybook Documentation](https://storybook.js.org/)
+- [WCAG Guidelines](https://www.w3.org/WAI/WCAG21/quickref/)
+- [Tailwind CSS](https://tailwindcss.com/)
+
+---
+
+**Ready to explore?** Start with the [Button component](/?path=/docs/ui-button--docs) or browse the sidebar! 🚀

@@ -1,0 +1,412 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Accessibility/Keyboard Navigation" />
+
+# ⌨️ Keyboard Navigation Guide
+
+Complete keyboard shortcuts and navigation patterns for the Reiseklar application.
+
+## Why Keyboard Navigation Matters
+
+Keyboard navigation is essential for:
+- **Users with motor disabilities** who cannot use a mouse
+- **Power users** who prefer keyboard efficiency
+- **Screen reader users** who rely on keyboard commands
+- **Situational limitations** (broken mouse, touchpad issues)
+
+## Global Keyboard Shortcuts
+
+### Navigation
+
+| Key Combination | Action | Available |
+|----------------|--------|-----------|
+| `Tab` | Move focus to next interactive element | Always |
+| `Shift + Tab` | Move focus to previous interactive element | Always |
+| `Enter` | Activate focused link or button | Always |
+| `Space` | Activate focused button or toggle checkbox | Always |
+| `Escape` | Close modal, dropdown, or dialog | When open |
+| `Home` | Jump to first item in list | In lists |
+| `End` | Jump to last item in list | In lists |
+
+### Skip Navigation
+
+| Key | Action | When |
+|-----|--------|------|
+| `Tab` (from page load) | Focus "Skip to Content" link | On page load |
+| `Enter` (on skip link) | Jump to main content | When skip link focused |
+
+## Component-Specific Shortcuts
+
+### 🔍 Location Autocomplete
+
+**Opening the dropdown:**
+- Type 2+ characters to show suggestions
+- Click input field
+
+**Navigating suggestions:**
+- `↓ Arrow Down` - Move to next suggestion
+- `↑ Arrow Up` - Move to previous suggestion
+- `Enter` - Select highlighted suggestion
+- `Escape` - Close dropdown
+- `Tab` - Close dropdown and move to next field
+
+**Using "Your Position":**
+- `↓ Arrow Down` to first option
+- `Enter` to trigger geolocation
+
+**Example flow:**
+```
+1. Tab to "From" field
+2. Type "Oslo"
+3. ↓ to navigate suggestions
+4. Enter to select
+5. Tab to "To" field
+6. Repeat
+```
+
+### 📅 Date Time Picker
+
+**Opening picker:**
+- `Enter` or `Space` on date/time button
+- Click button
+
+**In date picker:**
+- `←→` Arrow keys - Navigate days
+- `↑↓` Arrow keys - Navigate weeks
+- `Page Up` - Previous month
+- `Page Down` - Next month
+- `Home` - First day of month
+- `End` - Last day of month
+- `Enter` - Select date
+- `Escape` - Close picker
+
+**In time picker:**
+- `↑↓` Arrow keys - Navigate hours/minutes
+- `Enter` - Select time
+- `Escape` - Close picker
+
+### 🔘 Buttons
+
+All buttons are keyboard accessible:
+
+**Primary actions:**
+- `Tab` - Focus button
+- `Enter` or `Space` - Activate button
+- Visual focus indicator shown
+
+**Button with icon:**
+- Same keyboard behavior
+- ARIA label describes action
+
+### 📝 Form Inputs
+
+**Text inputs:**
+- `Tab` - Focus input
+- Type to enter text
+- `Tab` - Move to next field
+
+**Dropdowns:**
+- `Enter` or `Space` - Open dropdown
+- `↑↓` Arrow keys - Navigate options
+- `Enter` - Select option
+- `Escape` - Close dropdown
+
+**Checkboxes:**
+- `Tab` - Focus checkbox
+- `Space` - Toggle checked/unchecked
+
+### 🗺️ Search Form
+
+Complete journey search keyboard flow:
+
+```
+1. Tab → Focus "From" field
+2. Type location (e.g., "Oslo")
+3. ↓ → Navigate suggestions
+4. Enter → Select location
+5. Tab → Focus "To" field
+6. Type destination
+7. ↓ → Navigate suggestions
+8. Enter → Select location
+9. Tab → Focus "Nå" button (optional)
+10. Enter → Set to current time
+11. Tab → Focus "Date" button
+12. Enter → Open date picker
+13. Arrow keys → Navigate dates
+14. Enter → Select date
+15. Tab → Focus "Search" button
+16. Enter → Submit search
+```
+
+### 🧭 Navigation Bar
+
+**Desktop navigation:**
+- `Tab` - Move through nav items
+- `Enter` - Activate link
+- `Escape` - Close dropdown menus
+
+**Mobile menu:**
+- `Tab` - Focus hamburger button
+- `Enter` - Open menu
+- `Tab` - Navigate menu items
+- `Enter` - Select item
+- `Escape` - Close menu
+
+### 🃏 Cards
+
+**Interactive cards:**
+- `Tab` - Focus card or card buttons
+- `Enter` - Activate primary action
+- `Tab` - Navigate to next action
+
+**Card with multiple actions:**
+- Each button focusable individually
+- Clear focus indicators
+
+## Focus Management
+
+### Focus Indicators
+
+All focusable elements show a visible focus indicator:
+
+**Default focus style:**
+- Blue ring (2px)
+- 2px offset for visibility
+- High contrast
+
+**Hover vs Focus:**
+- Hover: Background color change
+- Focus: Ring indicator
+- Both can occur together
+
+### Focus Traps
+
+Modal dialogs trap focus:
+
+**When modal opens:**
+1. Focus moves to modal
+2. Tab cycles within modal only
+3. Can't tab to background content
+4. Escape closes modal
+5. Focus returns to trigger element
+
+**Example:**
+```
+[Button: Open Modal] → Tab → ...content...
+        ↓ Enter
+[Modal opens]
+[Close button] → Tab → [Modal content] → Tab → [Action button]
+        ↑_____________Tab cycles here____________↓
+        ↓ Escape
+[Focus returns to "Open Modal" button]
+```
+
+## Accessibility Features
+
+### Screen Reader Announcements
+
+**When using keyboard:**
+- Element type announced (button, link, checkbox)
+- Element label read
+- State announced (checked, expanded, disabled)
+- Instructions provided (e.g., "Press Enter to activate")
+
+### ARIA Live Regions
+
+**Dynamic updates announced:**
+- Error messages (assertive)
+- Success messages (polite)
+- Loading states (polite)
+- Form validation (assertive)
+
+## Testing Your Keyboard Navigation
+
+### Manual Test Checklist
+
+**Basic Navigation:**
+- [ ] Can tab to all interactive elements
+- [ ] Focus indicator always visible
+- [ ] Tab order makes logical sense
+- [ ] Can activate with Enter/Space
+- [ ] No keyboard traps
+
+**Forms:**
+- [ ] Can complete entire form with keyboard
+- [ ] Error messages announced and focusable
+- [ ] Can submit form with Enter
+- [ ] Field validation works
+
+**Modals:**
+- [ ] Opens with keyboard
+- [ ] Focus trapped in modal
+- [ ] Escape closes modal
+- [ ] Focus returns correctly
+
+**Dropdowns:**
+- [ ] Opens with keyboard
+- [ ] Arrow keys navigate options
+- [ ] Enter selects option
+- [ ] Escape closes dropdown
+
+### Automated Testing
+
+Our test suite includes keyboard accessibility tests:
+
+```tsx
+import { getFocusableElements } from '@/tests/accessibility';
+
+it('should have keyboard accessible elements', () => {
+  const { container } = render(<Component />);
+  const focusable = getFocusableElements(container);
+  expect(focusable.length).toBeGreaterThan(0);
+});
+```
+
+## Common Patterns
+
+### Pattern 1: Search and Select
+
+Used in: Location autocomplete, dropdowns
+
+```
+Tab → Type → ↓↑ Navigate → Enter Select
+```
+
+### Pattern 2: Modal Interaction
+
+Used in: Dialogs, alerts
+
+```
+Enter → Opens modal
+Tab → Navigate within
+Enter → Activate action
+Escape → Close modal
+```
+
+### Pattern 3: Form Completion
+
+Used in: Sign up, search forms
+
+```
+Tab → Type → Tab → Type → Tab → Enter Submit
+```
+
+### Pattern 4: List Navigation
+
+Used in: Menu items, autocomplete
+
+```
+↓↑ Navigate → Enter Select or Tab Move on
+```
+
+## Browser Differences
+
+### macOS Safari
+- Uses `Option + Tab` for form controls by default
+- Enable "Press Tab to highlight each item on a webpage" in Settings
+
+### Firefox
+- Full keyboard support by default
+- Most consistent behavior
+
+### Chrome
+- Good keyboard support
+- Sometimes needs configuration for certain form controls
+
+## Tips for Keyboard Users
+
+**Efficient Navigation:**
+1. Use Tab for forward movement
+2. Use Shift+Tab for backward movement
+3. Use arrow keys within grouped controls
+4. Use Escape to close overlays quickly
+
+**Finding Your Focus:**
+- Look for the blue focus ring
+- Press Tab if focus is lost
+- Use skip links to jump to main content
+
+**Form Completion:**
+- Use Tab to move between fields
+- Don't use mouse between fields
+- Submit with Enter when on submit button
+
+## Developer Guidelines
+
+When building new components:
+
+### 1. Make It Focusable
+```tsx
+// ✅ Good
+<button onClick={handleClick}>Click me</button>
+
+// ❌ Bad
+<div onClick={handleClick}>Click me</div>
+```
+
+### 2. Add Keyboard Handlers
+```tsx
+// ✅ Good
+<div
+  role="button"
+  tabIndex={0}
+  onClick={handleClick}
+  onKeyDown={(e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      handleClick();
+    }
+  }}
+>
+  Interactive div
+</div>
+```
+
+### 3. Manage Focus
+```tsx
+// ✅ Good - Return focus after closing
+const handleClose = () => {
+  setIsOpen(false);
+  triggerButtonRef.current?.focus();
+};
+```
+
+### 4. Show Focus Indicators
+```css
+/* ✅ Good */
+button:focus-visible {
+  outline: 2px solid blue;
+  outline-offset: 2px;
+}
+
+/* ❌ Bad */
+button:focus {
+  outline: none; /* Don't do this without replacement */
+}
+```
+
+## Resources
+
+- [WebAIM Keyboard Accessibility](https://webaim.org/techniques/keyboard/)
+- [WAI-ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/)
+- [Keyboard Testing Guide](https://webaim.org/articles/keyboard/)
+
+## Quick Reference Card
+
+Print or bookmark for quick reference:
+
+| Action | Keys |
+|--------|------|
+| **Navigate forward** | `Tab` |
+| **Navigate backward** | `Shift + Tab` |
+| **Activate button** | `Enter` or `Space` |
+| **Close overlay** | `Escape` |
+| **Navigate list** | `↑` `↓` |
+| **Navigate menu** | `Arrow keys` |
+| **Jump to start** | `Home` |
+| **Jump to end** | `End` |
+| **Select date** | `Arrow keys` then `Enter` |
+| **Submit form** | `Enter` (on submit button) |
+
+---
+
+**Try it yourself!** Navigate this Storybook entirely with your keyboard. It's fully accessible!

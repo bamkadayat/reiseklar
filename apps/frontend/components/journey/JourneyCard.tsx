@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Train, Bus, Cable, Ship, ChevronRight, Flag, Plane, Bookmark, Check } from "lucide-react";
+import { Train, Bus, Cable, Ship, ChevronDown, ChevronUp, Plane, Bookmark, Check } from "lucide-react";
 import { IoMdWalk } from "react-icons/io";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -28,30 +28,32 @@ interface JourneyCardProps {
 const getModeIcon = (mode: string) => {
   switch (mode.toLowerCase()) {
     case "bus":
-      return <Bus className="w-5 h-5" />;
+      return <Bus className="w-4 h-4" />;
     case "tram":
-      return <Cable className="w-5 h-5" />;
+      return <Cable className="w-4 h-4" />;
     case "rail":
     case "train":
-      return <Train className="w-5 h-5" />;
+      return <Train className="w-4 h-4" />;
     case "metro":
-      return <Train className="w-5 h-5" />;
+      return <Train className="w-4 h-4" />;
     case "water":
     case "ferry":
-      return <Ship className="w-5 h-5" />;
+      return <Ship className="w-4 h-4" />;
     case "air":
     case "plane":
     case "flight":
-      return <Plane className="w-5 h-5" />;
+      return <Plane className="w-4 h-4" />;
     case "foot":
-      return <IoMdWalk className="w-5 h-5" />;
+      return <IoMdWalk className="w-4 h-4" />;
     default:
-      return <Bus className="w-5 h-5" />;
+      return <Bus className="w-4 h-4" />;
   }
 };
 
 const formatTime = (isoString: string) => {
+  if (!isoString) return "Invalid Date";
   const date = new Date(isoString);
+  if (isNaN(date.getTime())) return "Invalid Date";
   return date.toLocaleTimeString("en-US", {
     hour: "2-digit",
     minute: "2-digit",
@@ -62,7 +64,7 @@ const formatTime = (isoString: string) => {
 const formatDuration = (seconds: number) => {
   const minutes = Math.floor(seconds / 60);
 
-  if (minutes >= 1440) { // 24 hours = 1440 minutes
+  if (minutes >= 1440) {
     const days = Math.floor(minutes / 1440);
     const remainingMinutes = minutes % 1440;
     const hours = Math.floor(remainingMinutes / 60);
@@ -86,44 +88,36 @@ const formatDuration = (seconds: number) => {
 
 const formatDistance = (meters: number) => {
   if (meters >= 1000) {
-    const kilometers = (meters / 1000).toFixed(2);
+    const kilometers = (meters / 1000).toFixed(1);
     return `${kilometers} km`;
   }
-  return `${Math.round(meters)} m`;
+  return `${Math.round(meters)} meter`;
 };
 
 export function JourneyCard({ journey, from, fromData, toData }: JourneyCardProps) {
   const t = useTranslations("journey");
   const router = useRouter();
   const { isAuthenticated } = useAuth();
-  const [showDetails, setShowDetails] = useState(false);
+  const [expandedLegs, setExpandedLegs] = useState<Set<number>>(new Set());
   const [isSaving, setIsSaving] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
-  const mainLeg = journey.legs?.find((leg: any) => leg.mode !== "foot");
-  const totalWalkingTime = journey.legs
-    ?.filter((leg: any) => leg.mode === "foot")
-    .reduce((sum: number, leg: any) => sum + (leg.duration || 0), 0);
-
-  const firstWalkingLeg = journey.legs?.find(
-    (leg: any) => leg.mode === "foot" && leg.fromPlace
-  );
-  const lastWalkingLeg = [...(journey.legs || [])]
-    .reverse()
-    .find((leg: any) => leg.mode === "foot" && leg.toPlace);
-
-  // Get the destination from the main leg
-  const destination = mainLeg?.toPlace?.name || mainLeg?.line?.name || "";
+  const toggleLegExpansion = (index: number) => {
+    const newExpanded = new Set(expandedLegs);
+    if (newExpanded.has(index)) {
+      newExpanded.delete(index);
+    } else {
+      newExpanded.add(index);
+    }
+    setExpandedLegs(newExpanded);
+  };
 
   const handleSaveTrip = async () => {
-    // Check if user is logged in
     if (!isAuthenticated) {
-      // Redirect to login page
       router.push('/signIn');
       return;
     }
 
-    // Check if we have the required data
     if (!fromData || !toData) {
       alert('Missing location data. Please try searching again.');
       return;
@@ -148,7 +142,6 @@ export function JourneyCard({ journey, from, fromData, toData }: JourneyCardProp
       });
 
       setIsSaved(true);
-      // Reset the saved state after 3 seconds
       setTimeout(() => setIsSaved(false), 3000);
     } catch (error: any) {
       console.error('Error saving trip:', error);
@@ -159,367 +152,227 @@ export function JourneyCard({ journey, from, fromData, toData }: JourneyCardProp
   };
 
   return (
-    <Card className="shadow-md hover:shadow-lg transition-shadow border border-gray-200">
-      <CardContent className="p-0">
-        {/* Header Section with Better Visual Hierarchy */}
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 sm:p-5 border-b border-gray-200">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
-                {getModeIcon(mainLeg?.mode || "bus")}
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-700">Total journey time</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {formatDuration(journey.duration)}
-                </p>
-              </div>
-            </div>
-            <div className="text-right">
-              <p className="text-xs font-medium text-gray-600 uppercase tracking-wide">From</p>
-              <p className="text-sm font-semibold text-gray-900 truncate max-w-[120px]">{from}</p>
-            </div>
+    <Card className="shadow-sm hover:shadow-md transition-shadow border border-gray-200 bg-white">
+      <CardContent className="p-4 md:p-6">
+        {/* Header - Time Range and Duration */}
+        <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
+          <div className="flex items-center gap-2">
+            <span className="text-lg font-semibold text-gray-900">
+              {formatTime(journey.startTime)} - {formatTime(journey.endTime)}
+            </span>
           </div>
-        </div>
 
-        {/* Main Journey Timeline Section */}
-        <div className="p-4 sm:p-6">
-
-          {/* Improved Timeline with Clear Visual Steps */}
-          <div className="space-y-6">
-            {/* Start Point */}
-            <div className="flex items-center gap-4">
-              <div className="flex-shrink-0 w-24 sm:w-32 text-right">
-                <p className="text-2xl sm:text-3xl font-bold text-gray-900">
-                  {formatTime(journey.startTime)}
-                </p>
-                <p className="text-xs sm:text-sm text-gray-600 mt-1">Departure</p>
-              </div>
-              <div className="relative flex-shrink-0">
-                <div className="w-5 h-5 rounded-full bg-green-500 ring-4 ring-green-100"></div>
-                <div className="absolute top-5 left-1/2 -translate-x-1/2 w-0.5 h-8 bg-gray-300"></div>
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-semibold text-gray-900 text-base sm:text-lg truncate">{from}</p>
-              </div>
-            </div>
-
-            {/* First Walking Segment */}
-            {firstWalkingLeg && (
-              <div className="flex items-center gap-4">
-                <div className="flex-shrink-0 w-24 sm:w-32"></div>
-                <div className="relative flex-shrink-0">
-                  <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center border-2 border-gray-300">
-                    <IoMdWalk className="w-6 h-6 text-gray-700" aria-hidden="true" />
-                  </div>
-                  <div className="absolute top-12 left-1/2 -translate-x-1/2 w-0.5 h-8 bg-gray-300"></div>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-gray-900">Walk {Math.floor(firstWalkingLeg.duration / 60)} min</p>
-                  <p className="text-sm text-gray-600">{formatDistance(firstWalkingLeg.distance)}</p>
-                </div>
-              </div>
-            )}
-
-            {/* Main Transport Segment */}
-            {mainLeg && (
-              <div className="flex items-center gap-4">
-                <div className="flex-shrink-0 w-24 sm:w-32"></div>
-                <div className="relative flex-shrink-0">
-                  {mainLeg.mode.toLowerCase() === "metro" ? (
-                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg">
-                      <div className="flex items-center gap-1">
-                        <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
-                          <span className="text-orange-600 font-bold text-xs">T</span>
-                        </div>
-                        <span className="text-white font-bold text-lg">{mainLeg.line?.publicCode}</span>
-                      </div>
-                    </div>
-                  ) : mainLeg.mode.toLowerCase() === "bus" ? (
-                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center shadow-lg">
-                      <div className="flex items-center gap-1">
-                        <Bus className="w-5 h-5 text-white" aria-hidden="true" />
-                        <span className="text-white font-bold text-lg">{mainLeg.line?.publicCode}</span>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center shadow-lg">
-                      {getModeIcon(mainLeg.mode)}
-                    </div>
+          {/* Transport Modes and Duration */}
+          <div className="flex items-center gap-2">
+            {/* Walking icon with duration */}
+            {journey.legs?.some((leg: any) => leg.mode === "foot") && (
+              <div className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-lg">
+                <IoMdWalk className="w-4 h-4 text-gray-700" />
+                <span className="text-sm font-medium text-gray-900">
+                  {Math.floor(
+                    journey.legs
+                      ?.filter((leg: any) => leg.mode === "foot")
+                      .reduce((sum: number, leg: any) => sum + (leg.duration || 0), 0) / 60
                   )}
-                  <div className="absolute top-14 left-1/2 -translate-x-1/2 w-0.5 h-8 bg-gray-300"></div>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-gray-900 text-base sm:text-lg">
-                    {mainLeg.line?.name || mainLeg.mode}
-                  </p>
-                  <p className="text-sm text-gray-600 mt-1">
-                    {mainLeg.mode.toUpperCase()} • {formatDuration(mainLeg.duration)}
-                  </p>
-                  {destination && (
-                    <p className="text-sm text-gray-600">To: {destination}</p>
-                  )}
-                </div>
+                </span>
               </div>
             )}
 
-            {/* Last Walking Segment */}
-            {lastWalkingLeg && (
-              <div className="flex items-center gap-4">
-                <div className="flex-shrink-0 w-24 sm:w-32"></div>
-                <div className="relative flex-shrink-0">
-                  <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center border-2 border-gray-300">
-                    <IoMdWalk className="w-6 h-6 text-gray-700" aria-hidden="true" />
-                  </div>
-                  <div className="absolute top-12 left-1/2 -translate-x-1/2 w-0.5 h-8 bg-gray-300"></div>
+            {/* Transit icons */}
+            {journey.legs
+              ?.filter((leg: any) => leg.mode !== "foot")
+              .map((leg: any, idx: number) => (
+                <div
+                  key={idx}
+                  className="flex items-center gap-1 bg-transit-red text-white px-2 py-1 rounded-lg font-medium text-sm"
+                >
+                  {getModeIcon(leg.mode)}
+                  <span>{leg.line?.publicCode || leg.mode.charAt(0).toUpperCase()}</span>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-gray-900">Walk {Math.floor(lastWalkingLeg.duration / 60)} min</p>
-                  <p className="text-sm text-gray-600">{formatDistance(lastWalkingLeg.distance)}</p>
-                </div>
-              </div>
-            )}
+              ))}
 
-            {/* End Point */}
-            <div className="flex items-center gap-4">
-              <div className="flex-shrink-0 w-24 sm:w-32 text-right">
-                <p className="text-2xl sm:text-3xl font-bold text-gray-900">
-                  {formatTime(journey.endTime)}
-                </p>
-                <p className="text-xs sm:text-sm text-gray-600 mt-1">Arrival</p>
-              </div>
-              <div className="relative flex-shrink-0">
-                <div className="w-5 h-5 rounded-full bg-red-500 ring-4 ring-red-100"></div>
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-semibold text-gray-900 text-base sm:text-lg truncate">
-                  {mainLeg?.toPlace?.name || destination || "Destination"}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Action Buttons - Better Design */}
-          <div className="mt-6 pt-6 border-t border-gray-200 flex flex-col sm:flex-row gap-3">
-            <button
-              onClick={() => setShowDetails(!showDetails)}
-              className="flex-1 flex items-center justify-center gap-2 py-3 px-4 text-sm font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-xl transition-all border-2 border-blue-200 hover:border-blue-300"
-              aria-expanded={showDetails}
-              aria-label={showDetails ? "Hide journey details" : "Show journey details"}
-            >
-              <span>{showDetails ? "Hide Details" : "Show Details"}</span>
-              <ChevronRight
-                className={`w-4 h-4 transition-transform ${
-                  showDetails ? "rotate-90" : ""
-                }`}
-                aria-hidden="true"
-              />
-            </button>
-
-            <Button
-              onClick={handleSaveTrip}
-              disabled={isSaving || isSaved}
-              className={`flex-1 py-3 px-4 text-sm font-semibold rounded-xl transition-all shadow-md ${
-                isSaved
-                  ? "bg-green-600 hover:bg-green-600 text-white"
-                  : "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white"
-              }`}
-              aria-label={isSaved ? "Route saved" : "Save this route"}
-            >
-              {isSaving ? (
-                <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" aria-hidden="true"></div>
-                  Saving...
-                </>
-              ) : isSaved ? (
-                <>
-                  <Check className="w-4 h-4 mr-2" aria-hidden="true" />
-                  Saved!
-                </>
-              ) : (
-                <>
-                  <Bookmark className="w-4 h-4 mr-2" aria-hidden="true" />
-                  Save Route
-                </>
-              )}
-            </Button>
-          </div>
-        </div>
-
-        {/* Improved Details Section */}
-        {showDetails && (
-          <div className="mt-6 p-4 sm:p-6 bg-gray-50 rounded-xl">
-            <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <span className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold">
-                {journey.legs?.length || 0}
+            {/* Total duration */}
+            <div className="flex items-center gap-1 ml-2">
+              <span className="text-lg font-bold text-gray-900">
+                {formatDuration(journey.duration)}
               </span>
-              Journey Steps
-            </h3>
-            <div className="space-y-6">
-              {journey.legs?.map((leg: any, index: number) => (
-                <div key={index} className="relative">
-                  {leg.mode === "foot" ? (
-                    /* Walking leg - Improved Design */
-                    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow">
-                      <div className="flex items-start gap-4">
-                        <div className="flex-shrink-0">
-                          <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center border-2 border-gray-300">
-                            <IoMdWalk className="w-6 h-6 text-gray-700" aria-hidden="true" />
-                          </div>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between mb-2">
-                            <p className="font-semibold text-gray-900 text-base">Walk</p>
-                            <span className="text-sm font-medium text-gray-600 bg-gray-100 px-3 py-1 rounded-full">
-                              {formatDuration(leg.duration)}
-                            </span>
-                          </div>
-                          <p className="text-sm text-gray-700">
-                            Distance: <span className="font-medium">{formatDistance(leg.distance)}</span>
-                          </p>
-                          {leg.fromPlace?.name && (
-                            <p className="text-sm text-gray-600 mt-1">
-                              From: {leg.fromPlace.name}
-                            </p>
-                          )}
-                          {leg.toPlace?.name && (
-                            <p className="text-sm text-gray-600">
-                              To: {leg.toPlace.name}
-                            </p>
-                          )}
-                        </div>
-                      </div>
+              <ChevronUp className="w-4 h-4 text-gray-400" />
+            </div>
+          </div>
+        </div>
+
+        {/* Timeline */}
+        <div className="space-y-0">
+          {journey.legs?.map((leg: any, index: number) => (
+            <div key={index} className="relative">
+              {/* Walking Leg */}
+              {leg.mode === "foot" ? (
+                <div className="flex items-start gap-3">
+                  {/* Time Column */}
+                  <div className="w-12 flex-shrink-0">
+                    <div className="text-sm font-medium text-gray-900">
+                      {formatTime(leg.expectedStartTime || leg.aimedStartTime)}
                     </div>
-                  ) : (
-                    /* Transit leg - Improved Design */
-                    <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                      {/* Transit Header */}
-                      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 border-b border-gray-200">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            {leg.mode.toLowerCase() === "metro" ? (
-                              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-md">
-                                <div className="flex items-center gap-1">
-                                  <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center">
-                                    <span className="text-orange-600 font-bold text-[10px]">T</span>
-                                  </div>
-                                  <span className="text-white font-bold text-base">{leg.line?.publicCode}</span>
-                                </div>
-                              </div>
-                            ) : leg.mode.toLowerCase() === "bus" ? (
-                              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center shadow-md">
-                                <div className="flex items-center gap-1">
-                                  <Bus className="w-5 h-5 text-white" aria-hidden="true" />
-                                  <span className="text-white font-bold text-base">{leg.line?.publicCode}</span>
-                                </div>
-                              </div>
-                            ) : (
-                              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center shadow-md">
-                                {getModeIcon(leg.mode)}
-                              </div>
-                            )}
-                            <div>
-                              <p className="font-semibold text-gray-900 text-base">
-                                {leg.line?.name || leg.mode.toUpperCase()}
-                              </p>
-                              <p className="text-sm text-gray-600">
-                                {formatDuration(leg.duration)}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
+                  </div>
+
+                  {/* Timeline Column */}
+                  <div className="flex flex-col items-center flex-shrink-0 w-12">
+                    {index === 0 && (
+                      <div className="w-3 h-3 rounded-full bg-gray-900 mb-2"></div>
+                    )}
+                    <div className="w-[2px] bg-gray-300 flex-1 min-h-[60px]"></div>
+                  </div>
+
+                  {/* Content Column */}
+                  <div className="flex-1 pb-4">
+                    <div className="text-sm font-semibold text-gray-900 mb-1">
+                      {leg.fromPlace?.name || (index === 0 ? from : "")}
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      <span className="font-medium">Gå {Math.floor(leg.duration / 60)} min</span>
+                    </div>
+                    <div className="text-xs text-gray-500 mt-1">
+                      ({formatDistance(leg.distance)})
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                /* Transit Leg */
+                <div className="flex items-start gap-3">
+                  {/* Time Column */}
+                  <div className="w-12 flex-shrink-0">
+                    <div className="text-sm font-medium text-gray-900">
+                      {formatTime(leg.fromEstimatedCall?.expectedDepartureTime || leg.fromEstimatedCall?.aimedDepartureTime)}
+                    </div>
+                  </div>
+
+                  {/* Timeline Column */}
+                  <div className="flex flex-col items-center flex-shrink-0 w-12">
+                    {index === 0 && (
+                      <div className="w-3 h-3 rounded-full bg-gray-900 mb-2"></div>
+                    )}
+                    <div className="w-[3px] bg-transit-red flex-1 min-h-[100px]"></div>
+                  </div>
+
+                  {/* Content Column */}
+                  <div className="flex-1 pb-4">
+                    {/* Departure Stop */}
+                    <div className="mb-3">
+                      <div className="text-sm font-semibold text-gray-900 mb-1">
+                        {leg.fromPlace?.name}
                       </div>
-
-                      {/* Transit Timeline */}
-                      <div className="p-4 space-y-4">
-                        {/* Departure Stop */}
-                        <div className="flex items-start gap-4">
-                          <div className="flex flex-col items-center flex-shrink-0">
-                            <div className="text-base font-bold text-gray-900 mb-2">
-                              {formatTime(leg.fromEstimatedCall?.expectedDepartureTime || leg.startTime)}
-                            </div>
-                            <div className="w-4 h-4 rounded-full bg-green-500 ring-4 ring-green-100"></div>
-                            <div className="w-0.5 bg-gradient-to-b from-green-500 to-blue-500 flex-1 min-h-[40px] mt-2"></div>
-                          </div>
-                          <div className="flex-1 pt-2">
-                            <p className="font-semibold text-gray-900 text-base mb-1">{leg.fromPlace?.name}</p>
-                            {leg.fromPlace?.quay?.publicCode && (
-                              <div className="flex items-center gap-2 mt-2">
-                                <span className="text-xs font-medium text-gray-600">Platform</span>
-                                <span className="inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-lg bg-blue-100 text-blue-900 text-sm font-bold border border-blue-200">
-                                  {leg.fromPlace.quay.publicCode}
-                                </span>
-                              </div>
-                            )}
-                          </div>
+                      {leg.fromPlace?.quay?.publicCode && (
+                        <div className="text-xs text-gray-500">
+                          Spor: <span className="inline-flex items-center justify-center w-5 h-5 rounded bg-yellow-400 text-gray-900 font-bold text-xs">{leg.fromPlace.quay.publicCode}</span> Retning sentrum
                         </div>
+                      )}
+                    </div>
 
-                        {/* Intermediate Stops */}
-                        {leg.intermediateEstimatedCalls && leg.intermediateEstimatedCalls.length > 0 && (
-                          <div className="flex items-start gap-4">
-                            <div className="flex flex-col items-center flex-shrink-0">
-                              <div className="w-0.5 bg-gradient-to-b from-blue-500 to-blue-500 h-8"></div>
-                            </div>
-                            <div className="flex-1">
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  const element = e.currentTarget.nextElementSibling as HTMLElement;
-                                  if (element) {
-                                    element.classList.toggle("hidden");
-                                    const isHidden = element.classList.contains("hidden");
-                                    e.currentTarget.querySelector("span")!.textContent =
-                                      isHidden
-                                        ? `Show ${leg.intermediateEstimatedCalls.length} stops`
-                                        : `Hide ${leg.intermediateEstimatedCalls.length} stops`;
-                                    const icon = e.currentTarget.querySelector("svg");
-                                    if (icon) {
-                                      icon.style.transform = isHidden ? "rotate(0deg)" : "rotate(180deg)";
-                                    }
-                                  }
-                                }}
-                                className="flex items-center gap-2 text-sm text-blue-700 hover:text-blue-900 font-semibold bg-blue-50 hover:bg-blue-100 px-3 py-2 rounded-lg transition-all"
-                                aria-label={`Toggle ${leg.intermediateEstimatedCalls.length} intermediate stops`}
-                              >
-                                <span>Show {leg.intermediateEstimatedCalls.length} stops</span>
-                                <ChevronRight className="w-4 h-4 transition-transform" aria-hidden="true" style={{transform: "rotate(0deg)"}} />
-                              </button>
-                              <div className="hidden space-y-2 mt-3 pl-4 border-l-2 border-gray-200">
-                                {leg.intermediateEstimatedCalls.map((call: any, idx: number) => (
-                                  <div key={idx} className="flex items-center gap-3 bg-gray-50 p-2 rounded-lg">
-                                    <span className="text-sm font-medium text-gray-900 w-14 flex-shrink-0">
-                                      {formatTime(call.expectedArrivalTime || call.aimedArrivalTime)}
-                                    </span>
-                                    <div className="w-2 h-2 rounded-full bg-gray-400 flex-shrink-0"></div>
-                                    <span className="text-sm text-gray-700 flex-1">{call.quay?.name}</span>
-                                  </div>
-                                ))}
+                    {/* Transit Info */}
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="flex items-center gap-1 bg-transit-red text-white px-2 py-1 rounded font-medium text-sm">
+                        {getModeIcon(leg.mode)}
+                        <span>{leg.line?.publicCode}</span>
+                      </div>
+                      <span className="text-sm font-medium text-gray-700">
+                        {leg.line?.name || "Stortinget"}
+                      </span>
+                    </div>
+
+                    {/* Intermediate Stops */}
+                    {leg.intermediateEstimatedCalls && leg.intermediateEstimatedCalls.length > 0 && (
+                      <div className="mb-3">
+                        <button
+                          onClick={() => toggleLegExpansion(index)}
+                          className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900 font-medium"
+                        >
+                          <span>{leg.intermediateEstimatedCalls.length} stopp</span>
+                          {expandedLegs.has(index) ? (
+                            <ChevronUp className="w-4 h-4" />
+                          ) : (
+                            <ChevronDown className="w-4 h-4" />
+                          )}
+                        </button>
+
+                        {expandedLegs.has(index) && (
+                          <div className="mt-2 space-y-1 pl-4 border-l-2 border-gray-200">
+                            {leg.intermediateEstimatedCalls.map((call: any, idx: number) => (
+                              <div key={idx} className="flex items-center gap-2 py-1">
+                                <span className="text-xs text-gray-500 w-10">
+                                  {formatTime(call.expectedArrivalTime || call.aimedArrivalTime)}
+                                </span>
+                                <span className="text-sm text-gray-700">{call.quay?.name}</span>
                               </div>
-                            </div>
+                            ))}
                           </div>
                         )}
+                      </div>
+                    )}
 
-                        {/* Arrival Stop */}
-                        <div className="flex items-start gap-4">
-                          <div className="flex flex-col items-center flex-shrink-0">
-                            <div className="w-0.5 bg-gradient-to-b from-blue-500 to-red-500 flex-1 min-h-[40px] mb-2"></div>
-                            <div className="w-4 h-4 rounded-full bg-red-500 ring-4 ring-red-100"></div>
-                            <div className="text-base font-bold text-gray-900 mt-2">
-                              {formatTime(leg.toEstimatedCall?.expectedArrivalTime || leg.endTime)}
-                            </div>
-                          </div>
-                          <div className="flex-1 pt-2">
-                            <p className="font-semibold text-gray-900 text-base">{leg.toPlace?.name}</p>
-                          </div>
-                        </div>
+                    {/* Arrival Time */}
+                    <div className="flex items-start gap-3 mt-2">
+                      <div className="text-sm font-medium text-gray-900 w-12">
+                        {formatTime(leg.toEstimatedCall?.expectedArrivalTime || leg.toEstimatedCall?.aimedArrivalTime)}
+                      </div>
+                      <div className="text-sm font-semibold text-gray-900">
+                        {leg.toPlace?.name}
                       </div>
                     </div>
-                )}
-              </div>
-            ))}
-          </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Final Destination */}
+              {index === journey.legs.length - 1 && (
+                <div className="flex items-start gap-3">
+                  <div className="w-12 flex-shrink-0">
+                    <div className="text-sm font-medium text-gray-900">
+                      {formatTime(journey.endTime)}
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-center flex-shrink-0 w-12">
+                    <div className="w-3 h-3 rounded-full bg-gray-900"></div>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm font-semibold text-gray-900">
+                      {leg.toPlace?.name || "Destination"}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
         </div>
-        )}
+
+        {/* Save Button */}
+        <div className="mt-6 pt-4 border-t border-gray-100">
+          <Button
+            onClick={handleSaveTrip}
+            disabled={isSaving || isSaved}
+            className={`w-full flex items-center justify-center gap-2 py-3 rounded-lg font-semibold transition-all ${
+              isSaved
+                ? "bg-green-600 hover:bg-green-700 text-white"
+                : "bg-norwegian-blue hover:bg-norwegian-blue-700 text-white"
+            }`}
+          >
+            {isSaving ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                <span>Lagrer...</span>
+              </>
+            ) : isSaved ? (
+              <>
+                <Check className="w-5 h-5" />
+                <span>Lagret!</span>
+              </>
+            ) : (
+              <>
+                <Bookmark className="w-5 h-5" />
+                <span>Lagre rute</span>
+              </>
+            )}
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );
