@@ -28,12 +28,50 @@ export default function AdminLayout({
 
   if (isCheckingAuth) {
     return (
-      <div className="flex h-screen items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-norwegian-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+      <ThemeProvider initialTheme="light">
+        <div className="flex h-screen bg-background overflow-hidden">
+          {/* Sidebar Skeleton */}
+          <aside className="hidden lg:block w-64 bg-background border-r border-border">
+            <div className="h-16 px-6 border-b border-border flex items-center animate-pulse">
+              <div className="h-8 w-32 bg-muted rounded"></div>
+            </div>
+            <div className="p-3 space-y-2 animate-pulse">
+              <div className="h-10 bg-muted rounded-lg"></div>
+              <div className="h-10 bg-muted rounded-lg"></div>
+              <div className="h-10 bg-muted rounded-lg"></div>
+            </div>
+          </aside>
+
+          {/* Main Content */}
+          <div className="flex-1 flex flex-col min-w-0">
+            {/* Header Skeleton */}
+            <header className="h-16 bg-background border-b border-border px-6 flex items-center justify-between animate-pulse">
+              <div className="h-6 w-6 bg-muted rounded lg:hidden"></div>
+              <div className="ml-auto flex items-center gap-4">
+                <div className="w-32 h-10 bg-muted rounded-lg hidden md:block"></div>
+                <div className="w-10 h-10 bg-muted rounded-full"></div>
+              </div>
+            </header>
+
+            {/* Main Content Area Skeleton */}
+            <main className="flex-1 overflow-y-auto bg-background p-6">
+              <div className="max-w-7xl space-y-6 animate-pulse">
+                {/* Title skeleton */}
+                <div className="h-8 w-64 bg-muted rounded"></div>
+                <div className="h-4 w-96 bg-muted rounded"></div>
+
+                {/* Stats Grid skeleton */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="h-32 bg-card border border-border rounded-lg"></div>
+                  <div className="h-32 bg-card border border-border rounded-lg"></div>
+                  <div className="h-32 bg-card border border-border rounded-lg"></div>
+                  <div className="h-32 bg-card border border-border rounded-lg"></div>
+                </div>
+              </div>
+            </main>
+          </div>
         </div>
-      </div>
+      </ThemeProvider>
     );
   }
 
@@ -43,7 +81,7 @@ export default function AdminLayout({
 
   return (
     <ThemeProvider initialTheme={user?.theme}>
-      <div className="flex h-screen bg-gray-50 dark:bg-gray-900 overflow-hidden">
+      <div className="flex h-screen bg-background overflow-hidden">
         {/* Sidebar */}
         <AdminSidebar
           isOpen={isSidebarOpen}
@@ -61,7 +99,7 @@ export default function AdminLayout({
           />
 
           {/* Main Content Area */}
-          <main className="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900">
+          <main className="flex-1 overflow-y-auto bg-background">
             <div className="max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
               {children}
             </div>

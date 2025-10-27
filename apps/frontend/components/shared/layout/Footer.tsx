@@ -2,20 +2,20 @@ import Link from 'next/link';
 
 export function Footer() {
   return (
-    <footer className="py-6 px-4 border-t border-gray-200 bg-white">
+    <footer className="py-6 px-4 border-t border-border bg-card">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col items-center justify-center gap-4 text-sm text-gray-600">
+        <div className="flex flex-col items-center justify-center gap-4 text-sm text-muted-foreground">
           <p className="text-center">
             © {new Date().getFullYear()} Reiseklar. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <Link href="/terms" className="hover:text-gray-900 transition-colors">
+            <Link href="/terms" className="hover:text-foreground transition-colors">
               Terms
             </Link>
-            <Link href="/privacy" className="hover:text-gray-900 transition-colors">
+            <Link href="/privacy" className="hover:text-foreground transition-colors">
               Privacy
             </Link>
-            <Link href="/help" className="hover:text-gray-900 transition-colors">
+            <Link href="/help" className="hover:text-foreground transition-colors">
               Help
             </Link>
           </div>

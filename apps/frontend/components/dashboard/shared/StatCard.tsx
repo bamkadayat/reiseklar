@@ -14,11 +14,11 @@ interface StatCardProps {
 }
 
 const colorClasses = {
-  blue: 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400',
-  green: 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400',
-  purple: 'bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400',
-  orange: 'bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400',
-  red: 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400',
+  blue: 'bg-primary/10 text-primary',
+  green: 'bg-primary/10 text-primary',
+  purple: 'bg-primary/10 text-primary',
+  orange: 'bg-primary/10 text-primary',
+  red: 'bg-destructive/10 text-destructive',
 };
 
 export function StatCard({
@@ -30,11 +30,11 @@ export function StatCard({
   color = 'blue',
 }: StatCardProps) {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-shadow">
+    <div className="bg-card rounded-lg border border-border p-6 hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">{title}</p>
-          <p className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">
+          <p className="text-sm font-medium text-muted-foreground mb-1">{title}</p>
+          <p className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
             {value}
           </p>
           {trend && (
@@ -42,18 +42,18 @@ export function StatCard({
               <span
                 className={cn(
                   'text-sm font-medium',
-                  trend.isPositive ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
+                  trend.isPositive ? 'text-primary' : 'text-destructive'
                 )}
               >
                 {trend.isPositive ? '↑' : '↓'} {Math.abs(trend.value)}%
               </span>
               {description && (
-                <span className="text-sm text-gray-500 dark:text-gray-400">{description}</span>
+                <span className="text-sm text-muted-foreground">{description}</span>
               )}
             </div>
           )}
           {!trend && description && (
-            <p className="text-sm text-gray-500 dark:text-gray-400">{description}</p>
+            <p className="text-sm text-muted-foreground">{description}</p>
           )}
         </div>
         <div className={cn('p-3 rounded-lg', colorClasses[color])}>

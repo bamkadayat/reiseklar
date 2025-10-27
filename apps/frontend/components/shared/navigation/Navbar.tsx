@@ -64,7 +64,7 @@ export function Navbar() {
 
   return (
     <>
-  <nav className="sticky top-0 z-40 bg-white backdrop-blur-sm bg-opacity-95 shadow-sm border-b border-gray-100">
+  <nav className="sticky top-0 z-40 bg-card backdrop-blur-sm bg-opacity-95 shadow-sm border-b border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-3">
           {/* Logo */}
@@ -94,7 +94,7 @@ export function Navbar() {
             {/* About Link */}
             <Link
               href="/about"
-              className="text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-base px-3 py-2 rounded-lg hover:bg-gray-50 transition-all duration-200"
+              className="text-primary hover:text-primary/80 font-medium text-base px-3 py-2 rounded-lg hover:bg-muted transition-all duration-200"
             >
               {t("about")}
             </Link>
@@ -104,7 +104,7 @@ export function Navbar() {
                 {/* User Profile */}
                 <Link
                   href="/user"
-                  className="flex items-center gap-2 text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-base px-4 py-2 rounded-lg hover:bg-gray-50 transition-all duration-200"
+                  className="flex items-center gap-2 text-primary hover:text-primary/80 font-medium text-base px-4 py-2 rounded-lg hover:bg-muted transition-all duration-200"
                 >
                   <User className="w-5 h-5" />
                   <span className="hidden lg:inline">Dashboard</span>
@@ -114,7 +114,7 @@ export function Navbar() {
                 <button
                   onClick={handleLogout}
                   disabled={isLoggingOut}
-                  className="flex items-center gap-2 text-red-600 hover:text-red-700 px-4 py-2 rounded-lg hover:bg-red-50 font-medium text-base transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
+                  className="flex items-center gap-2 text-destructive hover:text-destructive/80 px-4 py-2 rounded-lg hover:bg-destructive/10 font-medium text-base transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
                 >
                   <LogOut className={`w-5 h-5 ${isLoggingOut ? 'animate-pulse' : ''}`} />
                   <span className="hidden lg:inline">{isLoggingOut ? 'Logging out...' : 'Logout'}</span>
@@ -125,7 +125,7 @@ export function Navbar() {
                 {/* Sign In Link */}
                 <Link
                   href="/signIn"
-                  className="flex items-center gap-2 text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-base px-4 py-2 rounded-lg hover:bg-gray-50 transition-all duration-200"
+                  className="flex items-center gap-2 text-primary hover:text-primary/80 font-medium text-base px-4 py-2 rounded-lg hover:bg-muted transition-all duration-200"
                 >
                   <BiLogIn className="w-5 h-5" />
                   <span className="hidden lg:inline">{t("login")}</span>
@@ -134,7 +134,7 @@ export function Navbar() {
                 {/* Sign Up Button */}
                 <Link
                   href="/signUp"
-                  className="flex items-center gap-2 text-norwegian-blue px-4 py-2 rounded-lg hover:bg-neutral-light font-medium text-base transition-all duration-200 border border-norwegian-blue/20 hover:border-norwegian-blue/40 shadow-sm hover:shadow-md"
+                  className="flex items-center gap-2 text-primary px-4 py-2 rounded-lg hover:bg-muted font-medium text-base transition-all duration-200 border border-border shadow-sm hover:shadow-md"
                 >
                   <BiUserPlus className="w-5 h-5" />
                   <span className="hidden lg:inline">{t("register")}</span>
@@ -146,7 +146,7 @@ export function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden flex flex-col items-center gap-1.5 text-norwegian-blue p-3 hover:bg-gray-50 rounded-lg transition-all duration-200"
+            className="md:hidden flex flex-col items-center gap-1.5 text-primary p-3 hover:bg-muted rounded-lg transition-all duration-200"
             aria-label={isMobileMenuOpen ? "Close mobile menu" : "Open mobile menu"}
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-menu"
@@ -184,7 +184,7 @@ export function Navbar() {
     {/* Mobile Menu Overlay */}
     <div
       id="mobile-menu"
-      className={`fixed right-0 top-0 bottom-0 w-96 max-w-[90vw] bg-white z-[60] md:hidden transition-transform duration-300 ease-in-out shadow-2xl border-l border-gray-100 ${
+      className={`fixed right-0 top-0 bottom-0 w-96 max-w-[90vw] bg-card z-[60] md:hidden transition-transform duration-300 ease-in-out shadow-2xl border-l border-border ${
         isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
       }`}
       role="dialog"
@@ -193,12 +193,12 @@ export function Navbar() {
     >
       <div className="flex flex-col h-full overflow-y-auto">
         {/* Menu Header */}
-        <div className="px-6 py-4 border-b border-gray-100 bg-gray-50 flex-shrink-0 flex items-center justify-between">
-          <h3 id="mobile-menu-title" className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Menu</h3>
+        <div className="px-6 py-4 border-b border-border bg-muted flex-shrink-0 flex items-center justify-between">
+          <h3 id="mobile-menu-title" className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Menu</h3>
           <button
             type="button"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="p-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-norwegian-blue/50 transition"
+            className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition"
             aria-label="Close mobile menu"
           >
             <X className="w-5 h-5" />
@@ -208,27 +208,13 @@ export function Navbar() {
         <div className="flex-1 px-4 py-6 space-y-1">
           {/* Language Switcher */}
             <div className="mb-6 px-2">
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Language</p>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Language</p>
               <LanguageSwitcher />
             </div>
 
-            {/* Navigation Section */}
-            <div className="space-y-1">
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 px-2">Navigation</p>
-
-              {/* About Link */}
-              <Link
-                href="/about"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-base px-4 py-3 rounded-xl hover:bg-gray-50 transition-all duration-200 active:scale-95"
-              >
-                {t("about")}
-              </Link>
-            </div>
-
             {/* Account Section */}
-            <div className="pt-6 space-y-1">
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 px-2">Account</p>
+            <div className="space-y-1">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3 px-2">Account</p>
 
               {isAuthenticated ? (
                 <>
@@ -236,7 +222,7 @@ export function Navbar() {
                   <Link
                     href="/user"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex items-center gap-3 text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-base px-4 py-3 rounded-xl hover:bg-gray-50 transition-all duration-200 active:scale-95"
+                    className="flex items-center gap-3 text-primary hover:text-primary/80 font-medium text-base px-4 py-3 rounded-xl hover:bg-muted transition-all duration-200 active:scale-95"
                   >
                     <User className="w-5 h-5" />
                     <span>Dashboard</span>
@@ -246,7 +232,7 @@ export function Navbar() {
                   <button
                     onClick={handleLogout}
                     disabled={isLoggingOut}
-                    className="flex items-center gap-3 text-red-600 hover:text-red-700 font-medium text-base px-4 py-3 rounded-xl hover:bg-red-50 transition-all duration-200 disabled:opacity-50 w-full text-left active:scale-95"
+                    className="flex items-center gap-3 text-destructive hover:text-destructive/80 font-medium text-base px-4 py-3 rounded-xl hover:bg-destructive/10 transition-all duration-200 disabled:opacity-50 w-full text-left active:scale-95"
                   >
                     <LogOut className={`w-5 h-5 ${isLoggingOut ? 'animate-pulse' : ''}`} />
                     <span>{isLoggingOut ? 'Logging out...' : 'Logout'}</span>
@@ -258,7 +244,7 @@ export function Navbar() {
                   <Link
                     href="/signIn"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex items-center gap-3 text-norwegian-blue hover:text-norwegian-blue-600 font-medium text-base px-4 py-3 rounded-xl hover:bg-gray-50 transition-all duration-200 active:scale-95"
+                    className="flex items-center gap-3 text-primary hover:text-primary/80 font-medium text-base px-4 py-3 rounded-xl hover:bg-muted transition-all duration-200 active:scale-95"
                   >
                     <BiLogIn className="w-5 h-5" />
                     <span>{t("signIn")}</span>
@@ -268,13 +254,27 @@ export function Navbar() {
                   <Link
                     href="/signUp"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex items-center justify-center gap-2 text-white bg-norwegian-blue hover:bg-norwegian-blue-600 font-medium text-base px-4 py-3 rounded-xl transition-all duration-200 mt-4 shadow-md hover:shadow-lg active:scale-95"
+                    className="flex items-center gap-3 text-primary hover:text-primary/80 font-medium text-base px-4 py-3 rounded-xl hover:bg-muted transition-all duration-200 active:scale-95"
                   >
                     <BiUserPlus className="w-5 h-5" />
                     <span>{t("signUp")}</span>
                   </Link>
                 </>
               )}
+            </div>
+
+            {/* Navigation Section */}
+            <div className="pt-6 space-y-1">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3 px-2">Navigation</p>
+
+              {/* About Link */}
+              <Link
+                href="/about"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center text-primary hover:text-primary/80 font-medium text-base px-4 py-3 rounded-xl hover:bg-muted transition-all duration-200 active:scale-95"
+              >
+                {t("about")}
+              </Link>
             </div>
         </div>
       </div>

@@ -6,6 +6,12 @@ import { Users, Route, TrendingUp, Activity } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { adminService } from '@/lib/api/admin.service';
 import type { AdminStats, AdminUser, SystemHealth } from '@reiseklar/shared';
+import {
+  StatCardSkeleton,
+  RecentUserCardSkeleton,
+  SystemHealthSkeleton,
+  QuickActionSkeleton,
+} from '@/components/dashboard/shared/SkeletonLoaders';
 
 export default function AdminDashboardPage() {
   const t = useTranslations('dashboard.admin');
@@ -36,73 +42,81 @@ export default function AdminDashboardPage() {
     fetchData();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-norwegian-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Loading dashboard...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-6 sm:space-y-8">
       {/* Welcome Section */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
           {t('welcome')}
         </h1>
-        <p className="mt-2 text-sm sm:text-base text-gray-600 dark:text-gray-400">
+        <p className="mt-2 text-sm sm:text-base text-muted-foreground">
           {t('welcomeMessage')}
         </p>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        <StatCard
-          title={t('totalUsers')}
-          value={stats?.totalUsers.toLocaleString() || '0'}
-          icon={Users}
-          description={`${stats?.newToday || 0} new today`}
-          color="blue"
-        />
-        <StatCard
-          title={t('activeRoutes')}
-          value={stats?.totalTrips.toLocaleString() || '0'}
-          icon={Route}
-          description="Total trips created"
-          color="green"
-        />
-        <StatCard
-          title="Active Users"
-          value={stats?.activeUsers.toLocaleString() || '0'}
-          icon={Activity}
-          description="Email verified"
-          color="purple"
-        />
-        <StatCard
-          title="Admins"
-          value={stats?.admins.toLocaleString() || '0'}
-          icon={TrendingUp}
-          description={`${stats?.totalPlaces || 0} total places`}
-          color="orange"
-        />
+        {loading ? (
+          <>
+            <StatCardSkeleton />
+            <StatCardSkeleton />
+            <StatCardSkeleton />
+            <StatCardSkeleton />
+          </>
+        ) : (
+          <>
+            <StatCard
+              title={t('totalUsers')}
+              value={stats?.totalUsers.toLocaleString() || '0'}
+              icon={Users}
+              description={`${stats?.newToday || 0} new today`}
+              color="blue"
+            />
+            <StatCard
+              title={t('activeRoutes')}
+              value={stats?.totalTrips.toLocaleString() || '0'}
+              icon={Route}
+              description="Total trips created"
+              color="green"
+            />
+            <StatCard
+              title="Active Users"
+              value={stats?.activeUsers.toLocaleString() || '0'}
+              icon={Activity}
+              description="Email verified"
+              color="purple"
+            />
+            <StatCard
+              title="Admins"
+              value={stats?.admins.toLocaleString() || '0'}
+              icon={TrendingUp}
+              description={`${stats?.totalPlaces || 0} total places`}
+              color="orange"
+            />
+          </>
+        )}
       </div>
 
       {/* Recent Activity & User Growth */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Users */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+        <div className="bg-card rounded-lg border border-border overflow-hidden">
+          <div className="px-6 py-4 border-b border-border">
+            <h2 className="text-lg font-semibold text-foreground">
               {t('recentUsers')}
             </h2>
           </div>
-          <div className="divide-y divide-gray-200 dark:divide-gray-700">
-            {recentUsers.length === 0 ? (
-              <div className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
+          <div className="divide-y divide-border">
+            {loading ? (
+              <>
+                <RecentUserCardSkeleton />
+                <RecentUserCardSkeleton />
+                <RecentUserCardSkeleton />
+                <RecentUserCardSkeleton />
+                <RecentUserCardSkeleton />
+              </>
+            ) : recentUsers.length === 0 ? (
+              <div className="px-6 py-8 text-center text-muted-foreground">
                 No users yet
               </div>
             ) : (
@@ -125,30 +139,30 @@ export default function AdminDashboardPage() {
                 return (
                   <div
                     key={user.id}
-                    className="px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                    className="px-6 py-4 hover:bg-muted transition-colors"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-norwegian-blue rounded-full flex items-center justify-center text-white font-semibold">
+                        <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-semibold">
                           {user.name.charAt(0).toUpperCase()}
                         </div>
                         <div>
-                          <h3 className="font-medium text-gray-900 dark:text-white">
+                          <h3 className="font-medium text-foreground">
                             {user.name}
                           </h3>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">
+                          <p className="text-sm text-muted-foreground">
                             {user.email}
                           </p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm text-gray-600 dark:text-gray-300">
+                        <p className="text-sm text-foreground">
                           {timeAgo}
                         </p>
                         <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full mt-1 ${
                           user.status === 'Active'
-                            ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
-                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                            ? 'bg-primary/10 text-primary'
+                            : 'bg-muted text-muted-foreground'
                         }`}>
                           {user.status}
                         </span>
@@ -162,44 +176,51 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* System Health */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+        <div className="bg-card rounded-lg border border-border overflow-hidden">
+          <div className="px-6 py-4 border-b border-border">
+            <h2 className="text-lg font-semibold text-foreground">
               {t('systemHealth')}
             </h2>
           </div>
           <div className="p-6 space-y-4">
-            {systemHealth.length === 0 ? (
-              <div className="text-center text-gray-500 dark:text-gray-400 py-4">
+            {loading ? (
+              <>
+                <SystemHealthSkeleton />
+                <SystemHealthSkeleton />
+                <SystemHealthSkeleton />
+                <SystemHealthSkeleton />
+              </>
+            ) : systemHealth.length === 0 ? (
+              <div className="text-center text-muted-foreground py-4">
                 No health data available
               </div>
             ) : (
               systemHealth.map((metric) => {
                 const statusColor =
                   metric.status === 'Healthy'
-                    ? 'text-green-600 dark:text-green-400'
+                    ? 'text-primary'
                     : metric.status === 'Warning'
-                    ? 'text-yellow-600 dark:text-yellow-400'
-                    : 'text-red-600 dark:text-red-400';
+                    ? 'text-primary/70'
+                    : 'text-destructive';
 
                 const barColor =
                   metric.status === 'Healthy'
-                    ? 'bg-green-600'
+                    ? 'bg-primary'
                     : metric.status === 'Warning'
-                    ? 'bg-yellow-600'
-                    : 'bg-red-600';
+                    ? 'bg-primary/70'
+                    : 'bg-destructive';
 
                 return (
                   <div key={metric.name}>
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                      <span className="text-sm font-medium text-muted-foreground">
                         {metric.name}
                       </span>
                       <span className={`text-sm font-semibold ${statusColor}`}>
                         {metric.status}
                       </span>
                     </div>
-                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                    <div className="w-full bg-muted rounded-full h-2">
                       <div
                         className={`${barColor} h-2 rounded-full transition-all duration-500`}
                         style={{ width: `${metric.percentage}%` }}
@@ -215,23 +236,33 @@ export default function AdminDashboardPage() {
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <button className="p-6 bg-white dark:bg-gray-800 border-2 border-norwegian-blue rounded-lg hover:bg-norwegian-blue hover:text-white transition-all group text-left">
-          <Users className="w-8 h-8 mb-3 text-norwegian-blue group-hover:text-white" />
-          <h3 className="font-semibold mb-1 text-gray-900 dark:text-white group-hover:text-white">{t('manageUsers')}</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400 group-hover:text-white/90">
-            {t('manageUsersDesc')}
-          </p>
-        </button>
-        <button className="p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow-md transition-all text-left">
-          <Activity className="w-8 h-8 mb-3 text-green-600 dark:text-green-400" />
-          <h3 className="font-semibold mb-1 text-gray-900 dark:text-white">{t('viewAnalytics')}</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">{t('viewAnalyticsDesc')}</p>
-        </button>
-        <button className="p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow-md transition-all text-left">
-          <Route className="w-8 h-8 mb-3 text-purple-600 dark:text-purple-400" />
-          <h3 className="font-semibold mb-1 text-gray-900 dark:text-white">{t('routeManagement')}</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">{t('routeManagementDesc')}</p>
-        </button>
+        {loading ? (
+          <>
+            <QuickActionSkeleton />
+            <QuickActionSkeleton />
+            <QuickActionSkeleton />
+          </>
+        ) : (
+          <>
+            <button className="p-6 bg-card border-2 border-primary rounded-lg hover:bg-primary hover:text-primary-foreground transition-all group text-left">
+              <Users className="w-8 h-8 mb-3 text-primary group-hover:text-primary-foreground" />
+              <h3 className="font-semibold mb-1 text-foreground group-hover:text-primary-foreground">{t('manageUsers')}</h3>
+              <p className="text-sm text-muted-foreground group-hover:text-primary-foreground/90">
+                {t('manageUsersDesc')}
+              </p>
+            </button>
+            <button className="p-6 bg-card border border-border rounded-lg hover:shadow-md transition-all text-left">
+              <Activity className="w-8 h-8 mb-3 text-primary" />
+              <h3 className="font-semibold mb-1 text-foreground">{t('viewAnalytics')}</h3>
+              <p className="text-sm text-muted-foreground">{t('viewAnalyticsDesc')}</p>
+            </button>
+            <button className="p-6 bg-card border border-border rounded-lg hover:shadow-md transition-all text-left">
+              <Route className="w-8 h-8 mb-3 text-primary" />
+              <h3 className="font-semibold mb-1 text-foreground">{t('routeManagement')}</h3>
+              <p className="text-sm text-muted-foreground">{t('routeManagementDesc')}</p>
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

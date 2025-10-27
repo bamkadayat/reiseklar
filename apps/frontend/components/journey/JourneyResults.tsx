@@ -203,8 +203,8 @@ export function JourneyResults({
 
   return (
     <div className="min-h-screen">
-      <div className="max-w-[1600px] mx-auto px-4 py-4 lg:py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="max-w-[1600px] mx-auto px-2 sm:px-4 py-3 sm:py-4 lg:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 lg:gap-6">
           {/* Mobile: Compact Search Header (shown on mobile only) */}
           <div className="lg:hidden lg:col-span-12">
             <button
@@ -304,7 +304,7 @@ export function JourneyResults({
           </div>
 
           {/* Main Content - Map and Journey Results */}
-          <div className="lg:col-span-9 space-y-4">
+          <div className="lg:col-span-9 space-y-3 sm:space-y-4">
             {/* Map - shown above journey cards on all screens */}
             {!isLoading && journeys.length > 0 && (
               <JourneyMap
@@ -319,7 +319,7 @@ export function JourneyResults({
             )}
 
             {/* Journey Results */}
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {isLoading ? (
                 <>
                   <JourneyCardSkeleton />

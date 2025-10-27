@@ -1,10 +1,18 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Search, Filter, MoreVertical, UserPlus, Mail, Ban, Trash2, Shield, X } from 'lucide-react';
+import { Search, Filter, UserPlus, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { adminService } from '@/lib/api/admin.service';
 import type { AdminUser } from '@reiseklar/shared';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 export default function AdminUsersPage() {
   const t = useTranslations('dashboard.admin.usersPage');
@@ -12,6 +20,19 @@ export default function AdminUsersPage() {
   const [filteredUsers, setFilteredUsers] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [deleteDialog, setDeleteDialog] = useState<{ open: boolean; userId: string | null }>({
+    open: false,
+    userId: null,
+  });
+  const [roleDialog, setRoleDialog] = useState<{
+    open: boolean;
+    userId: string | null;
+    currentRole: 'USER' | 'ADMIN' | null;
+  }>({
+    open: false,
+    userId: null,
+    currentRole: null,
+  });
 
   useEffect(() => {
     fetchUsers();
@@ -45,24 +66,27 @@ export default function AdminUsersPage() {
     }
   };
 
-  const handleDeleteUser = async (userId: string) => {
-    if (!confirm('Are you sure you want to delete this user?')) return;
+  const handleDeleteUser = async () => {
+    if (!deleteDialog.userId) return;
 
     try {
-      await adminService.deleteUser(userId);
+      await adminService.deleteUser(deleteDialog.userId);
       await fetchUsers();
+      setDeleteDialog({ open: false, userId: null });
     } catch (error: any) {
       alert(error.message || 'Failed to delete user');
     }
   };
 
-  const handleToggleRole = async (userId: string, currentRole: 'USER' | 'ADMIN') => {
-    const newRole = currentRole === 'ADMIN' ? 'USER' : 'ADMIN';
-    if (!confirm(`Change user role to ${newRole}?`)) return;
+  const handleToggleRole = async () => {
+    if (!roleDialog.userId || !roleDialog.currentRole) return;
+
+    const newRole = roleDialog.currentRole === 'ADMIN' ? 'USER' : 'ADMIN';
 
     try {
-      await adminService.updateUserRole(userId, newRole);
+      await adminService.updateUserRole(roleDialog.userId, newRole);
       await fetchUsers();
+      setRoleDialog({ open: false, userId: null, currentRole: null });
     } catch (error: any) {
       alert(error.message || 'Failed to update user role');
     }
@@ -72,8 +96,8 @@ export default function AdminUsersPage() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-norwegian-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Loading users...</p>
+          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading users...</p>
         </div>
       </div>
     );
@@ -84,14 +108,14 @@ export default function AdminUsersPage() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
             {t('title')}
           </h1>
-          <p className="mt-2 text-sm sm:text-base text-gray-600 dark:text-gray-400">
+          <p className="mt-2 text-sm sm:text-base text-muted-foreground">
             {t('description')}
           </p>
         </div>
-        <button className="flex items-center justify-center gap-2 px-6 py-3 bg-norwegian-blue text-white font-medium rounded-lg hover:bg-norwegian-blue-600 transition-colors whitespace-nowrap">
+        <button className="flex items-center justify-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition-colors whitespace-nowrap">
           <UserPlus className="w-5 h-5" />
           {t('addUser')}
         </button>
@@ -99,99 +123,99 @@ export default function AdminUsersPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
-          <p className="text-sm text-gray-600 dark:text-gray-400">{t('totalUsers')}</p>
-          <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">{users.length}</p>
+        <div className="bg-card rounded-lg border border-border p-4">
+          <p className="text-sm text-muted-foreground">{t('totalUsers')}</p>
+          <p className="text-2xl font-bold text-foreground mt-1">{users.length}</p>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
-          <p className="text-sm text-gray-600 dark:text-gray-400">{t('activeUsers')}</p>
-          <p className="text-2xl font-bold text-green-600 dark:text-green-400 mt-1">
+        <div className="bg-card rounded-lg border border-border p-4">
+          <p className="text-sm text-muted-foreground">{t('activeUsers')}</p>
+          <p className="text-2xl font-bold text-primary mt-1">
             {users.filter((u) => u.status === 'Active').length}
           </p>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
-          <p className="text-sm text-gray-600 dark:text-gray-400">{t('totalTrips')}</p>
-          <p className="text-2xl font-bold text-blue-600 dark:text-blue-400 mt-1">
+        <div className="bg-card rounded-lg border border-border p-4">
+          <p className="text-sm text-muted-foreground">{t('totalTrips')}</p>
+          <p className="text-2xl font-bold text-primary mt-1">
             {users.reduce((sum, u) => sum + u.trips, 0)}
           </p>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
-          <p className="text-sm text-gray-600 dark:text-gray-400">{t('admins')}</p>
-          <p className="text-2xl font-bold text-purple-600 dark:text-purple-400 mt-1">
+        <div className="bg-card rounded-lg border border-border p-4">
+          <p className="text-sm text-muted-foreground">{t('admins')}</p>
+          <p className="text-2xl font-bold text-primary mt-1">
             {users.filter((u) => u.role === 'ADMIN').length}
           </p>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+      <div className="bg-card rounded-lg border border-border p-4">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <input
               type="text"
               placeholder={t('searchUsers')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-10 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400"
+              className="w-full pl-10 pr-10 py-2 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-foreground placeholder:text-muted-foreground"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-full p-1 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 hover:bg-muted rounded-full p-1 transition-colors"
                 title="Clear search"
               >
-                <X className="w-4 h-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200" />
+                <X className="w-4 h-4 text-muted-foreground hover:text-foreground" />
               </button>
             )}
           </div>
-          <button className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-gray-900 dark:text-white">
+          <button className="flex items-center justify-center gap-2 px-4 py-2 border border-input rounded-lg hover:bg-muted transition-colors text-foreground">
             <Filter className="w-5 h-5" />
             {t('filters')}
           </button>
         </div>
         {/* Search Results Info */}
         {searchQuery && (
-          <div className="mt-3 text-sm text-gray-600 dark:text-gray-400">
+          <div className="mt-3 text-sm text-muted-foreground">
             Found {filteredUsers.length} user{filteredUsers.length !== 1 ? 's' : ''} matching &quot;{searchQuery}&quot;
           </div>
         )}
       </div>
 
       {/* Users Table */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div className="bg-card rounded-lg border border-border overflow-hidden">
         {/* Desktop Table */}
         <div className="hidden md:block overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
+            <thead className="bg-muted border-b border-border">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   {t('user')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   {t('role')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   {t('status')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   {t('joinDate')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   {t('trips')}
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   {t('actions')}
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+            <tbody className="divide-y divide-border">
               {filteredUsers.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-6 py-12 text-center">
-                    <div className="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400">
-                      <Search className="w-12 h-12 text-gray-300 dark:text-gray-600 mb-3" />
-                      <p className="text-lg font-medium text-gray-900 dark:text-white mb-1">No users found</p>
+                    <div className="flex flex-col items-center justify-center text-muted-foreground">
+                      <Search className="w-12 h-12 text-muted-foreground mb-3" />
+                      <p className="text-lg font-medium text-foreground mb-1">No users found</p>
                       <p className="text-sm">
                         {searchQuery
                           ? `No users match "${searchQuery}". Try a different search.`
@@ -200,7 +224,7 @@ export default function AdminUsersPage() {
                       {searchQuery && (
                         <button
                           onClick={() => setSearchQuery('')}
-                          className="mt-4 px-4 py-2 bg-norwegian-blue text-white rounded-lg hover:bg-norwegian-blue-600 transition-colors"
+                          className="mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
                         >
                           Clear search
                         </button>
@@ -210,17 +234,17 @@ export default function AdminUsersPage() {
                 </tr>
               ) : (
                 filteredUsers.map((user) => (
-                  <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <tr key={user.id} className="hover:bg-muted">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
-                      <div className="w-10 h-10 bg-norwegian-blue rounded-full flex items-center justify-center text-white font-semibold">
+                      <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-semibold">
                         {user.name.charAt(0).toUpperCase()}
                       </div>
                       <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900 dark:text-white">
+                        <div className="text-sm font-medium text-foreground">
                           {user.name}
                         </div>
-                        <div className="text-sm text-gray-500 dark:text-gray-400">
+                        <div className="text-sm text-muted-foreground">
                           {user.email}
                         </div>
                       </div>
@@ -230,8 +254,8 @@ export default function AdminUsersPage() {
                     <span
                       className={`px-3 py-1 text-xs font-medium rounded-full ${
                         user.role === 'ADMIN'
-                          ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
-                          : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
+                          ? 'bg-primary/10 text-primary'
+                          : 'bg-accent/10 text-accent-foreground'
                       }`}
                     >
                       {user.role}
@@ -241,38 +265,36 @@ export default function AdminUsersPage() {
                     <span
                       className={`px-3 py-1 text-xs font-medium rounded-full ${
                         user.status === 'Active'
-                          ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
-                          : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                          ? 'bg-primary/10 text-primary'
+                          : 'bg-muted text-muted-foreground'
                       }`}
                     >
                       {user.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                     {new Date(user.joinDate).toLocaleDateString('en-US', {
                       month: 'short',
                       day: 'numeric',
                       year: 'numeric',
                     })}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white font-medium">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground font-medium">
                     {user.trips}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex items-center justify-end gap-2">
                       <button
-                        onClick={() => handleToggleRole(user.id, user.role)}
-                        className="p-1 text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300"
-                        title={`Toggle role (current: ${user.role})`}
+                        onClick={() => setRoleDialog({ open: true, userId: user.id, currentRole: user.role })}
+                        className="px-3 py-1.5 text-sm font-medium text-primary hover:bg-primary/10 rounded-lg transition-colors"
                       >
-                        <Shield className="w-5 h-5" />
+                        Toggle Role
                       </button>
                       <button
-                        onClick={() => handleDeleteUser(user.id)}
-                        className="p-1 text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300"
-                        title="Delete user"
+                        onClick={() => setDeleteDialog({ open: true, userId: user.id })}
+                        className="px-3 py-1.5 text-sm font-medium text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
                       >
-                        <Trash2 className="w-5 h-5" />
+                        Delete
                       </button>
                     </div>
                   </td>
@@ -284,12 +306,12 @@ export default function AdminUsersPage() {
         </div>
 
         {/* Mobile Cards */}
-        <div className="md:hidden divide-y divide-gray-200 dark:divide-gray-700">
+        <div className="md:hidden divide-y divide-border">
           {filteredUsers.length === 0 ? (
             <div className="p-8 text-center">
-              <div className="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400">
-                <Search className="w-12 h-12 text-gray-300 dark:text-gray-600 mb-3" />
-                <p className="text-lg font-medium text-gray-900 dark:text-white mb-1">No users found</p>
+              <div className="flex flex-col items-center justify-center text-muted-foreground">
+                <Search className="w-12 h-12 text-muted-foreground mb-3" />
+                <p className="text-lg font-medium text-foreground mb-1">No users found</p>
                 <p className="text-sm">
                   {searchQuery
                     ? `No users match "${searchQuery}". Try a different search.`
@@ -298,7 +320,7 @@ export default function AdminUsersPage() {
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery('')}
-                    className="mt-4 px-4 py-2 bg-norwegian-blue text-white rounded-lg hover:bg-norwegian-blue-600 transition-colors"
+                    className="mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
                   >
                     Clear search
                   </button>
@@ -308,30 +330,30 @@ export default function AdminUsersPage() {
           ) : (
             filteredUsers.map((user) => (
               <div key={user.id} className="p-4 space-y-3">
-              <div className="flex items-center justify-between">
+              <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-norwegian-blue rounded-full flex items-center justify-center text-white font-semibold">
+                  <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-semibold">
                     {user.name.charAt(0).toUpperCase()}
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-gray-900 dark:text-white">
+                    <div className="text-sm font-medium text-foreground">
                       {user.name}
                     </div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400">{user.email}</div>
+                    <div className="text-xs text-muted-foreground">{user.email}</div>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-col gap-1">
                   <button
-                    onClick={() => handleToggleRole(user.id, user.role)}
-                    className="p-1 text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300"
+                    onClick={() => setRoleDialog({ open: true, userId: user.id, currentRole: user.role })}
+                    className="px-2 py-1 text-xs font-medium text-primary hover:bg-primary/10 rounded transition-colors whitespace-nowrap"
                   >
-                    <Shield className="w-5 h-5" />
+                    Toggle Role
                   </button>
                   <button
-                    onClick={() => handleDeleteUser(user.id)}
-                    className="p-1 text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300"
+                    onClick={() => setDeleteDialog({ open: true, userId: user.id })}
+                    className="px-2 py-1 text-xs font-medium text-destructive hover:bg-destructive/10 rounded transition-colors"
                   >
-                    <Trash2 className="w-5 h-5" />
+                    Delete
                   </button>
                 </div>
               </div>
@@ -340,8 +362,8 @@ export default function AdminUsersPage() {
                   <span
                     className={`px-2 py-1 text-xs font-medium rounded-full ${
                       user.role === 'ADMIN'
-                        ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
-                        : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
+                        ? 'bg-primary/10 text-primary'
+                        : 'bg-accent/10 text-accent-foreground'
                     }`}
                   >
                     {user.role}
@@ -349,20 +371,77 @@ export default function AdminUsersPage() {
                   <span
                     className={`px-2 py-1 text-xs font-medium rounded-full ${
                       user.status === 'Active'
-                        ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
-                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                        ? 'bg-primary/10 text-primary'
+                        : 'bg-muted text-muted-foreground'
                     }`}
                   >
                     {user.status}
                   </span>
                 </div>
-                <span className="text-xs text-gray-500 dark:text-gray-400">{user.trips} trips</span>
+                <span className="text-xs text-muted-foreground">{user.trips} trips</span>
               </div>
             </div>
           ))
           )}
         </div>
       </div>
+
+      {/* Delete User Dialog */}
+      <Dialog open={deleteDialog.open} onOpenChange={(open) => setDeleteDialog({ open, userId: null })}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete User</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this user? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <button
+              onClick={() => setDeleteDialog({ open: false, userId: null })}
+              className="px-4 py-2 text-sm font-medium text-foreground hover:bg-muted rounded-lg transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleDeleteUser}
+              className="px-4 py-2 text-sm font-medium bg-destructive text-destructive-foreground hover:bg-destructive/90 rounded-lg transition-colors"
+            >
+              Delete
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Toggle Role Dialog */}
+      <Dialog open={roleDialog.open} onOpenChange={(open) => setRoleDialog({ open, userId: null, currentRole: null })}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Change User Role</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to change this user&apos;s role from{' '}
+              <span className="font-semibold">{roleDialog.currentRole}</span> to{' '}
+              <span className="font-semibold">
+                {roleDialog.currentRole === 'ADMIN' ? 'USER' : 'ADMIN'}
+              </span>
+              ?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <button
+              onClick={() => setRoleDialog({ open: false, userId: null, currentRole: null })}
+              className="px-4 py-2 text-sm font-medium text-foreground hover:bg-muted rounded-lg transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleToggleRole}
+              className="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg transition-colors"
+            >
+              Change Role
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

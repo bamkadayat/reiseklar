@@ -14,12 +14,12 @@ export default function UserError({
   }, [error]);
 
   return (
-    <div className="flex h-screen items-center justify-center bg-gray-50">
-      <div className="max-w-md rounded-lg bg-white p-8 shadow-lg">
+    <div className="flex h-screen items-center justify-center bg-background">
+      <div className="max-w-md rounded-lg bg-card p-8 shadow-lg border border-border">
         <div className="mb-4 flex items-center justify-center">
-          <div className="rounded-full bg-red-100 p-3">
+          <div className="rounded-full bg-destructive/10 p-3">
             <svg
-              className="h-8 w-8 text-red-600"
+              className="h-8 w-8 text-destructive"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -33,15 +33,15 @@ export default function UserError({
             </svg>
           </div>
         </div>
-        <h2 className="mb-2 text-center text-xl font-semibold text-gray-900">
+        <h2 className="mb-2 text-center text-xl font-semibold text-foreground">
           Something went wrong!
         </h2>
-        <p className="mb-6 text-center text-gray-600">
+        <p className="mb-6 text-center text-muted-foreground">
           An error occurred while loading your dashboard.
         </p>
         <button
           onClick={reset}
-          className="w-full rounded-md bg-green-600 px-4 py-2 text-white transition-colors hover:bg-green-700"
+          className="w-full rounded-md bg-primary px-4 py-2 text-primary-foreground transition-colors hover:bg-primary/90"
         >
           Try again
         </button>
