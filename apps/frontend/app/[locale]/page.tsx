@@ -1,9 +1,17 @@
 'use client';
 
 import { HeroSection } from '@/components/landing/HeroSection';
-import { WeatherSection } from '@/components/landing/WeatherSection';
-import { NewsSection } from '@/components/landing/NewsSection';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
+
+// Lazy load non-critical sections for better performance
+const WeatherSection = dynamic(() => import('@/components/landing/WeatherSection').then(mod => ({ default: mod.WeatherSection })), {
+  loading: () => <div className="h-64 bg-gray-100 animate-pulse rounded-lg" />,
+});
+
+const NewsSection = dynamic(() => import('@/components/landing/NewsSection').then(mod => ({ default: mod.NewsSection })), {
+  loading: () => <div className="h-64 bg-gray-100 animate-pulse rounded-lg" />,
+});
 
 export default function Home() {
   return (
@@ -18,24 +26,10 @@ export default function Home() {
 
       <main id="main-content">
         <section
-          className="relative w-full min-h-[50vh] flex items-center justify-center px-4 py-16 sm:py-20 overflow-hidden bg-[#012B6A]"
+          className="relative w-full min-h-[50vh] flex items-center justify-center px-4 py-16 sm:py-20 bg-gradient-to-br from-[#012B6A] via-[#01286d] to-[#01409d]"
           aria-label="Search for travel routes"
         >
-          {/* Background image with proper optimization */}
-          <div className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden="true">
-            <Image
-              src="/images/hero-bg.png"
-              alt=""
-              fill
-              priority
-              quality={90}
-              className="object-contain object-center"
-              sizes="100vw"
-            />
-          </div>
-          <div className="relative z-10">
-            <HeroSection />
-          </div>
+          <HeroSection />
         </section>
 
         <section className="w-full max-w-5xl mx-auto px-4 py-12" aria-label="Weather and news information">

@@ -27,6 +27,15 @@ function JourneyContent() {
     );
   }
 
+  // Parse date safely - expect timestamp in milliseconds
+  let dateTime = new Date();
+  if (date) {
+    const timestamp = parseInt(date, 10);
+    if (!isNaN(timestamp)) {
+      dateTime = new Date(timestamp);
+    }
+  }
+
   return (
     <JourneyResults
       startId={startId}
@@ -37,7 +46,7 @@ function JourneyContent() {
       stopLabel={stopLabel || ''}
       stopLat={parseFloat(stopLat)}
       stopLon={parseFloat(stopLon)}
-      dateTime={date ? new Date(parseInt(date)) : new Date()}
+      dateTime={dateTime}
     />
   );
 }

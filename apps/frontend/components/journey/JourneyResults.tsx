@@ -95,6 +95,10 @@ export function JourneyResults({
                   mode
                   distance
                   duration
+                  aimedStartTime
+                  aimedEndTime
+                  expectedStartTime
+                  expectedEndTime
                   pointsOnLink {
                     points
                   }
@@ -215,14 +219,18 @@ export function JourneyResults({
                     <span className="font-semibold text-gray-900">{searchParams.stopLabel}</span>
                   </div>
                   <div className="text-xs text-gray-500 mt-1">
-                    {searchParams.dateTime.toLocaleDateString('no-NO', {
-                      day: '2-digit',
-                      month: '2-digit',
-                      year: 'numeric'
-                    })} • {searchParams.dateTime.toLocaleTimeString('no-NO', {
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
+                    {searchParams.dateTime instanceof Date && !isNaN(searchParams.dateTime.getTime()) ? (
+                      <>
+                        {searchParams.dateTime.toLocaleDateString('no-NO', {
+                          day: '2-digit',
+                          month: '2-digit',
+                          year: 'numeric'
+                        })} • {searchParams.dateTime.toLocaleTimeString('no-NO', {
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                      </>
+                    ) : 'Now'}
                   </div>
                 </div>
                 {isSearchExpanded ? (
