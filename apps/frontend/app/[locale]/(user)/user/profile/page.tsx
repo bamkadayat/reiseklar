@@ -76,7 +76,7 @@ export default function UserProfilePage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600 dark:text-blue-400" />
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
     );
   }
@@ -87,7 +87,7 @@ export default function UserProfilePage() {
       <div className="space-y-6 max-w-3xl">
         <Card>
           <CardContent className="p-6">
-            <p className="text-red-600 dark:text-red-400">Error loading profile: {fetchError}</p>
+            <p className="text-destructive">Error loading profile: {fetchError}</p>
             <Button onClick={refetch} className="mt-4">
               Retry
             </Button>
@@ -103,7 +103,7 @@ export default function UserProfilePage() {
       <div className="space-y-6 max-w-3xl">
         <Card>
           <CardContent className="p-6">
-            <p className="text-gray-600 dark:text-gray-400">Please log in to view your profile.</p>
+            <p className="text-muted-foreground">Please log in to view your profile.</p>
           </CardContent>
         </Card>
       </div>
@@ -114,7 +114,7 @@ export default function UserProfilePage() {
     <div className="space-y-6 max-w-3xl">
       {/* Greeting Header */}
       <div>
-        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">
+        <h1 className="text-3xl sm:text-4xl font-bold text-foreground">
           {mounted ? greeting : '\u00A0'}, {user.name || 'User'}
         </h1>
       </div>
@@ -130,7 +130,7 @@ export default function UserProfilePage() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
+                className="text-primary hover:text-primary/80"
                 onClick={() => setIsEditing(true)}
               >
                 <Edit className="w-4 h-4 mr-1" />
@@ -142,21 +142,21 @@ export default function UserProfilePage() {
         <CardContent className="space-y-4">
           {!isEditing ? (
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+              <p className="text-sm text-muted-foreground mb-1">
                 {t('personalInfo.fullName')}
               </p>
-              <p className="text-base text-gray-900 dark:text-white">{user.name || 'Not set'}</p>
+              <p className="text-base text-foreground">{user.name || 'Not set'}</p>
             </div>
           ) : (
             <div className="space-y-4">
               {saveError && (
-                <div className="p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-md">
-                  <p className="text-sm text-red-600 dark:text-red-400">{saveError}</p>
+                <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-md">
+                  <p className="text-sm text-destructive">{saveError}</p>
                 </div>
               )}
               <div>
-                <Label htmlFor="fullName" className="text-sm text-gray-600 dark:text-gray-400">
-                  {t('personalInfo.fullName')} <span className="text-red-600 dark:text-red-400">*</span>
+                <Label htmlFor="fullName" className="text-sm text-muted-foreground">
+                  {t('personalInfo.fullName')} <span className="text-destructive">*</span>
                 </Label>
                 <Input
                   id="fullName"
@@ -169,7 +169,7 @@ export default function UserProfilePage() {
               <div className="flex gap-3 pt-4">
                 <Button
                   onClick={handleSave}
-                  className="bg-blue-700 hover:bg-blue-800 text-white px-8"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground px-8"
                   disabled={saveLoading}
                 >
                   {saveLoading ? (
@@ -204,14 +204,14 @@ export default function UserProfilePage() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+            <p className="text-sm text-muted-foreground mb-1">
               {t('loginSecurity.email')}
             </p>
-            <p className="text-base text-gray-900 dark:text-white mb-2">{user.email}</p>
+            <p className="text-base text-foreground mb-2">{user.email}</p>
             {user.emailVerifiedAt && (
               <div className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-green-600 dark:text-green-400" />
-                <span className="text-sm text-gray-900 dark:text-white">{t('loginSecurity.confirmed')}</span>
+                <CheckCircle className="w-4 h-4 text-primary" />
+                <span className="text-sm text-foreground">{t('loginSecurity.confirmed')}</span>
               </div>
             )}
           </div>
@@ -226,10 +226,10 @@ export default function UserProfilePage() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+          <p className="text-sm text-muted-foreground leading-relaxed">
             {t('deleteProfile.description')}
           </p>
-          <Button variant="destructive" className="bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/50 border-0">
+          <Button variant="destructive" className="bg-destructive/10 text-destructive hover:bg-destructive/20 border-0">
             {t('deleteProfile.button')}
           </Button>
         </CardContent>

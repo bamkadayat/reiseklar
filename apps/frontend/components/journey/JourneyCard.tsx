@@ -153,22 +153,27 @@ export function JourneyCard({ journey, from, fromData, toData }: JourneyCardProp
 
   return (
     <Card className="shadow-sm hover:shadow-md transition-shadow border border-gray-200 bg-white">
-      <CardContent className="p-4 md:p-6">
+      <CardContent className="p-3 sm:p-4 md:p-6">
         {/* Header - Time Range and Duration */}
-        <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
-          <div className="flex items-center gap-2">
-            <span className="text-lg font-semibold text-gray-900">
+        <div className="mb-4 md:mb-6 pb-3 md:pb-4 border-b border-gray-100">
+          {/* Time - Full width on mobile */}
+          <div className="flex items-center justify-between mb-2 md:mb-0">
+            <span className="text-base sm:text-lg font-semibold text-gray-900">
               {formatTime(journey.startTime)} - {formatTime(journey.endTime)}
+            </span>
+            {/* Duration - Show on mobile next to time */}
+            <span className="text-base sm:text-lg font-bold text-gray-900 md:hidden">
+              {formatDuration(journey.duration)}
             </span>
           </div>
 
-          {/* Transport Modes and Duration */}
-          <div className="flex items-center gap-2">
+          {/* Transport Modes and Duration - Wrap on mobile */}
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mt-2 md:mt-3">
             {/* Walking icon with duration */}
             {journey.legs?.some((leg: any) => leg.mode === "foot") && (
-              <div className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-lg">
-                <IoMdWalk className="w-4 h-4 text-gray-700" />
-                <span className="text-sm font-medium text-gray-900">
+              <div className="flex items-center gap-1 bg-gray-100 px-1.5 sm:px-2 py-1 rounded-lg">
+                <IoMdWalk className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-700" />
+                <span className="text-xs sm:text-sm font-medium text-gray-900">
                   {Math.floor(
                     journey.legs
                       ?.filter((leg: any) => leg.mode === "foot")
@@ -184,15 +189,15 @@ export function JourneyCard({ journey, from, fromData, toData }: JourneyCardProp
               .map((leg: any, idx: number) => (
                 <div
                   key={idx}
-                  className="flex items-center gap-1 bg-transit-red text-white px-2 py-1 rounded-lg font-medium text-sm"
+                  className="flex items-center gap-1 bg-transit-red text-white px-1.5 sm:px-2 py-1 rounded-lg font-medium text-xs sm:text-sm"
                 >
                   {getModeIcon(leg.mode)}
                   <span>{leg.line?.publicCode || leg.mode.charAt(0).toUpperCase()}</span>
                 </div>
               ))}
 
-            {/* Total duration */}
-            <div className="flex items-center gap-1 ml-2">
+            {/* Total duration - Hidden on mobile, shown on desktop */}
+            <div className="hidden md:flex items-center gap-1 ml-2">
               <span className="text-lg font-bold text-gray-900">
                 {formatDuration(journey.duration)}
               </span>
@@ -207,28 +212,28 @@ export function JourneyCard({ journey, from, fromData, toData }: JourneyCardProp
             <div key={index} className="relative">
               {/* Walking Leg */}
               {leg.mode === "foot" ? (
-                <div className="flex items-start gap-3">
+                <div className="flex items-start gap-2 sm:gap-3">
                   {/* Time Column */}
-                  <div className="w-12 flex-shrink-0">
-                    <div className="text-sm font-medium text-gray-900">
+                  <div className="w-10 sm:w-12 flex-shrink-0">
+                    <div className="text-xs sm:text-sm font-medium text-gray-900">
                       {formatTime(leg.expectedStartTime || leg.aimedStartTime)}
                     </div>
                   </div>
 
                   {/* Timeline Column */}
-                  <div className="flex flex-col items-center flex-shrink-0 w-12">
+                  <div className="flex flex-col items-center flex-shrink-0 w-8 sm:w-12">
                     {index === 0 && (
-                      <div className="w-3 h-3 rounded-full bg-gray-900 mb-2"></div>
+                      <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-gray-900 mb-2"></div>
                     )}
-                    <div className="w-[2px] bg-gray-300 flex-1 min-h-[60px]"></div>
+                    <div className="w-[2px] bg-gray-300 flex-1 min-h-[50px] sm:min-h-[60px]"></div>
                   </div>
 
                   {/* Content Column */}
-                  <div className="flex-1 pb-4">
-                    <div className="text-sm font-semibold text-gray-900 mb-1">
+                  <div className="flex-1 pb-3 sm:pb-4">
+                    <div className="text-xs sm:text-sm font-semibold text-gray-900 mb-1">
                       {leg.fromPlace?.name || (index === 0 ? from : "")}
                     </div>
-                    <div className="text-sm text-gray-600">
+                    <div className="text-xs sm:text-sm text-gray-600">
                       <span className="font-medium">Gå {Math.floor(leg.duration / 60)} min</span>
                     </div>
                     <div className="text-xs text-gray-500 mt-1">
@@ -238,70 +243,70 @@ export function JourneyCard({ journey, from, fromData, toData }: JourneyCardProp
                 </div>
               ) : (
                 /* Transit Leg */
-                <div className="flex items-start gap-3">
+                <div className="flex items-start gap-2 sm:gap-3">
                   {/* Time Column */}
-                  <div className="w-12 flex-shrink-0">
-                    <div className="text-sm font-medium text-gray-900">
+                  <div className="w-10 sm:w-12 flex-shrink-0">
+                    <div className="text-xs sm:text-sm font-medium text-gray-900">
                       {formatTime(leg.fromEstimatedCall?.expectedDepartureTime || leg.fromEstimatedCall?.aimedDepartureTime)}
                     </div>
                   </div>
 
                   {/* Timeline Column */}
-                  <div className="flex flex-col items-center flex-shrink-0 w-12">
+                  <div className="flex flex-col items-center flex-shrink-0 w-8 sm:w-12">
                     {index === 0 && (
-                      <div className="w-3 h-3 rounded-full bg-gray-900 mb-2"></div>
+                      <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-gray-900 mb-2"></div>
                     )}
-                    <div className="w-[3px] bg-transit-red flex-1 min-h-[100px]"></div>
+                    <div className="w-[3px] bg-transit-red flex-1 min-h-[80px] sm:min-h-[100px]"></div>
                   </div>
 
                   {/* Content Column */}
-                  <div className="flex-1 pb-4">
+                  <div className="flex-1 pb-3 sm:pb-4">
                     {/* Departure Stop */}
-                    <div className="mb-3">
-                      <div className="text-sm font-semibold text-gray-900 mb-1">
+                    <div className="mb-2 sm:mb-3">
+                      <div className="text-xs sm:text-sm font-semibold text-gray-900 mb-1">
                         {leg.fromPlace?.name}
                       </div>
                       {leg.fromPlace?.quay?.publicCode && (
                         <div className="text-xs text-gray-500">
-                          Spor: <span className="inline-flex items-center justify-center w-5 h-5 rounded bg-yellow-400 text-gray-900 font-bold text-xs">{leg.fromPlace.quay.publicCode}</span> Retning sentrum
+                          Spor: <span className="inline-flex items-center justify-center w-4 h-4 sm:w-5 sm:h-5 rounded bg-yellow-400 text-gray-900 font-bold text-[10px] sm:text-xs">{leg.fromPlace.quay.publicCode}</span> Retning sentrum
                         </div>
                       )}
                     </div>
 
                     {/* Transit Info */}
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="flex items-center gap-1 bg-transit-red text-white px-2 py-1 rounded font-medium text-sm">
+                    <div className="flex items-center gap-1.5 sm:gap-2 mb-2 sm:mb-3 flex-wrap">
+                      <div className="flex items-center gap-1 bg-transit-red text-white px-1.5 sm:px-2 py-1 rounded font-medium text-xs sm:text-sm">
                         {getModeIcon(leg.mode)}
                         <span>{leg.line?.publicCode}</span>
                       </div>
-                      <span className="text-sm font-medium text-gray-700">
+                      <span className="text-xs sm:text-sm font-medium text-gray-700">
                         {leg.line?.name || "Stortinget"}
                       </span>
                     </div>
 
                     {/* Intermediate Stops */}
                     {leg.intermediateEstimatedCalls && leg.intermediateEstimatedCalls.length > 0 && (
-                      <div className="mb-3">
+                      <div className="mb-2 sm:mb-3">
                         <button
                           onClick={() => toggleLegExpansion(index)}
-                          className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900 font-medium"
+                          className="flex items-center gap-1 text-xs sm:text-sm text-gray-600 hover:text-gray-900 font-medium"
                         >
                           <span>{leg.intermediateEstimatedCalls.length} stopp</span>
                           {expandedLegs.has(index) ? (
-                            <ChevronUp className="w-4 h-4" />
+                            <ChevronUp className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                           ) : (
-                            <ChevronDown className="w-4 h-4" />
+                            <ChevronDown className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                           )}
                         </button>
 
                         {expandedLegs.has(index) && (
-                          <div className="mt-2 space-y-1 pl-4 border-l-2 border-gray-200">
+                          <div className="mt-1.5 sm:mt-2 space-y-0.5 sm:space-y-1 pl-3 sm:pl-4 border-l-2 border-gray-200">
                             {leg.intermediateEstimatedCalls.map((call: any, idx: number) => (
-                              <div key={idx} className="flex items-center gap-2 py-1">
-                                <span className="text-xs text-gray-500 w-10">
+                              <div key={idx} className="flex items-center gap-2 py-0.5 sm:py-1">
+                                <span className="text-[10px] sm:text-xs text-gray-500 w-8 sm:w-10">
                                   {formatTime(call.expectedArrivalTime || call.aimedArrivalTime)}
                                 </span>
-                                <span className="text-sm text-gray-700">{call.quay?.name}</span>
+                                <span className="text-xs sm:text-sm text-gray-700">{call.quay?.name}</span>
                               </div>
                             ))}
                           </div>
@@ -310,11 +315,11 @@ export function JourneyCard({ journey, from, fromData, toData }: JourneyCardProp
                     )}
 
                     {/* Arrival Time */}
-                    <div className="flex items-start gap-3 mt-2">
-                      <div className="text-sm font-medium text-gray-900 w-12">
+                    <div className="flex items-start gap-2 sm:gap-3 mt-1.5 sm:mt-2">
+                      <div className="text-xs sm:text-sm font-medium text-gray-900 w-10 sm:w-12">
                         {formatTime(leg.toEstimatedCall?.expectedArrivalTime || leg.toEstimatedCall?.aimedArrivalTime)}
                       </div>
-                      <div className="text-sm font-semibold text-gray-900">
+                      <div className="text-xs sm:text-sm font-semibold text-gray-900">
                         {leg.toPlace?.name}
                       </div>
                     </div>
@@ -324,17 +329,17 @@ export function JourneyCard({ journey, from, fromData, toData }: JourneyCardProp
 
               {/* Final Destination */}
               {index === journey.legs.length - 1 && (
-                <div className="flex items-start gap-3">
-                  <div className="w-12 flex-shrink-0">
-                    <div className="text-sm font-medium text-gray-900">
+                <div className="flex items-start gap-2 sm:gap-3">
+                  <div className="w-10 sm:w-12 flex-shrink-0">
+                    <div className="text-xs sm:text-sm font-medium text-gray-900">
                       {formatTime(journey.endTime)}
                     </div>
                   </div>
-                  <div className="flex flex-col items-center flex-shrink-0 w-12">
-                    <div className="w-3 h-3 rounded-full bg-gray-900"></div>
+                  <div className="flex flex-col items-center flex-shrink-0 w-8 sm:w-12">
+                    <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-gray-900"></div>
                   </div>
                   <div className="flex-1">
-                    <div className="text-sm font-semibold text-gray-900">
+                    <div className="text-xs sm:text-sm font-semibold text-gray-900">
                       {leg.toPlace?.name || "Destination"}
                     </div>
                   </div>
@@ -345,11 +350,11 @@ export function JourneyCard({ journey, from, fromData, toData }: JourneyCardProp
         </div>
 
         {/* Save Button */}
-        <div className="mt-6 pt-4 border-t border-gray-100">
+        <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-gray-100">
           <Button
             onClick={handleSaveTrip}
             disabled={isSaving || isSaved}
-            className={`w-full flex items-center justify-center gap-2 py-3 rounded-lg font-semibold transition-all ${
+            className={`w-full flex items-center justify-center gap-2 py-2.5 sm:py-3 rounded-lg font-semibold transition-all text-sm sm:text-base ${
               isSaved
                 ? "bg-green-600 hover:bg-green-700 text-white"
                 : "bg-norwegian-blue hover:bg-norwegian-blue-700 text-white"
@@ -357,17 +362,17 @@ export function JourneyCard({ journey, from, fromData, toData }: JourneyCardProp
           >
             {isSaving ? (
               <>
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                <div className="animate-spin rounded-full h-3.5 w-3.5 sm:h-4 sm:w-4 border-b-2 border-white"></div>
                 <span>Lagrer...</span>
               </>
             ) : isSaved ? (
               <>
-                <Check className="w-5 h-5" />
+                <Check className="w-4 h-4 sm:w-5 sm:h-5" />
                 <span>Lagret!</span>
               </>
             ) : (
               <>
-                <Bookmark className="w-5 h-5" />
+                <Bookmark className="w-4 h-4 sm:w-5 sm:h-5" />
                 <span>Lagre rute</span>
               </>
             )}

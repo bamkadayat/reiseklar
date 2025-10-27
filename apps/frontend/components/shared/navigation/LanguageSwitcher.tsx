@@ -42,7 +42,7 @@ export function LanguageSwitcher() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex items-center gap-2 px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors outline-none">
+      <DropdownMenuTrigger className="flex items-center gap-2 px-3 py-2 text-foreground hover:bg-muted rounded transition-colors outline-none">
         <span className="text-lg">{languages[locale as keyof typeof languages]?.flag || '🇳🇴'}</span>
         <span className="text-sm font-medium">{languages[locale as keyof typeof languages]?.label || 'Bokmål'}</span>
         <ChevronDown className="h-4 w-4" />
@@ -56,7 +56,7 @@ export function LanguageSwitcher() {
           >
             <span className="text-lg">{languages[loc as keyof typeof languages]?.flag}</span>
             <span className="text-sm font-medium flex-1">{languages[loc as keyof typeof languages]?.label}</span>
-            {locale === loc && <Check className="h-4 w-4 text-norwegian-blue" />}
+            {locale === loc && <Check className="h-4 w-4 text-primary" />}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

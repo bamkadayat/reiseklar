@@ -37,13 +37,13 @@ export function DashboardHeader({
   };
 
   return (
-    <header className="h-16 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-30">
+    <header className="h-16 bg-background border-b border-border sticky top-0 z-30">
       <div className="h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         {/* Left Side - Menu Button + Logo */}
         <div className="flex items-center gap-3">
           <button
             onClick={onMenuClick}
-            className="lg:hidden p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+            className="lg:hidden p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
             aria-label="Open menu"
           >
             <Menu className="w-6 h-6" />
@@ -53,12 +53,12 @@ export function DashboardHeader({
         {/* Right Side - Actions */}
         <div className="flex items-center gap-2 sm:gap-4 ml-auto">
           {/* User Profile */}
-          <div className="hidden md:flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer">
-            <div className="w-8 h-8 bg-norwegian-blue rounded-full flex items-center justify-center text-white font-semibold">
+          <div className="hidden md:flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-muted transition-colors cursor-pointer">
+            <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-semibold">
               {userName.charAt(0).toUpperCase()}
             </div>
             <div className="text-sm">
-              <p className="font-medium text-gray-900 dark:text-white"> {user?.name}</p>
+              <p className="font-medium text-foreground"> {user?.name}</p>
             </div>
           </div>
 
@@ -66,7 +66,7 @@ export function DashboardHeader({
           <button
             onClick={handleLogout}
             disabled={isLoggingOut}
-            className="p-2 text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             aria-label="Logout"
             title="Logout"
           >

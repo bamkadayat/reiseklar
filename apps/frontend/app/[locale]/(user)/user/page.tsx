@@ -37,7 +37,7 @@ export default function UserDashboardPage() {
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-norwegian-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Loading dashboard...</p>
+          <p className="text-muted-foreground">Loading dashboard...</p>
         </div>
       </div>
     );
@@ -47,10 +47,10 @@ export default function UserDashboardPage() {
     <div className="space-y-6 sm:space-y-8">
       {/* Welcome Section */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
           {t('welcome')}
         </h1>
-        <p className="mt-2 text-sm sm:text-base text-gray-600 dark:text-gray-400">
+        <p className="mt-2 text-sm sm:text-base text-muted-foreground">
           {t('welcomeMessage')}
         </p>
       </div>
@@ -95,15 +95,15 @@ export default function UserDashboardPage() {
       </div>
 
       {/* Recent Trips */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+      <div className="bg-card rounded-lg border border-border overflow-hidden">
+        <div className="px-6 py-4 border-b border-border">
+          <h2 className="text-lg font-semibold text-foreground">
             {t('recentTrips')}
           </h2>
         </div>
-        <div className="divide-y divide-gray-200 dark:divide-gray-700">
+        <div className="divide-y divide-border">
           {recentTrips.length === 0 ? (
-            <div className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
+            <div className="px-6 py-8 text-center text-muted-foreground">
               No recent trips yet. Start planning your first journey!
             </div>
           ) : (
@@ -126,27 +126,27 @@ export default function UserDashboardPage() {
               return (
                 <div
                   key={trip.id}
-                  className="px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                  className="px-6 py-4 hover:bg-muted transition-colors"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <Route className="w-4 h-4 text-norwegian-blue dark:text-blue-400" />
-                        <h3 className="font-medium text-gray-900 dark:text-white">
+                        <Route className="w-4 h-4 text-primary" />
+                        <h3 className="font-medium text-foreground">
                           {trip.origin} → {trip.destination}
                         </h3>
                       </div>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                      <p className="text-sm text-muted-foreground">
                         {trip.transportMode} • {trip.estimatedDuration}
                       </p>
                     </div>
                     <div className="flex items-center justify-between sm:justify-end gap-4">
-                      <span className="text-sm text-gray-600 dark:text-gray-400">{timeAgo}</span>
+                      <span className="text-sm text-muted-foreground">{timeAgo}</span>
                       <span
                         className={`px-3 py-1 text-xs font-medium rounded-full ${
                           trip.status === 'Completed'
-                            ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
-                            : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
+                            ? 'bg-primary/10 text-primary'
+                            : 'bg-accent/10 text-accent-foreground'
                         }`}
                       >
                         {trip.status}
@@ -162,22 +162,22 @@ export default function UserDashboardPage() {
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <button className="p-6 bg-white dark:bg-gray-800 border-2 border-norwegian-blue dark:border-blue-500 rounded-lg hover:bg-norwegian-blue hover:text-white transition-all group text-left">
-          <Route className="w-8 h-8 mb-3 text-norwegian-blue dark:text-blue-400 group-hover:text-white" />
-          <h3 className="font-semibold mb-1 text-gray-900 dark:text-white group-hover:text-white">{t('planNewRoute')}</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400 group-hover:text-white/90">
+        <button className="p-6 bg-card border-2 border-primary rounded-lg hover:bg-primary hover:text-primary-foreground transition-all group text-left">
+          <Route className="w-8 h-8 mb-3 text-primary group-hover:text-primary-foreground" />
+          <h3 className="font-semibold mb-1 text-foreground group-hover:text-primary-foreground">{t('planNewRoute')}</h3>
+          <p className="text-sm text-muted-foreground group-hover:text-primary-foreground/90">
             {t('planNewRouteDesc')}
           </p>
         </button>
-        <button className="p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow-md transition-all text-left">
-          <Clock className="w-8 h-8 mb-3 text-green-600 dark:text-green-400" />
-          <h3 className="font-semibold mb-1 text-gray-900 dark:text-white">{t('savedRoutes')}</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">{t('savedRoutesDesc')}</p>
+        <button className="p-6 bg-card border border-border rounded-lg hover:shadow-md transition-all text-left">
+          <Clock className="w-8 h-8 mb-3 text-primary" />
+          <h3 className="font-semibold mb-1 text-foreground">{t('savedRoutes')}</h3>
+          <p className="text-sm text-muted-foreground">{t('savedRoutesDesc')}</p>
         </button>
-        <button className="p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow-md transition-all text-left">
-          <Leaf className="w-8 h-8 mb-3 text-purple-600 dark:text-purple-400" />
-          <h3 className="font-semibold mb-1 text-gray-900 dark:text-white">{t('ecoStats')}</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">{t('ecoStatsDesc')}</p>
+        <button className="p-6 bg-card border border-border rounded-lg hover:shadow-md transition-all text-left">
+          <Leaf className="w-8 h-8 mb-3 text-primary" />
+          <h3 className="font-semibold mb-1 text-foreground">{t('ecoStats')}</h3>
+          <p className="text-sm text-muted-foreground">{t('ecoStatsDesc')}</p>
         </button>
       </div>
     </div>

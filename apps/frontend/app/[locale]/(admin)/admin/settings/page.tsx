@@ -103,8 +103,8 @@ export default function AdminSettingsPage() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-norwegian-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading settings...</p>
+          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading settings...</p>
         </div>
       </div>
     );
@@ -114,10 +114,10 @@ export default function AdminSettingsPage() {
     <div className="space-y-6 sm:space-y-8">
       {/* Page Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
           {t('title')}
         </h1>
-        <p className="mt-2 text-sm sm:text-base text-gray-600 dark:text-gray-400">
+        <p className="mt-2 text-sm sm:text-base text-muted-foreground">
           {t('description')}
         </p>
       </div>
@@ -125,44 +125,44 @@ export default function AdminSettingsPage() {
       {/* Settings Sections */}
       <div className="space-y-6">
         {/* General Settings */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
+        <div className="bg-card rounded-lg border border-border overflow-hidden">
+          <div className="px-6 py-4 border-b border-border bg-muted">
             <div className="flex items-center gap-3">
-              <Globe className="w-5 h-5 text-norwegian-blue dark:text-blue-400" />
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+              <Globe className="w-5 h-5 text-primary" />
+              <h2 className="text-lg font-semibold text-foreground">
                 {t('general')}
               </h2>
             </div>
           </div>
           <div className="p-6 space-y-4">
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="block text-sm font-medium text-muted-foreground">
                 {t('siteName')}
               </label>
               <input
                 type="text"
                 value={siteName}
                 onChange={(e) => setSiteName(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="w-full px-4 py-2 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-foreground"
               />
             </div>
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="block text-sm font-medium text-muted-foreground">
                 {t('siteDescription')}
               </label>
               <textarea
                 rows={3}
                 value={siteDescription}
                 onChange={(e) => setSiteDescription(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="w-full px-4 py-2 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-foreground"
               />
             </div>
-            <div className="flex items-center justify-between py-3 border-t border-gray-100 dark:border-gray-700">
+            <div className="flex items-center justify-between py-3 border-t border-border">
               <div className="flex-1">
-                <p className="font-medium text-gray-900 dark:text-white">
+                <p className="font-medium text-foreground">
                   {t('maintenanceMode')}
                 </p>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                <p className="text-sm text-muted-foreground mt-1">
                   {t('maintenanceModeDesc')}
                 </p>
               </div>
@@ -174,18 +174,18 @@ export default function AdminSettingsPage() {
                   onChange={(e) => setMaintenanceMode(e.target.checked)}
                   aria-label="Enable maintenance mode"
                 />
-                <div className="w-11 h-6 bg-gray-200 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
+                <div className="w-11 h-6 bg-input peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-border after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-destructive"></div>
               </label>
             </div>
           </div>
         </div>
 
         {/* Security Settings */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
+        <div className="bg-card rounded-lg border border-border overflow-hidden">
+          <div className="px-6 py-4 border-b border-border bg-muted">
             <div className="flex items-center gap-3">
-              <Shield className="w-5 h-5 text-norwegian-blue dark:text-blue-400" />
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+              <Shield className="w-5 h-5 text-primary" />
+              <h2 className="text-lg font-semibold text-foreground">
                 {t('security')}
               </h2>
             </div>
@@ -193,10 +193,10 @@ export default function AdminSettingsPage() {
           <div className="p-6 space-y-4">
             <div className="flex items-center justify-between py-3">
               <div className="flex-1">
-                <p className="font-medium text-gray-900 dark:text-white">
+                <p className="font-medium text-foreground">
                   {t('requireEmailVerification')}
                 </p>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                <p className="text-sm text-muted-foreground mt-1">
                   {t('requireEmailVerificationDesc')}
                 </p>
               </div>
@@ -210,15 +210,15 @@ export default function AdminSettingsPage() {
                   }
                   aria-label="Require email verification"
                 />
-                <div className="w-11 h-6 bg-gray-200 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-norwegian-blue"></div>
+                <div className="w-11 h-6 bg-input peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-border after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
               </label>
             </div>
-            <div className="flex items-center justify-between py-3 border-t border-gray-100 dark:border-gray-700">
+            <div className="flex items-center justify-between py-3 border-t border-border">
               <div className="flex-1">
-                <p className="font-medium text-gray-900 dark:text-white">
+                <p className="font-medium text-foreground">
                   {t('twoFactorAuth')}
                 </p>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                <p className="text-sm text-muted-foreground mt-1">
                   {t('twoFactorAuthDesc')}
                 </p>
               </div>
@@ -230,17 +230,17 @@ export default function AdminSettingsPage() {
                   onChange={(e) => setTwoFactorAuth(e.target.checked)}
                   aria-label="Enable two-factor authentication"
                 />
-                <div className="w-11 h-6 bg-gray-200 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-norwegian-blue"></div>
+                <div className="w-11 h-6 bg-input peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-border after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
               </label>
             </div>
-            <div className="space-y-2 border-t border-gray-100 dark:border-gray-700 pt-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <div className="space-y-2 border-t border-border pt-4">
+              <label className="block text-sm font-medium text-muted-foreground">
                 {t('sessionTimeout')}
               </label>
               <select
                 value={sessionTimeout}
                 onChange={(e) => setSessionTimeout(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="w-full px-4 py-2 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-foreground"
               >
                 <option value="15">15 minutes</option>
                 <option value="30">30 minutes</option>
@@ -252,18 +252,18 @@ export default function AdminSettingsPage() {
         </div>
 
         {/* API Settings */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
+        <div className="bg-card rounded-lg border border-border overflow-hidden">
+          <div className="px-6 py-4 border-b border-border bg-muted">
             <div className="flex items-center gap-3">
-              <Key className="w-5 h-5 text-norwegian-blue dark:text-blue-400" />
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+              <Key className="w-5 h-5 text-primary" />
+              <h2 className="text-lg font-semibold text-foreground">
                 {t('apiSettings')}
               </h2>
             </div>
           </div>
           <div className="p-6 space-y-4">
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="block text-sm font-medium text-muted-foreground">
                 {t('apiKey')}
               </label>
               <div className="flex gap-2">
@@ -271,89 +271,89 @@ export default function AdminSettingsPage() {
                   type="password"
                   value="••••••••••••••••"
                   readOnly
-                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="flex-1 px-4 py-2 border border-input rounded-lg bg-muted text-foreground"
                 />
-                <button className="px-4 py-2 bg-norwegian-blue text-white font-medium rounded-lg hover:bg-norwegian-blue-600 transition-colors">
+                <button className="px-4 py-2 bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition-colors">
                   {t('regenerate')}
                 </button>
               </div>
             </div>
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="block text-sm font-medium text-muted-foreground">
                 {t('rateLimitPerHour')}
               </label>
               <input
                 type="number"
                 value={rateLimit}
                 onChange={(e) => setRateLimit(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="w-full px-4 py-2 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-foreground"
               />
             </div>
           </div>
         </div>
 
         {/* Email Settings */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
+        <div className="bg-card rounded-lg border border-border overflow-hidden">
+          <div className="px-6 py-4 border-b border-border bg-muted">
             <div className="flex items-center gap-3">
-              <Mail className="w-5 h-5 text-norwegian-blue dark:text-blue-400" />
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+              <Mail className="w-5 h-5 text-primary" />
+              <h2 className="text-lg font-semibold text-foreground">
                 {t('email')}
               </h2>
             </div>
           </div>
           <div className="p-6 space-y-4">
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="block text-sm font-medium text-muted-foreground">
                 {t('fromEmail')}
               </label>
               <input
                 type="email"
                 value={fromEmail}
                 onChange={(e) => setFromEmail(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="w-full px-4 py-2 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-foreground"
               />
             </div>
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="block text-sm font-medium text-muted-foreground">
                 {t('fromName')}
               </label>
               <input
                 type="text"
                 value={fromName}
                 onChange={(e) => setFromName(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="w-full px-4 py-2 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-foreground"
               />
             </div>
           </div>
         </div>
 
         {/* Preferences */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
+        <div className="bg-card rounded-lg border border-border overflow-hidden">
+          <div className="px-6 py-4 border-b border-border bg-muted">
             <div className="flex items-center gap-3">
-              <Palette className="w-5 h-5 text-norwegian-blue dark:text-blue-400" />
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+              <Palette className="w-5 h-5 text-primary" />
+              <h2 className="text-lg font-semibold text-foreground">
                 Preferences
               </h2>
             </div>
           </div>
           <div className="p-6 space-y-4">
             <div className="space-y-2">
-              <label htmlFor="dashboard-theme" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label htmlFor="dashboard-theme" className="block text-sm font-medium text-muted-foreground">
                 Dashboard Theme
               </label>
               <select
                 id="dashboard-theme"
                 value={theme}
                 onChange={(e) => setTheme(e.target.value as 'light' | 'dark' | 'system')}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="w-full px-4 py-2 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-foreground"
               >
                 <option value="light">Light</option>
                 <option value="dark">Dark</option>
                 <option value="system">System</option>
               </select>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 Choose your preferred dashboard theme appearance
               </p>
             </div>
@@ -364,14 +364,14 @@ export default function AdminSettingsPage() {
         <div className="flex justify-end gap-4">
           <button
             onClick={() => window.location.reload()}
-            className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            className="px-6 py-3 border border-input text-muted-foreground font-medium rounded-lg hover:bg-muted transition-colors"
           >
             {t('cancel')}
           </button>
           <button
             onClick={handleSave}
             disabled={saving}
-            className="px-8 py-3 bg-norwegian-blue text-white font-medium rounded-lg hover:bg-norwegian-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-8 py-3 bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {saving ? 'Saving...' : t('saveChanges')}
           </button>
@@ -384,9 +384,9 @@ export default function AdminSettingsPage() {
           <AlertDialogHeader>
             <div className="flex items-center gap-3">
               {alertType === 'success' ? (
-                <CheckCircle2 className="w-6 h-6 text-green-600 dark:text-green-400" />
+                <CheckCircle2 className="w-6 h-6 text-primary" />
               ) : (
-                <XCircle className="w-6 h-6 text-red-600 dark:text-red-400" />
+                <XCircle className="w-6 h-6 text-destructive" />
               )}
               <AlertDialogTitle>
                 {alertType === 'success' ? 'Success' : 'Error'}
@@ -399,7 +399,7 @@ export default function AdminSettingsPage() {
           <AlertDialogFooter>
             <AlertDialogAction
               onClick={() => setAlertOpen(false)}
-              className="bg-norwegian-blue hover:bg-norwegian-blue-600"
+              className="bg-norwegian-blue hover:bg-primary/90"
             >
               OK
             </AlertDialogAction>

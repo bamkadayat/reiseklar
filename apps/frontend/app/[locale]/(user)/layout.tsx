@@ -27,7 +27,7 @@ export default function UserLayout({
       <div className="flex h-screen items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-norwegian-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+          <p className="text-muted-foreground">Loading...</p>
         </div>
       </div>
     );
@@ -39,7 +39,7 @@ export default function UserLayout({
 
   return (
     <ThemeProvider initialTheme={user?.theme}>
-      <div className="flex h-screen bg-gray-50 dark:bg-gray-900 overflow-hidden">
+      <div className="flex h-screen bg-background overflow-hidden">
         {/* Sidebar */}
         <UserSidebar
           isOpen={isSidebarOpen}
@@ -57,7 +57,7 @@ export default function UserLayout({
           />
 
           {/* Main Content Area */}
-          <main className="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900">
+          <main className="flex-1 overflow-y-auto bg-background">
             <div className="max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
               {children}
             </div>
