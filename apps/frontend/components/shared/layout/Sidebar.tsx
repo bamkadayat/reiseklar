@@ -148,7 +148,9 @@ export function Sidebar({ sections, bottomItems, isOpen, onClose, logo, showLang
                 <div className="space-y-1">
                   {section.items.map((item) => {
                     const Icon = item.icon;
-                    const isActive = pathname === item.href;
+                    // Remove locale prefix from pathname for comparison
+                    const pathnameWithoutLocale = pathname.replace(/^\/(en|nb)/, '');
+                    const isActive = pathnameWithoutLocale === item.href || pathname === item.href;
 
                     return (
                       <Link
@@ -189,7 +191,9 @@ export function Sidebar({ sections, bottomItems, isOpen, onClose, logo, showLang
           <div className="px-3 py-4 border-t border-border space-y-1 flex-shrink-0">
             {bottomItems.map((item) => {
               const Icon = item.icon;
-              const isActive = pathname === item.href;
+              // Remove locale prefix from pathname for comparison
+              const pathnameWithoutLocale = pathname.replace(/^\/(en|nb)/, '');
+              const isActive = pathnameWithoutLocale === item.href || pathname === item.href;
 
               const handleClick = () => {
                 // If navigating to homepage, force remove dark class
