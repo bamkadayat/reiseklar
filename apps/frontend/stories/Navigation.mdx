@@ -1,0 +1,80 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Navigation/Overview" />
+
+# Navigation Components
+
+The Reiseklar app uses a comprehensive navigation system with responsive design and accessibility features.
+
+## Navbar
+
+The main navigation bar (`components/shared/navigation/Navbar.tsx`) includes:
+
+### Features
+- **Responsive Design**: Adapts seamlessly between desktop and mobile views
+- **Authentication State**: Shows different options for logged-in vs logged-out users
+- **Language Switcher**: Toggle between English and Norwegian
+- **Mobile Menu**: Full-screen overlay menu for mobile devices
+- **Keyboard Navigation**: ESC key closes mobile menu
+- **Accessibility**: Proper ARIA labels and keyboard support
+
+### User States
+
+#### Unauthenticated Users
+- Home link
+- About link
+- Sign In button
+- Sign Up button
+- Language switcher
+
+#### Authenticated Users
+- Home link
+- About link
+- Profile dropdown with:
+  - User Dashboard
+  - Admin Dashboard (if admin)
+  - Profile Settings
+  - Logout
+
+### Mobile Behavior
+- Hamburger menu toggle
+- Full-screen overlay
+- Body scroll lock when open
+- Touch-friendly tap targets
+
+## Technical Details
+
+### Dependencies
+- `next-intl` for internationalization
+- `next/image` for optimized logo
+- Redux for authentication state
+- Lucide React for icons
+
+### Accessibility
+- Semantic HTML (`<nav>` element)
+- ARIA labels on interactive elements
+- Keyboard navigation support
+- Focus management in mobile menu
+- Skip links (recommended addition)
+
+## Usage Example
+
+```tsx
+import { Navbar } from '@/components/shared/navigation/Navbar';
+
+export default function Layout({ children }) {
+  return (
+    <>
+      <Navbar />
+      <main>{children}</main>
+    </>
+  );
+}
+```
+
+## Customization
+
+The navbar uses Tailwind CSS classes and can be customized through:
+- Theme colors in `tailwind.config.js`
+- Translation keys in `messages/en.json` and `messages/no.json`
+- Logo replacement in `/public/images/logo.png`

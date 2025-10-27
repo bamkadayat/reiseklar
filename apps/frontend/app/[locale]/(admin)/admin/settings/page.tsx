@@ -166,12 +166,13 @@ export default function AdminSettingsPage() {
                   {t('maintenanceModeDesc')}
                 </p>
               </div>
-              <label className="relative inline-flex items-center cursor-pointer ml-4">
+              <label className="relative inline-flex items-center cursor-pointer ml-4" aria-label="Toggle maintenance mode">
                 <input
                   type="checkbox"
                   className="sr-only peer"
                   checked={maintenanceMode}
                   onChange={(e) => setMaintenanceMode(e.target.checked)}
+                  aria-label="Enable maintenance mode"
                 />
                 <div className="w-11 h-6 bg-gray-200 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
               </label>
@@ -199,7 +200,7 @@ export default function AdminSettingsPage() {
                   {t('requireEmailVerificationDesc')}
                 </p>
               </div>
-              <label className="relative inline-flex items-center cursor-pointer ml-4">
+              <label className="relative inline-flex items-center cursor-pointer ml-4" aria-label="Toggle email verification requirement">
                 <input
                   type="checkbox"
                   className="sr-only peer"
@@ -207,6 +208,7 @@ export default function AdminSettingsPage() {
                   onChange={(e) =>
                     setRequireEmailVerification(e.target.checked)
                   }
+                  aria-label="Require email verification"
                 />
                 <div className="w-11 h-6 bg-gray-200 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-norwegian-blue"></div>
               </label>
@@ -220,12 +222,13 @@ export default function AdminSettingsPage() {
                   {t('twoFactorAuthDesc')}
                 </p>
               </div>
-              <label className="relative inline-flex items-center cursor-pointer ml-4">
+              <label className="relative inline-flex items-center cursor-pointer ml-4" aria-label="Toggle two-factor authentication">
                 <input
                   type="checkbox"
                   className="sr-only peer"
                   checked={twoFactorAuth}
                   onChange={(e) => setTwoFactorAuth(e.target.checked)}
+                  aria-label="Enable two-factor authentication"
                 />
                 <div className="w-11 h-6 bg-gray-200 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-norwegian-blue"></div>
               </label>
@@ -337,10 +340,11 @@ export default function AdminSettingsPage() {
           </div>
           <div className="p-6 space-y-4">
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label htmlFor="dashboard-theme" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Dashboard Theme
               </label>
               <select
+                id="dashboard-theme"
                 value={theme}
                 onChange={(e) => setTheme(e.target.value as 'light' | 'dark' | 'system')}
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-norwegian-blue focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"

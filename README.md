@@ -9,6 +9,8 @@
 
 *Reiseklar* ("ready to travel" in Norwegian) helps commuters in Norway plan daily routes using real-time data from **Entur** and weather insights from **Yr**.
 
+This is a technical demonstration built to showcase modern web development skills, not a commercial product competing with established services like Ruter or Entur.
+
 Built with **Next.js 14**, **TypeScript**, and modern best practices.
 
 [Features](#features) • [Tech Stack](#tech-stack) • [Getting Started](#getting-started) • [Architecture](#architecture) • [Database Schema](#database-schema)

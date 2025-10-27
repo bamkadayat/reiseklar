@@ -331,12 +331,21 @@ export function JourneyResults({
                 journeys.map((journey, index) => (
                   <div
                     key={index}
+                    role="button"
+                    tabIndex={0}
                     onClick={() => setSelectedJourneyIndex(index)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setSelectedJourneyIndex(index);
+                      }
+                    }}
                     className={`cursor-pointer transition-all ${
                       selectedJourneyIndex === index
                         ? 'ring-2 ring-blue-500 rounded-xl'
                         : ''
                     }`}
+                    aria-label={`Select journey option ${index + 1}`}
                   >
                     <JourneyCard
                       journey={journey}

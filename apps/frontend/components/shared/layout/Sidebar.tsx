@@ -41,8 +41,16 @@ export function Sidebar({ sections, bottomItems, isOpen, onClose, logo, showLang
       {/* Mobile Overlay */}
       {isOpen && (
         <div
+          role="button"
+          tabIndex={0}
           className="fixed inset-0 bg-black/50 z-40 lg:hidden"
           onClick={onClose}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape' || e.key === 'Enter') {
+              onClose();
+            }
+          }}
+          aria-label="Close sidebar"
         />
       )}
 
