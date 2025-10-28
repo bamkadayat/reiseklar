@@ -2,23 +2,25 @@
 
 import { SignInForm } from '@/components/auth/signIn/SignInForm';
 import { useAuth } from '@/contexts/AuthContext';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { useEffect } from 'react';
 
 export default function SignInPage() {
   const { isAuthenticated, isCheckingAuth, user } = useAuth();
   const router = useRouter();
+  const params = useParams();
+  const locale = params.locale as string;
 
   useEffect(() => {
     if (!isCheckingAuth && isAuthenticated && user) {
-      // Redirect based on user role
+      // Redirect based on user role with locale prefix
       if (user.role === 'ADMIN') {
-        router.push('/admin');
+        router.push(`/${locale}/admin`);
       } else {
-        router.push('/user');
+        router.push(`/${locale}/user`);
       }
     }
-  }, [isAuthenticated, isCheckingAuth, user, router]);
+  }, [isAuthenticated, isCheckingAuth, user, router, locale]);
 
   if (isCheckingAuth) {
     return (

@@ -1,12 +1,10 @@
 import { ReactNode } from 'react';
 import { PublicPageWrapper } from '@/components/shared/layout/PublicPageWrapper';
 
-export default function AuthLayout({ children }: { children: ReactNode }) {
+export default function PublicLayout({ children }: { children: ReactNode }) {
   return (
     <PublicPageWrapper>
-      <div className="flex items-center justify-center min-h-full py-12">
-        {children}
-      </div>
+      {children}
     </PublicPageWrapper>
   );
 }

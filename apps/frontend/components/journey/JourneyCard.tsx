@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Train, Bus, Cable, Ship, ChevronDown, ChevronUp, Plane, Bookmark, Check } from "lucide-react";
+import { Train, Bus, Cable, Ship, ChevronDown, ChevronUp, Plane, Bookmark, Check, ExternalLink } from "lucide-react";
 import { IoMdWalk } from "react-icons/io";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { tripsService } from "@/lib/api/trips.service";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface JourneyCardProps {
   journey: any;
@@ -101,6 +102,7 @@ export function JourneyCard({ journey, from, fromData, toData }: JourneyCardProp
   const [expandedLegs, setExpandedLegs] = useState<Set<number>>(new Set());
   const [isSaving, setIsSaving] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const [existingTripId, setExistingTripId] = useState<string | null>(null);
 
   const toggleLegExpansion = (index: number) => {
     const newExpanded = new Set(expandedLegs);
@@ -123,9 +125,14 @@ export function JourneyCard({ journey, from, fromData, toData }: JourneyCardProp
       return;
     }
 
+    // Prevent multiple clicks while saving or already saved this exact route
+    if (isSaving || existingTripId) {
+      return;
+    }
+
     setIsSaving(true);
     try {
-      await tripsService.createTrip({
+      const newTrip = await tripsService.createTrip({
         origin: {
           label: fromData.label,
           lat: fromData.lat,
@@ -139,13 +146,27 @@ export function JourneyCard({ journey, from, fromData, toData }: JourneyCardProp
           address: toData.label,
         },
         accessibility: 'none',
+        routeData: {
+          startTime: journey.startTime,
+          endTime: journey.endTime,
+          duration: journey.duration,
+          legs: journey.legs,
+        },
       });
 
+      setExistingTripId(newTrip.id);
       setIsSaved(true);
-      setTimeout(() => setIsSaved(false), 3000);
     } catch (error: any) {
       console.error('Error saving trip:', error);
-      alert(error.message || 'Failed to save trip. Please try again.');
+
+      // Check if it's a duplicate route error (409 status)
+      if (error.response?.data?.data && error.statusCode === 409) {
+        // Route already exists, set the existing trip ID
+        setExistingTripId(error.response.data.data.id);
+        setIsSaved(true);
+      } else {
+        alert(error.message || 'Failed to save trip. Please try again.');
+      }
     } finally {
       setIsSaving(false);
     }
@@ -349,34 +370,46 @@ export function JourneyCard({ journey, from, fromData, toData }: JourneyCardProp
           ))}
         </div>
 
-        {/* Save Button */}
+        {/* Save Button / See Route Link */}
         <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-gray-100">
-          <Button
-            onClick={handleSaveTrip}
-            disabled={isSaving || isSaved}
-            className={`w-full flex items-center justify-center gap-2 py-2.5 sm:py-3 rounded-lg font-semibold transition-all text-sm sm:text-base ${
-              isSaved
-                ? "bg-green-600 hover:bg-green-700 text-white"
-                : "bg-norwegian-blue hover:bg-norwegian-blue-700 text-white"
-            }`}
-          >
-            {isSaving ? (
-              <>
-                <div className="animate-spin rounded-full h-3.5 w-3.5 sm:h-4 sm:w-4 border-b-2 border-white"></div>
-                <span>Lagrer...</span>
-              </>
-            ) : isSaved ? (
-              <>
+          {existingTripId ? (
+            <div className="space-y-2">
+              <Button
+                disabled
+                className="w-full flex items-center justify-center gap-2 py-2.5 sm:py-3 rounded-lg font-semibold text-sm sm:text-base bg-green-600 text-white cursor-not-allowed opacity-90"
+              >
                 <Check className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span>Lagret!</span>
-              </>
-            ) : (
-              <>
-                <Bookmark className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span>Lagre rute</span>
-              </>
-            )}
-          </Button>
+                <span>Rute lagret!</span>
+              </Button>
+              <Link href="/user/routes" className="block">
+                <Button
+                  variant="outline"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 sm:py-3 rounded-lg font-semibold text-sm sm:text-base border-2 border-norwegian-blue text-norwegian-blue hover:bg-norwegian-blue hover:text-white transition-all"
+                >
+                  <ExternalLink className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span>Se lagret rute</span>
+                </Button>
+              </Link>
+            </div>
+          ) : (
+            <Button
+              onClick={handleSaveTrip}
+              disabled={isSaving}
+              className="w-full flex items-center justify-center gap-2 py-2.5 sm:py-3 rounded-lg font-semibold transition-all text-sm sm:text-base bg-norwegian-blue hover:bg-norwegian-blue-700 text-white disabled:opacity-50"
+            >
+              {isSaving ? (
+                <>
+                  <div className="animate-spin rounded-full h-3.5 w-3.5 sm:h-4 sm:w-4 border-b-2 border-white"></div>
+                  <span>Lagrer...</span>
+                </>
+              ) : (
+                <>
+                  <Bookmark className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span>Lagre rute</span>
+                </>
+              )}
+            </Button>
+          )}
         </div>
       </CardContent>
     </Card>

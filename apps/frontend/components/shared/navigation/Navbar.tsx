@@ -10,14 +10,24 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { useAppSelector } from "@/store/hooks";
+import { ServerUser } from "@/lib/server/auth";
 
-export function Navbar() {
+interface NavbarProps {
+  initialUser: ServerUser | null;
+}
+
+export function Navbar({ initialUser }: NavbarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const t = useTranslations("nav");
   const { logout } = useAuth();
-  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
+  const { user: reduxUser, isAuthenticated: reduxIsAuthenticated, isCheckingAuth } = useAppSelector((state) => state.auth);
   const router = useRouter();
+
+  // Use server-side user initially, then switch to Redux after hydration
+  // This prevents flickering on page load
+  const user = isCheckingAuth ? initialUser : (reduxUser || initialUser);
+  const isAuthenticated = isCheckingAuth ? (initialUser !== null) : reduxIsAuthenticated;
 
   const handleLogout = async () => {
     try {

@@ -40,11 +40,9 @@ export function SignInForm() {
     try {
       await login(data.email, data.password);
 
-      // Small delay to ensure user state is updated
-      setTimeout(() => {
-        // The redirect will be handled by the page's useEffect
-        // which checks the user role
-      }, 100);
+      // After successful login, the redux store is updated
+      // We need to wait a tick for the state to be available
+      // Note: The redirect is handled by the page's useEffect which checks user.role
     } catch (error) {
       console.error('Login error:', error);
       setError('email', {

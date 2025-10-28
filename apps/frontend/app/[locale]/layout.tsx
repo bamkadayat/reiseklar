@@ -7,6 +7,7 @@ import { AuthProvider } from '@/contexts/AuthContext';
 import { ReduxProvider } from '@/components/providers/ReduxProvider';
 import { AppInitializer } from '@/components/AppInitializer';
 import { locales } from '@/i18n';
+import { getServerUser } from '@/lib/server/auth';
 import '../globals.css';
 
 export function generateStaticParams() {
@@ -28,6 +29,9 @@ export default async function LocaleLayout({
 
   const messages = await getMessages();
 
+  // Get user from server-side to prevent auth flickering
+  const serverUser = await getServerUser();
+
   return (
     <html lang={locale} suppressHydrationWarning>
       <body suppressHydrationWarning>
@@ -36,7 +40,7 @@ export default async function LocaleLayout({
             <AppInitializer>
               <AuthProvider>
                 <div className="flex flex-col min-h-screen">
-                  <ConditionalNavbar />
+                  <ConditionalNavbar initialUser={serverUser} />
                   <main className="flex-1">
                     {children}
                   </main>

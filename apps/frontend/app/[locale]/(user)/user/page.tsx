@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { StatCard } from '@/components/dashboard/shared/StatCard';
+import { DashboardSkeleton } from '@/components/dashboard/shared/DashboardSkeleton';
 import { Route, Clock, Leaf, TrendingUp } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { dashboardService } from '@/lib/api/dashboard.service';
@@ -33,14 +34,7 @@ export default function UserDashboardPage() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-norwegian-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading dashboard...</p>
-        </div>
-      </div>
-    );
+    return <DashboardSkeleton />;
   }
 
   return (

@@ -22,6 +22,8 @@ export interface Trip {
   originId: string;
   destinationId: string;
   accessibility: string;
+  routeHash?: string | null;
+  routeData?: any | null;
   createdAt: string;
   origin?: Place;
   destination?: Place;
@@ -54,6 +56,12 @@ export interface CreateTripRequest {
     address?: string;
   };
   accessibility?: string;
+  routeData?: {
+    startTime: string;
+    endTime: string;
+    duration: number;
+    legs: any[];
+  };
 }
 
 /**

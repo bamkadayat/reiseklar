@@ -1,6 +1,7 @@
 'use client';
 
 import { HeroSection } from '@/components/landing/HeroSection';
+import { PublicPageWrapper } from '@/components/shared/layout/PublicPageWrapper';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 
@@ -15,7 +16,7 @@ const NewsSection = dynamic(() => import('@/components/landing/NewsSection').the
 
 export default function Home() {
   return (
-    <>
+    <PublicPageWrapper>
       {/* Skip to main content link for accessibility */}
       <a
         href="#main-content"
@@ -39,6 +40,6 @@ export default function Home() {
           </div>
         </section>
       </main>
-    </>
+    </PublicPageWrapper>
   );
 }

@@ -110,12 +110,16 @@ model Trip {
   originId      String
   destinationId String
   accessibility String   @default("none")
+  routeHash     String?  // Hash of route details to prevent duplicate saves
+  routeData     Json?    // Store journey details (startTime, endTime, duration, legs)
   createdAt     DateTime @default(now())
 
   user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   origin      Place   @relation("TripOrigin", fields: [originId], references: [id])
   destination Place   @relation("TripDestination", fields: [destinationId], references: [id])
   alerts      Alert[]
+
+  @@index([userId, routeHash])
 }
 
 
