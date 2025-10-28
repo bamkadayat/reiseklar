@@ -2,7 +2,7 @@ import { prisma } from '../utils/prisma';
 import { hashPassword, comparePassword, generateVerificationCode, hashVerificationCode, compareVerificationCode, generateResetToken, hashResetToken, compareResetToken } from '../utils/password';
 import { generateTokenPair, verifyToken } from '../utils/jwt';
 import { TokenPair } from '../types';
-import { sendVerificationEmail, sendPasswordResetEmail } from './email.service';
+import { sendVerificationEmail, sendPasswordResetEmail, sendWelcomeEmail } from './email.service';
 
 const VERIFICATION_EXPIRY_MINUTES = 10;
 const MAX_VERIFICATION_ATTEMPTS = 5;
@@ -417,7 +417,7 @@ export class AuthService {
 
     if (user) {
       // Link Google account to existing user
-      return await prisma.user.update({
+      const updatedUser = await prisma.user.update({
         where: { id: user.id },
         data: {
           googleId,
@@ -426,10 +426,15 @@ export class AuthService {
           emailVerifiedAt: user.emailVerifiedAt || new Date(), // Auto-verify if from Google
         },
       });
+
+      // Send welcome email for newly linked Google account
+      await sendWelcomeEmail(email, name || email.split('@')[0]);
+
+      return updatedUser;
     }
 
     // Create new user with Google account
-    return await prisma.user.create({
+    const newUser = await prisma.user.create({
       data: {
         email,
         name,
@@ -439,6 +444,11 @@ export class AuthService {
         emailVerifiedAt: new Date(), // Google emails are pre-verified
       },
     });
+
+    // Send welcome email to new user
+    await sendWelcomeEmail(email, name || email.split('@')[0]);
+
+    return newUser;
   }
 
   // Request password reset

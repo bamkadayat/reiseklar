@@ -375,8 +375,9 @@ export class AuthController {
           maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         });
 
-        // Redirect to frontend success page
-        const successUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/user`;
+        // Redirect to frontend success page based on user role
+        const basePath = user.role === 'ADMIN' ? '/admin' : '/user';
+        const successUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}${basePath}`;
         res.redirect(successUrl);
       } catch (error) {
         console.error('Google OAuth callback error:', error);
