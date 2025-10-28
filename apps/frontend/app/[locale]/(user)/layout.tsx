@@ -2,10 +2,11 @@
 
 import { ReactNode, useState, useEffect } from 'react';
 import { UserSidebar } from '@/components/user/layout/UserSidebar';
+import { UserLayoutSkeleton } from '@/components/user/layout/UserLayoutSkeleton';
 import { DashboardHeader } from '@/components/shared/layout/DashboardHeader';
 import { useAuth } from '@/contexts/AuthContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 
 export default function UserLayout({
   children,
@@ -15,22 +16,17 @@ export default function UserLayout({
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { user, isCheckingAuth, isAuthenticated } = useAuth();
   const router = useRouter();
+  const params = useParams();
+  const locale = params.locale as string;
 
   useEffect(() => {
     if (!isCheckingAuth && !isAuthenticated) {
-      router.push('/signIn');
+      router.push(`/${locale}/signIn`);
     }
-  }, [isCheckingAuth, isAuthenticated, router]);
+  }, [isCheckingAuth, isAuthenticated, router, locale]);
 
   if (isCheckingAuth) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-norwegian-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading...</p>
-        </div>
-      </div>
-    );
+    return <UserLayoutSkeleton />;
   }
 
   if (!isAuthenticated) {

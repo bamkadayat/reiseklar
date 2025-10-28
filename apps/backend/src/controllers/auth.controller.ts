@@ -6,6 +6,18 @@ import { ZodError } from 'zod';
 import { generateTokenPair } from '../utils/jwt';
 import { hashPassword } from '../utils/password';
 
+// Cookie options for tokens
+// In production, use 'none' for cross-origin support with HTTPS, otherwise 'lax'
+const getCookieOptions = () => {
+  const isProduction = process.env.NODE_ENV === 'production';
+  return {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: (isProduction ? 'none' : 'lax') as 'none' | 'lax' | 'strict',
+    path: '/',
+  };
+};
+
 export class AuthController {
   // POST /api/auth/signup
   async signup(req: Request, res: Response) {
@@ -49,17 +61,14 @@ export class AuthController {
       const result = await authService.verifyEmail(email, code);
 
       // Set httpOnly cookies for tokens
+      const cookieOptions = getCookieOptions();
       res.cookie('accessToken', result.accessToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        ...cookieOptions,
         maxAge: 15 * 60 * 1000, // 15 minutes
       });
 
       res.cookie('refreshToken', result.refreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        ...cookieOptions,
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       });
 
@@ -135,17 +144,14 @@ export class AuthController {
       const result = await authService.login(email, password);
 
       // Set httpOnly cookies for tokens
+      const cookieOptions = getCookieOptions();
       res.cookie('accessToken', result.accessToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        ...cookieOptions,
         maxAge: 15 * 60 * 1000, // 15 minutes
       });
 
       res.cookie('refreshToken', result.refreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        ...cookieOptions,
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       });
 
@@ -195,17 +201,14 @@ export class AuthController {
       const result = await authService.refreshTokens(refreshToken);
 
       // Set new httpOnly cookies for tokens
+      const cookieOptions = getCookieOptions();
       res.cookie('accessToken', result.accessToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        ...cookieOptions,
         maxAge: 15 * 60 * 1000, // 15 minutes
       });
 
       res.cookie('refreshToken', result.refreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        ...cookieOptions,
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       });
 
@@ -361,17 +364,14 @@ export class AuthController {
         });
 
         // Set httpOnly cookies
+        const cookieOptions = getCookieOptions();
         res.cookie('accessToken', tokens.accessToken, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'strict',
+          ...cookieOptions,
           maxAge: 15 * 60 * 1000, // 15 minutes
         });
 
         res.cookie('refreshToken', tokens.refreshToken, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'strict',
+          ...cookieOptions,
           maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         });
 

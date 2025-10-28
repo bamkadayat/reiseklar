@@ -237,7 +237,7 @@ export class UserController {
         });
       }
 
-      const { origin, destination, accessibility } = req.body;
+      const { origin, destination, accessibility, routeData } = req.body;
 
       // Validate required fields
       if (!origin || !destination) {
@@ -291,21 +291,42 @@ export class UserController {
         });
       }
 
-      // Check if trip already exists
-      const existingTrip = await prisma.trip.findFirst({
-        where: {
-          userId: req.userId,
-          originId: originPlace.id,
-          destinationId: destinationPlace.id,
-        },
-      });
-
-      if (existingTrip) {
-        return res.status(200).json({
-          success: true,
-          data: existingTrip,
-          message: 'Trip already exists',
+      // Generate route hash if routeData is provided
+      let routeHash = null;
+      if (routeData) {
+        const crypto = require('crypto');
+        // Create hash from startTime, endTime, and leg details
+        const routeString = JSON.stringify({
+          startTime: routeData.startTime,
+          endTime: routeData.endTime,
+          legs: routeData.legs?.map((leg: any) => ({
+            mode: leg.mode,
+            line: leg.line?.publicCode,
+            from: leg.fromPlace?.name,
+            to: leg.toPlace?.name,
+          })),
         });
+        routeHash = crypto.createHash('sha256').update(routeString).digest('hex');
+
+        // Check if this exact route already exists
+        const existingRoute = await prisma.trip.findFirst({
+          where: {
+            userId: req.userId,
+            routeHash,
+          },
+          include: {
+            origin: true,
+            destination: true,
+          },
+        });
+
+        if (existingRoute) {
+          return res.status(409).json({
+            success: false,
+            error: 'This exact route is already saved',
+            data: existingRoute,
+          });
+        }
       }
 
       // Create trip
@@ -315,6 +336,8 @@ export class UserController {
           originId: originPlace.id,
           destinationId: destinationPlace.id,
           accessibility: accessibility || 'none',
+          routeHash,
+          routeData: routeData || null,
         },
         include: {
           origin: true,

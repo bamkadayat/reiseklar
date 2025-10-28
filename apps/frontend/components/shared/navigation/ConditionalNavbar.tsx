@@ -2,12 +2,17 @@
 
 import { usePathname } from 'next/navigation';
 import { Navbar } from './Navbar';
+import { ServerUser } from '@/lib/server/auth';
+
+interface ConditionalNavbarProps {
+  initialUser: ServerUser | null;
+}
 
 /**
  * Conditionally renders the global navbar
  * Hides navbar on dashboard pages (user and admin)
  */
-export function ConditionalNavbar() {
+export function ConditionalNavbar({ initialUser }: ConditionalNavbarProps) {
   const pathname = usePathname();
 
   // Hide navbar on dashboard pages
@@ -25,5 +30,5 @@ export function ConditionalNavbar() {
     return null;
   }
 
-  return <Navbar />;
+  return <Navbar initialUser={initialUser} />;
 }

@@ -5,7 +5,7 @@ import { AdminSidebar } from '@/components/admin/layout/AdminSidebar';
 import { DashboardHeader } from '@/components/shared/layout/DashboardHeader';
 import { useAuth } from '@/contexts/AuthContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 
 export default function AdminLayout({
   children,
@@ -15,16 +15,19 @@ export default function AdminLayout({
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { user, isCheckingAuth, isAuthenticated } = useAuth();
   const router = useRouter();
+  const params = useParams();
+  const locale = params.locale as string;
 
   useEffect(() => {
     if (!isCheckingAuth) {
       if (!isAuthenticated) {
-        router.push('/signIn');
+        router.push(`/${locale}/signIn`);
       } else if (user?.role !== 'ADMIN') {
-        router.push('/');
+        // If user is not admin, redirect to home page
+        router.push(`/${locale}`);
       }
     }
-  }, [isCheckingAuth, isAuthenticated, user, router]);
+  }, [isCheckingAuth, isAuthenticated, user, router, locale]);
 
   if (isCheckingAuth) {
     return (
