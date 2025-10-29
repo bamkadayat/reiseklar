@@ -116,7 +116,9 @@ export function JourneyCard({ journey, from, fromData, toData }: JourneyCardProp
 
   const handleSaveTrip = async () => {
     if (!isAuthenticated) {
-      router.push('/signIn');
+      // Store current URL to redirect back after login
+      const currentUrl = window.location.pathname + window.location.search;
+      router.push(`/signIn?callback=${encodeURIComponent(currentUrl)}`);
       return;
     }
 

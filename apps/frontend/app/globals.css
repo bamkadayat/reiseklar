@@ -109,9 +109,9 @@
     --radius: .3rem;
   }
   .dark {
-    --background: 219 93% 22%;        /* #04286D - Main background */
+    --background: 218 57% 21%;        /* #172554 - Main background (dashboard bg) */
     --foreground: 0 0% 100%;          /* #FFFFFF - Main text */
-    --card: 224 64% 33%;              /* #1E3A8A - Card backgrounds */
+    --card: 218 57% 21%;              /* #172554 - Card backgrounds (dashboard bg) */
     --card-foreground: 0 0% 100%;     /* #FFFFFF - Text on cards */
     --popover: 224 64% 33%;           /* #1E3A8A - Popover backgrounds */
     --popover-foreground: 0 0% 100%;  /* #FFFFFF - Popover text */
@@ -125,7 +125,7 @@
     --accent-foreground: 0 0% 100%;   /* #FFFFFF - Text on accent */
     --destructive: 0 63% 31%;         /* #7F1D1D - Destructive/error */
     --destructive-foreground: 0 0% 100%; /* #FFFFFF - Text on destructive */
-    --border: 226 71% 40%;            /* #1E40AF - Borders */
+    --border: 224 64% 33%;            /* #1E3A8A - Borders */
     --input: 224 64% 33%;             /* #1E3A8A - Input backgrounds */
     --ring: 209 99% 56%;              /* #2295FE - Focus rings */
     --chart-1: 209 99% 56%;           /* #2295FE */

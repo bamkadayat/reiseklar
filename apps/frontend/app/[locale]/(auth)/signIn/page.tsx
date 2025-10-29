@@ -2,25 +2,31 @@
 
 import { SignInForm } from '@/components/auth/signIn/SignInForm';
 import { useAuth } from '@/contexts/AuthContext';
-import { useRouter, useParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { useRouter, useParams, useSearchParams } from 'next/navigation';
+import { useEffect, Suspense } from 'react';
 
-export default function SignInPage() {
+function SignInContent() {
   const { isAuthenticated, isCheckingAuth, user } = useAuth();
   const router = useRouter();
   const params = useParams();
+  const searchParams = useSearchParams();
   const locale = params.locale as string;
+  const callbackUrl = searchParams.get('callback');
 
+  // Only redirect if user is already authenticated (e.g., page refresh)
   useEffect(() => {
     if (!isCheckingAuth && isAuthenticated && user) {
-      // Redirect based on user role with locale prefix
-      if (user.role === 'ADMIN') {
-        router.push(`/${locale}/admin`);
+      if (callbackUrl) {
+        router.push(callbackUrl);
       } else {
-        router.push(`/${locale}/user`);
+        if (user.role === 'ADMIN') {
+          router.push(`/${locale}/admin`);
+        } else {
+          router.push(`/${locale}/user`);
+        }
       }
     }
-  }, [isAuthenticated, isCheckingAuth, user, router, locale]);
+  }, [isAuthenticated, isCheckingAuth, user, router, locale, callbackUrl]);
 
   if (isCheckingAuth) {
     return (
@@ -36,7 +42,19 @@ export default function SignInPage() {
 
   return (
     <div className="w-full max-w-[500px] mx-auto p-4 mt-8 sm:mt-24">
-      <SignInForm />
+      <SignInForm callbackUrl={callbackUrl} />
     </div>
+  );
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-norwegian-blue"></div>
+      </div>
+    }>
+      <SignInContent />
+    </Suspense>
   );
 }

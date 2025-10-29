@@ -5,16 +5,24 @@ import { Button } from '@/components/ui/button';
 interface GoogleLoginButtonProps {
   disabled?: boolean;
   onClick?: () => void;
+  callbackUrl?: string | null;
 }
 
-export function GoogleLoginButton({ disabled, onClick }: GoogleLoginButtonProps) {
+export function GoogleLoginButton({ disabled, onClick, callbackUrl }: GoogleLoginButtonProps) {
   const handleGoogleLogin = () => {
     if (onClick) {
       onClick();
     } else {
-      // Redirect to backend Google OAuth endpoint
+      // Redirect to backend Google OAuth endpoint with callback URL as state
       const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
-      window.location.href = `${backendUrl}/api/auth/google`;
+      let url = `${backendUrl}/api/auth/google`;
+
+      // Pass callback URL as state parameter if it exists
+      if (callbackUrl) {
+        url += `?state=${encodeURIComponent(callbackUrl)}`;
+      }
+
+      window.location.href = url;
     }
   };
 
