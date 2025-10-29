@@ -2,6 +2,7 @@ import formData from 'form-data';
 import Mailgun from 'mailgun.js';
 import { getVerificationEmailTemplate } from '../templates/verification-email.template';
 import { getPasswordResetEmailTemplate } from '../templates/password-reset.template';
+import { getWelcomeEmailTemplate } from '../templates/welcome-email.template';
 
 /**
  * Initialize Mailgun client
@@ -71,5 +72,31 @@ export const sendPasswordResetEmail = async (email: string, resetToken: string):
 
     // Re-throw to handle in the calling function if needed
     throw new Error('Failed to send password reset email');
+  }
+};
+
+/**
+ * Send welcome email to new users (Google OAuth registration)
+ */
+export const sendWelcomeEmail = async (email: string, name: string): Promise<void> => {
+  try {
+    // Get email template
+    const { html, text } = getWelcomeEmailTemplate(name);
+
+    // Send email via Mailgun
+    const result = await mg.messages.create(process.env.MAILGUN_DOMAIN || '', {
+      from: process.env.MAILGUN_FROM || 'Reiseklar <no-reply@mail.reiseklar.dev>',
+      to: [email],
+      subject: 'Welcome to Reiseklar - Your Journey Starts Here!',
+      text: text,
+      html: html,
+      'h:Reply-To': process.env.MAILGUN_REPLY_TO || 'bamkadayat@gmail.com',
+    });
+
+    console.log(`✅ Welcome email sent to ${email}`, result);
+  } catch (error) {
+    console.error('❌ Failed to send welcome email:', error);
+    // Don't throw error - welcome email is not critical for the flow
+    // Just log the error and continue
   }
 };

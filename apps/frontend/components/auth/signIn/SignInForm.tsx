@@ -22,7 +22,11 @@ const signInSchema = z.object({
 
 type SignInFormData = z.infer<typeof signInSchema>;
 
-export function SignInForm() {
+interface SignInFormProps {
+  callbackUrl?: string | null;
+}
+
+export function SignInForm({ callbackUrl }: SignInFormProps) {
   const router = useRouter();
   const { login, user } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
@@ -38,11 +42,23 @@ export function SignInForm() {
 
   const onSubmit = async (data: SignInFormData) => {
     try {
-      await login(data.email, data.password);
+      const response = await login(data.email, data.password);
 
-      // After successful login, the redux store is updated
-      // We need to wait a tick for the state to be available
-      // Note: The redirect is handled by the page's useEffect which checks user.role
+      // After successful login, redirect to callback URL or default dashboard
+      // Small delay to ensure auth state is fully updated
+      setTimeout(() => {
+        if (callbackUrl) {
+          router.push(callbackUrl);
+        } else {
+          // Get updated user from auth context
+          const userRole = user?.role;
+          if (userRole === 'ADMIN') {
+            router.push('/admin');
+          } else {
+            router.push('/user');
+          }
+        }
+      }, 100);
     } catch (error) {
       console.error('Login error:', error);
       setError('email', {
@@ -136,7 +152,7 @@ export function SignInForm() {
           </div>
         </div>
 
-        <GoogleLoginButton disabled={isSubmitting} />
+        <GoogleLoginButton disabled={isSubmitting} callbackUrl={callbackUrl} />
       </CardContent>
       <CardFooter className="pb-8">
         <p className="text-center text-sm text-gray-600 w-full">

@@ -335,9 +335,13 @@ export class AuthController {
 
   // GET /api/auth/google - Initiate Google OAuth
   googleAuth(req: Request, res: Response, next: NextFunction) {
+    // Pass state parameter to preserve callback URL
+    const state = req.query.state as string | undefined;
+
     passport.authenticate('google', {
       scope: ['profile', 'email'],
       session: false,
+      state: state, // This will be passed back in the callback
     })(req, res, next);
   }
 
@@ -375,8 +379,20 @@ export class AuthController {
           maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         });
 
-        // Redirect to frontend success page
-        const successUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/user`;
+        // Check if there's a callback URL in the state parameter
+        const callbackUrl = req.query.state as string | undefined;
+        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+
+        let successUrl: string;
+        if (callbackUrl) {
+          // Redirect to the callback URL if it exists
+          successUrl = `${frontendUrl}${callbackUrl}`;
+        } else {
+          // Otherwise, redirect based on user role
+          const basePath = user.role === 'ADMIN' ? '/admin' : '/user';
+          successUrl = `${frontendUrl}${basePath}`;
+        }
+
         res.redirect(successUrl);
       } catch (error) {
         console.error('Google OAuth callback error:', error);
