@@ -81,17 +81,14 @@ export function Navbar({ initialUser }: NavbarProps) {
           <Link href="/" className="flex items-center gap-2 py-2 group">
             <div className="relative">
               <Image
-                src="/images/logo.webp"
+                src="/images/logo.svg"
                 alt="Reiseklar Logo"
-                width={40}
-                height={50}
+                width={155}
+                height={42}
                 loading="eager"
                 className="object-contain transition-transform duration-300 group-hover:scale-110"
               />
             </div>
-            <span className="text-2xl md:text-3xl font-bold text-norwegian-blue transition-all duration-300 group-hover:tracking-wide">
-              Reise<span className="text-klar-red">klar</span>
-            </span>
           </Link>
 
           {/* Desktop Navigation */}
