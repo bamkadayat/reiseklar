@@ -30,11 +30,16 @@ export default function Home() {
         <section
           className="relative w-full min-h-[50vh] flex items-center justify-center px-4 py-16 sm:py-20 bg-gradient-to-br from-[#012B6A] via-[#01286d] to-[#01409d]"
           aria-label="Search for travel routes"
+          style={{ containIntrinsicSize: '0 50vh' }}
         >
           <HeroSection />
         </section>
 
-        <section className="w-full max-w-5xl mx-auto px-4 py-12" aria-label="Weather and news information">
+        <section
+          className="w-full max-w-5xl mx-auto px-4 py-12"
+          aria-label="Weather and news information"
+          style={{ contentVisibility: 'auto', containIntrinsicSize: '0 500px' }}
+        >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <WeatherSection />
             <NewsSection />
