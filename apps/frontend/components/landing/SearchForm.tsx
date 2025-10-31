@@ -77,7 +77,7 @@ export function SearchForm() {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-6">
+    <div className="bg-blue-50 rounded-2xl shadow-xl p-4 sm:p-6">
       {/* Error message banner */}
       {errorMessage && (
         <div

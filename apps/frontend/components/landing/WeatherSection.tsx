@@ -251,36 +251,6 @@ export function WeatherSection() {
           </div>
         </div>
 
-        {/* Hourly Forecast - Next 24 Hours */}
-        <div className='md:mb-6'>
-          <h3 className="text-sm font-semibold text-gray-900 mb-3 uppercase tracking-wide">Next 24 Hours</h3>
-          <div className="bg-white rounded-xl p-4 shadow-sm overflow-x-auto" role="region" aria-label="Hourly weather forecast, scroll to see more">
-            <div className="flex gap-4">
-              {weather.hourlyToday.filter((_, index) => index % 2 === 0).map((hour, index) => (
-                <div key={index} className="flex flex-col items-center min-w-[56px] pb-1">
-                  <div className="text-xs font-medium text-gray-500 mb-2">
-                    {hour.hour.toString().padStart(2, '0')}
-                  </div>
-                  <div className="w-7 h-7 text-blue-500 mb-2">
-                    {getSmallWeatherIcon(hour.condition)}
-                  </div>
-                  <div className="text-base font-bold text-gray-900 mb-2">{hour.temperature}°</div>
-                  {hour.precipitation > 0 && (
-                    <div className="flex items-center gap-1 mb-1.5">
-                      <Droplets className="w-3 h-3 text-blue-500" aria-hidden="true" />
-                      <span className="text-xs text-blue-600 font-medium">{hour.precipitation}</span>
-                    </div>
-                  )}
-                  <div className="flex items-center gap-1 mt-auto">
-                    <Wind className="w-3 h-3 text-gray-500" aria-hidden="true" />
-                    <span className="text-xs text-gray-600">{hour.windSpeed}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
         {/* Weekly Forecast */}
         <div>
           <h3 className="text-sm font-semibold text-gray-900 mb-3 uppercase tracking-wide">{t('forecast')}</h3>

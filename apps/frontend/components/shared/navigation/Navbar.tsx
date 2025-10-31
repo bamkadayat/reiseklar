@@ -76,9 +76,9 @@ export function Navbar({ initialUser }: NavbarProps) {
     <>
   <nav className="sticky top-0 z-40 bg-card backdrop-blur-sm bg-opacity-95 shadow-sm border-b border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-3">
+        <div className="flex justify-between items-center py-1.5">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 py-2 group">
+          <Link href="/" className="flex items-center gap-2 py-1 group">
             <div className="relative">
               <Image
                 src="/images/logo.svg"
@@ -141,7 +141,7 @@ export function Navbar({ initialUser }: NavbarProps) {
                 {/* Sign Up Button */}
                 <Link
                   href="/signUp"
-                  className="flex items-center gap-2 text-primary px-4 py-2 rounded-lg hover:bg-muted font-medium text-base transition-all duration-200 border border-border shadow-sm hover:shadow-md"
+                  className="flex items-center gap-2 text-primary px-4 py-2 rounded-lg hover:bg-muted font-medium text-base transition-all duration-200"
                 >
                   <BiUserPlus className="w-5 h-5" />
                   <span className="hidden lg:inline">{t("register")}</span>

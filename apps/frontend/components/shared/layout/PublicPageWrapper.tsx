@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { CookieConsent } from '@/components/shared/CookieConsent';
 
 /**
  * PublicPageWrapper ensures that public pages always use light mode
@@ -36,5 +37,10 @@ export function PublicPageWrapper({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  return <>{children}</>;
+  return (
+    <>
+      {children}
+      <CookieConsent />
+    </>
+  );
 }
