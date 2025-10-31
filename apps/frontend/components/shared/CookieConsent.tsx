@@ -75,9 +75,9 @@ export function CookieConsent() {
   }
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 w-[400px] max-h-[500px] animate-slide-up">
-      <div className="bg-white border border-gray-200 rounded-lg shadow-lg flex flex-col max-h-[500px]">
-        <div className="flex-1 px-6 py-5 flex flex-col overflow-y-auto">
+    <div className="fixed inset-x-4 bottom-4 sm:bottom-4 sm:right-4 sm:left-auto sm:w-[400px] z-50 max-h-[90vh] sm:max-h-[500px] animate-slide-up">
+      <div className="bg-white border border-gray-200 rounded-lg shadow-lg flex flex-col max-h-[90vh] sm:max-h-[500px]">
+        <div className="flex-1 px-4 py-4 sm:px-6 sm:py-5 flex flex-col overflow-y-auto">
           {/* Message */}
           <div className="mb-4">
             <p className="text-sm text-gray-700 leading-relaxed mb-2">
@@ -155,18 +155,18 @@ export function CookieConsent() {
           )}
 
           {/* Buttons */}
-          <div className="flex flex-col gap-2 mt-auto">
+          <div className="flex flex-col gap-2 sm:gap-2 mt-auto">
             {showDetails ? (
               <>
                 <button
                   onClick={handleSavePreferences}
-                  className="w-full px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors duration-200"
+                  className="w-full px-4 py-3 sm:px-6 sm:py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors duration-200"
                 >
                   {t('savePreferences')}
                 </button>
                 <button
                   onClick={() => setShowDetails(false)}
-                  className="w-full px-6 py-2 text-gray-600 hover:text-gray-800 text-sm font-medium transition-colors duration-200"
+                  className="w-full px-4 py-2.5 sm:px-6 sm:py-2 text-gray-600 hover:text-gray-800 text-sm font-medium transition-colors duration-200"
                 >
                   {t('back')}
                 </button>
@@ -175,19 +175,19 @@ export function CookieConsent() {
               <>
                 <button
                   onClick={handleAcceptAll}
-                  className="w-full px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors duration-200"
+                  className="w-full px-4 py-3 sm:px-6 sm:py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors duration-200"
                 >
                   {t('acceptAll')}
                 </button>
                 <button
                   onClick={handleAcceptEssentialOnly}
-                  className="w-full px-6 py-2.5 bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-medium rounded-md transition-colors duration-200"
+                  className="w-full px-4 py-3 sm:px-6 sm:py-2.5 bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-medium rounded-md transition-colors duration-200"
                 >
                   {t('essentialOnly')}
                 </button>
                 <button
                   onClick={() => setShowDetails(true)}
-                  className="w-full px-6 py-2 text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors duration-200"
+                  className="w-full px-4 py-2.5 sm:px-6 sm:py-2 text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors duration-200"
                 >
                   {t('customize')}
                 </button>

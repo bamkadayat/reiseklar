@@ -58,7 +58,7 @@ export function UserSidebar({ isOpen, onClose }: UserSidebarProps) {
         text: 'Reiseklar',
         subtitle: t('userDashboard'),
       }}
-      showLanguageSwitcher={true}
+      showLanguageSwitcher={false}
       showNotifications={false}
       notificationCount={0}
     />

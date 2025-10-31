@@ -3,15 +3,16 @@
 import { HeroSection } from '@/components/landing/HeroSection';
 import { PublicPageWrapper } from '@/components/shared/layout/PublicPageWrapper';
 import dynamic from 'next/dynamic';
-import Image from 'next/image';
 
 // Lazy load non-critical sections for better performance
 const WeatherSection = dynamic(() => import('@/components/landing/WeatherSection').then(mod => ({ default: mod.WeatherSection })), {
-  loading: () => <div className="h-64 bg-gray-100 animate-pulse rounded-lg" />,
+  loading: () => <div className="min-h-[450px] bg-gray-100 animate-pulse rounded-2xl" />,
+  ssr: false,
 });
 
 const NewsSection = dynamic(() => import('@/components/landing/NewsSection').then(mod => ({ default: mod.NewsSection })), {
-  loading: () => <div className="h-64 bg-gray-100 animate-pulse rounded-lg" />,
+  loading: () => <div className="min-h-[450px] bg-gray-100 animate-pulse rounded-2xl" />,
+  ssr: false,
 });
 
 export default function Home() {

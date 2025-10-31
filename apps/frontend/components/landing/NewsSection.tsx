@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { ExternalLink, Calendar } from 'lucide-react';
 import { RiNewsFill } from 'react-icons/ri';
 import { useTranslations } from 'next-intl';
@@ -33,7 +33,6 @@ export function NewsSection() {
         setNews(data.news || []);
         setLoading(false);
       } catch (err) {
-        console.error('Error fetching news:', err);
         setError('Unable to load news');
         setLoading(false);
       }
@@ -42,7 +41,7 @@ export function NewsSection() {
     fetchNews();
   }, []);
 
-  const formatDate = (dateString: string) => {
+  const formatDate = useCallback((dateString: string) => {
     try {
       const date = new Date(dateString);
       const now = new Date();
@@ -64,24 +63,18 @@ export function NewsSection() {
     } catch {
       return dateString;
     }
-  };
+  }, []);
 
-  const stripHtml = (html: string) => {
-    const tmp = document.createElement('div');
-    tmp.innerHTML = html;
-    return tmp.textContent || tmp.innerText || '';
-  };
-
-  const truncateTitle = (title: string, maxLength: number = 60) => {
+  const truncateTitle = useCallback((title: string, maxLength: number = 60) => {
     if (title.length <= maxLength) {
       return title;
     }
     return title.substring(0, maxLength).trim() + '...';
-  };
+  }, []);
 
   if (loading) {
     return (
-      <div className="w-full h-full">
+      <div className="w-full h-full min-h-[450px]">
         <div className="rounded-2xl p-4 sm:p-6 bg-gradient-to-br from-blue-50 to-indigo-50 h-full flex flex-col">
           <div className="animate-pulse">
             {/* Header skeleton */}
@@ -92,7 +85,7 @@ export function NewsSection() {
 
             {/* News items skeleton */}
             <div className="flex-1 space-y-3">
-              {[...Array(5)].map((_, i) => (
+              {[...Array(3)].map((_, i) => (
                 <div key={i} className="bg-white rounded-lg p-4 shadow-sm">
                   <div className="space-y-2">
                     <div className="h-4 bg-gray-200 rounded w-full"></div>
@@ -113,7 +106,7 @@ export function NewsSection() {
 
   if (error || news.length === 0) {
     return (
-      <div className="w-full h-full">
+      <div className="w-full h-full min-h-[450px]">
         <div className="rounded-2xl p-4 sm:p-6 bg-gradient-to-br from-blue-50 to-indigo-50 h-full">
           <p className="text-red-700 text-center">
             {error || 'No news available at the moment'}
@@ -124,7 +117,7 @@ export function NewsSection() {
   }
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full min-h-[450px]">
       <div className="rounded-2xl p-4 sm:p-6 bg-gradient-to-br from-blue-50 to-indigo-50 h-full flex flex-col gap-4 sm:gap-6">
         {/* Header */}
         <div className="flex items-center gap-2">
