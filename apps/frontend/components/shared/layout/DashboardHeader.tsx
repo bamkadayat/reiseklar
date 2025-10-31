@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useAppSelector } from "@/store/hooks";
+import { LanguageSwitcher } from '@/components/shared/navigation/LanguageSwitcher';
 
 interface DashboardHeaderProps {
   onMenuClick: () => void;
@@ -52,6 +53,11 @@ export function DashboardHeader({
 
         {/* Right Side - Actions */}
         <div className="flex items-center gap-2 sm:gap-4 ml-auto">
+          {/* Language Switcher */}
+          <div className="mr-2">
+            <LanguageSwitcher />
+          </div>
+
           {/* User Profile */}
           <div className="hidden md:flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-muted transition-colors cursor-pointer">
             <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-semibold">

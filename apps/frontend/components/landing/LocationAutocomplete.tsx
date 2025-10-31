@@ -88,7 +88,6 @@ export function LocationAutocomplete({
         }
       } catch (error: any) {
         if (error.name !== 'AbortError') {
-          console.error('Error fetching locations:', error);
           setLocations([]);
           // Don't close dropdown if user is focused
           if (!isFocused) {
@@ -194,7 +193,6 @@ export function LocationAutocomplete({
               }
             }
           } catch (error) {
-            console.error('Error reverse geocoding:', error);
             // Use coordinates as fallback
             onChange('Your position', {
               id: `${latitude},${longitude}`,
@@ -212,7 +210,6 @@ export function LocationAutocomplete({
           setIsGettingLocation(false);
         },
         (error) => {
-          console.error('Error getting location:', error);
           let errorMessage = 'Unable to get your location. ';
 
           switch (error.code) {

@@ -80,7 +80,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
         text: 'Reiseklar',
         subtitle: t('adminPanel'),
       }}
-      showLanguageSwitcher={true}
+      showLanguageSwitcher={false}
       showNotifications={false}
       notificationCount={0}
     />

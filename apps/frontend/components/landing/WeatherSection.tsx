@@ -38,7 +38,6 @@ export function WeatherSection() {
             }
           }
         } catch (geocodeErr) {
-          console.error('Error fetching location name:', geocodeErr);
           // Continue with weather fetch even if geocoding fails
         }
 
@@ -61,28 +60,6 @@ export function WeatherSection() {
           humidity: Math.round(currentData.data.instant.details.relative_humidity),
           condition: currentData.data.next_1_hours?.summary?.symbol_code || 'unknown',
         };
-
-        // Process hourly data for next 24 hours
-        const hourlyToday = [];
-        const now = new Date();
-        const next24Hours = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-
-        for (const item of data.properties.timeseries) {
-          const itemDate = new Date(item.time);
-
-          if (itemDate >= now && itemDate <= next24Hours) {
-            hourlyToday.push({
-              time: item.time,
-              hour: itemDate.getHours(),
-              temperature: Math.round(item.data.instant.details.air_temperature),
-              condition: item.data.next_1_hours?.summary?.symbol_code || 'unknown',
-              precipitation: item.data.next_1_hours?.details?.precipitation_amount || 0,
-              windSpeed: Math.round(item.data.instant.details.wind_speed),
-            });
-          }
-
-          if (itemDate > next24Hours) break;
-        }
 
         // Process weekly forecast (next 7 days around noon)
         const forecast = [];
@@ -129,10 +106,9 @@ export function WeatherSection() {
           }
         }
 
-        setWeather({ current, hourlyToday, forecast });
+        setWeather({ current, forecast });
         setLoading(false);
       } catch (err) {
-        console.error('Error fetching weather:', err);
         setError('Unable to load weather data');
         setLoading(false);
       }
@@ -150,7 +126,6 @@ export function WeatherSection() {
             fetchWeather(lat, lon);
           },
           (err) => {
-            console.warn('Geolocation error:', err);
             // Fallback to Oslo if geolocation fails or is denied
             setLocationName('Oslo');
             fetchWeather(59.9139, 10.7522);
@@ -180,7 +155,7 @@ export function WeatherSection() {
 
   if (loading) {
     return (
-      <div className="w-full h-full">
+      <div className="w-full h-full min-h-[450px]">
         <div className="rounded-2xl p-8 shadow-sm border border-gray-100 h-full">
           <div className="animate-pulse">
             <div className="h-8 bg-gray-200 rounded w-48 mb-6"></div>
@@ -198,7 +173,7 @@ export function WeatherSection() {
 
   if (error || !weather) {
     return (
-      <div className="w-full h-full">
+      <div className="w-full h-full min-h-[450px]">
         <div className="rounded-2xl p-8 shadow-sm border border-gray-100 h-full">
           <p className="text-red-700 text-center">{error || 'Weather data unavailable'}</p>
         </div>
@@ -207,7 +182,7 @@ export function WeatherSection() {
   }
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full min-h-[450px]">
       <div className="rounded-2xl p-4 sm:p-6 bg-gradient-to-br from-blue-50 to-indigo-50 h-full flex flex-col gap-4 sm:gap-6">
         {/* Header */}
         <div className="flex items-center gap-2">

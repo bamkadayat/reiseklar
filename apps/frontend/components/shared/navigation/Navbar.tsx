@@ -36,7 +36,6 @@ export function Navbar({ initialUser }: NavbarProps) {
       setIsMobileMenuOpen(false);
       router.push('/signIn');
     } catch (error) {
-      console.error('Logout error:', error);
       setIsLoggingOut(false);
     }
   };
@@ -81,11 +80,11 @@ export function Navbar({ initialUser }: NavbarProps) {
           <Link href="/" className="flex items-center gap-2 py-1 group">
             <div className="relative">
               <Image
-                src="/images/logo.svg"
+                src="/images/dark-logo.svg"
                 alt="Reiseklar Logo"
                 width={155}
                 height={42}
-                loading="eager"
+                priority
                 className="object-contain transition-transform duration-300 group-hover:scale-110"
               />
             </div>
@@ -121,7 +120,7 @@ export function Navbar({ initialUser }: NavbarProps) {
                 <button
                   onClick={handleLogout}
                   disabled={isLoggingOut}
-                  className="flex items-center gap-2 text-destructive hover:text-destructive/80 px-4 py-2 rounded-lg hover:bg-destructive/10 font-medium text-base transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
+                  className="flex items-center gap-2 text-destructive hover:text-destructive/80 px-4 py-2 rounded-lg hover:bg-destructive/10 font-medium text-base transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <LogOut className={`w-5 h-5 ${isLoggingOut ? 'animate-pulse' : ''}`} />
                   <span className="hidden lg:inline">{isLoggingOut ? 'Logging out...' : 'Logout'}</span>
