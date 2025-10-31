@@ -146,7 +146,6 @@ export async function GET() {
 
     return NextResponse.json({ news: newsItems });
   } catch (error) {
-    console.error('Error fetching news:', error);
     return NextResponse.json(
       { error: 'Failed to fetch news' },
       { status: 500 }
