@@ -7,26 +7,8 @@
     "about": "About"
   },
   "about": {
-    "hero": {
-      "title": "About Reiseklar",
-      "subtitle": "Empowering smarter, greener commutes across Norway",
-      "getStarted": "Get Started",
-      "learnMore": "Learn More"
-    },
-    "stats": {
-      "users": "Active Users",
-      "routes": "Routes Planned",
-      "co2Saved": "CO₂ Saved",
-      "timeSaved": "Time Saved"
-    },
-    "mission": {
-      "title": "Our Mission",
-      "description1": "Reiseklar was born from a simple idea: commuting in Norway should be easier, faster, and more environmentally friendly. We combine real-time transit data, intelligent routing algorithms, and user-friendly design to help you make the most of your journey.",
-      "description2": "Whether you're taking the bus, train, tram, or ferry, our platform provides personalized route recommendations that save you time while reducing your carbon footprint. Join thousands of Norwegians who are already making their daily commute smarter."
-    },
     "features": {
       "title": "What We Offer",
-      "subtitle": "Everything you need for a seamless commute experience",
       "smartRouting": {
         "title": "Smart Route Planning",
         "description": "Our AI-powered algorithms analyze multiple factors to find the optimal route for your journey, considering time, cost, and environmental impact."
@@ -58,11 +40,6 @@
         "title": "Sustainability",
         "description": "We're committed to reducing carbon emissions by making public transport more accessible and appealing."
       }
-    },
-    "cta": {
-      "title": "Ready to Transform Your Commute?",
-      "description": "Join our community and start planning smarter routes today",
-      "button": "Sign Up Now"
     }
   },
   "home": {
@@ -138,6 +115,396 @@
       "arrival": "Arrival",
       "walk": "Walk"
     }
+  },
+  "cookies": {
+    "message": "This demo project uses cookies for testing purposes. You can choose which cookies you allow.",
+    "readPolicy": "Read Cookie Policy (Demo)",
+    "acceptAll": "Accept all",
+    "essentialOnly": "Essential only",
+    "customize": "Customize",
+    "savePreferences": "Save preferences",
+    "back": "Back",
+    "essential": {
+      "title": "Essential Cookies",
+      "description": "Required for the website to function. Cannot be disabled."
+    },
+    "functional": {
+      "title": "Functional Cookies",
+      "description": "Remember your preferences like language and location."
+    },
+    "analytics": {
+      "title": "Analytics Cookies",
+      "description": "Help us understand how you use our website anonymously."
+    }
+  },
+  "cookiePolicy": {
+    "title": "Cookie Policy",
+    "lastUpdated": "Last Updated",
+    "date": "October 31, 2025",
+    "intro": {
+      "paragraph1": "IMPORTANT: Reiseklar is a demonstration/testing project built for educational and portfolio purposes only. This is NOT a real commercial service. This cookie policy is provided as an example of GDPR-compliant cookie practices.",
+      "paragraph2": "Any cookies used during testing are for development purposes only. You can manage cookie preferences through the cookie consent dialog or your browser settings. This demonstrates best practices for user privacy control."
+    },
+    "whatAreCookies": {
+      "title": "What Are Cookies?",
+      "description": "Cookies are small text files that are placed on your computer or mobile device when you visit a website. They are widely used to make websites work more efficiently and provide information to website owners. Cookies allow websites to recognize your device and store some information about your preferences or past actions."
+    },
+    "howWeUseCookies": {
+      "title": "How We Use Cookies",
+      "description": "We use cookies for several reasons:",
+      "reasons": {
+        "authentication": "To keep you logged in and remember your authentication status",
+        "preferences": "To remember your preferences, such as language selection and location settings",
+        "analytics": "To understand how visitors use our website and improve our services",
+        "security": "To help keep our website and your data secure"
+      }
+    },
+    "typesOfCookies": {
+      "title": "Types of Cookies We Use",
+      "essential": {
+        "title": "Essential Cookies (No Consent Required)",
+        "description": "These cookies are strictly necessary for the website to function. They enable basic functions like page navigation, access to secure areas, and authentication. We do not need your consent to use these cookies as they are required for the service you requested. Storage period: Session or up to 1 year."
+      },
+      "functional": {
+        "title": "Functional Cookies (Consent Required)",
+        "description": "These cookies enable enhanced functionality and personalization, such as remembering your language preference, your saved routes, and your location settings. We only use these cookies with your explicit consent. Storage period: Up to 1 year."
+      },
+      "analytics": {
+        "title": "Analytics Cookies (Consent Required)",
+        "description": "These cookies help us understand how visitors interact with our website by collecting and reporting information anonymously. We use this data to improve our website and services. We only use these cookies with your explicit consent. Storage period: Up to 2 years."
+      }
+    },
+    "managingCookies": {
+      "title": "Managing Cookies",
+      "description": "Most web browsers allow you to control cookies through their settings. You can set your browser to refuse cookies or delete certain cookies. Generally, you should be able to manage cookie settings from the 'preferences' or 'options' menu in your browser.",
+      "warning": "Please note that if you choose to block cookies, some features of our website may not function properly, and you may not be able to access certain parts of our site."
+    },
+    "thirdPartyCookies": {
+      "title": "Third-Party Cookies",
+      "description": "In addition to our own cookies, we may also use various third-party cookies to report usage statistics of our service and deliver relevant content. These third parties have their own privacy policies, and we do not have access to or control over these cookies."
+    },
+    "changes": {
+      "title": "Changes to This Cookie Policy",
+      "description": "We may update this Cookie Policy from time to time to reflect changes in our practices or for other operational, legal, or regulatory reasons. Please revisit this Cookie Policy regularly to stay informed about our use of cookies."
+    },
+    "contact": {
+      "title": "Contact (Development Project)",
+      "description": "NOTE: This is a demo project. For questions about this demonstration:",
+      "email": "Developer Email"
+    },
+    "backToHome": "Back to Home"
+  },
+  "termsOfService": {
+    "title": "Terms of Service",
+    "lastUpdated": "Last Updated",
+    "date": "October 31, 2025",
+    "notice": {
+      "title": "Important Notice - Demo Project",
+      "description": "This is a demonstration/testing project for educational and portfolio purposes. This is NOT a real commercial service. These terms are provided as an example of what a real service would require."
+    },
+    "introduction": {
+      "title": "Introduction",
+      "paragraph1": "Welcome to Reiseklar. These Terms of Service would govern your use of our travel planning service if this were a real commercial application.",
+      "paragraph2": "This document demonstrates best practices for terms of service documentation in compliance with Norwegian and EU regulations."
+    },
+    "acceptance": {
+      "title": "Acceptance of Terms",
+      "description": "By accessing or using this demo service, you acknowledge that this is a testing environment. If this were a real service, you would be agreeing to be bound by these terms and all applicable laws and regulations."
+    },
+    "useOfService": {
+      "title": "Use of Service",
+      "description": "If this were a real service, users would agree to:",
+      "rules": {
+        "age": "Be at least 16 years of age or have parental consent",
+        "accurate": "Provide accurate and complete registration information",
+        "security": "Maintain the security of your account credentials",
+        "lawful": "Use the service only for lawful purposes",
+        "noHarm": "Not attempt to harm, disrupt, or interfere with the service"
+      }
+    },
+    "userAccounts": {
+      "title": "User Accounts",
+      "paragraph1": "You may be required to create an account to access certain features. You are responsible for maintaining the confidentiality of your account information.",
+      "paragraph2": "NOTE: This is a demo environment. Any accounts created are for testing purposes only and may be deleted at any time without notice."
+    },
+    "intellectualProperty": {
+      "title": "Intellectual Property",
+      "paragraph1": "This is a demonstration project. All content, features, and functionality are owned by the developer and are protected by international copyright, trademark, and other intellectual property laws.",
+      "paragraph2": "You may not reproduce, distribute, modify, or create derivative works without express permission."
+    },
+    "thirdParty": {
+      "title": "Third-Party Services",
+      "description": "This demo service may integrate with third-party APIs and services for demonstration purposes. The developer is not responsible for the availability, accuracy, or content of third-party services."
+    },
+    "disclaimer": {
+      "title": "Disclaimer of Warranties",
+      "important": "Important: This is a demo project",
+      "description": "This service is provided 'as is' and 'as available' for demonstration purposes only. If this were a real service, it would be provided without warranties of any kind, either express or implied. Use at your own risk."
+    },
+    "liability": {
+      "title": "Limitation of Liability",
+      "description": "This is a demonstration project with no commercial purpose. The developer shall not be liable for any damages arising from the use of this demo service, including but not limited to data loss, service interruptions, or any other issues."
+    },
+    "termination": {
+      "title": "Termination",
+      "description": "Since this is a testing environment, access may be terminated at any time without notice. If this were a real service, we would reserve the right to terminate or suspend accounts for violations of these terms."
+    },
+    "changes": {
+      "title": "Changes to Terms",
+      "description": "These terms may be updated at any time. If this were a real service, continued use after changes would constitute acceptance of the modified terms."
+    },
+    "governingLaw": {
+      "title": "Governing Law",
+      "description": "If this were a real Norwegian service, these terms would be governed by Norwegian law, and disputes would be subject to the jurisdiction of Norwegian courts."
+    },
+    "contact": {
+      "title": "Contact (Demo Project)",
+      "description": "For questions about this demonstration project:",
+      "email": "Developer Email"
+    },
+    "backToHome": "Back to Home"
+  },
+  "privacyPolicy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last Updated",
+    "date": "October 31, 2025",
+    "tableOfContents": "Table of Contents",
+    "introduction": {
+      "title": "Introduction",
+      "paragraph1": "IMPORTANT: Reiseklar is a demonstration/testing project built for educational and portfolio purposes only. This is NOT a real commercial service and no actual company exists. This privacy policy is provided as an example of best practices for GDPR compliance.",
+      "paragraph2": "If this were a real service, it would comply with the General Data Protection Regulation (GDPR) and the Norwegian Personal Data Act (Personopplysningsloven). Any data collected during testing is for development purposes only and will not be used for any other purpose."
+    },
+    "dataController": {
+      "title": "Data Controller (Development/Testing Only)",
+      "description": "NOTE: This is a development project. There is no registered company or formal data controller. This section is provided as an example of what a real service would require. For questions about this demo project, contact:",
+      "companyName": "Project",
+      "email": "Developer Contact"
+    },
+    "dataCollection": {
+      "title": "What Information We Collect",
+      "description": "We collect information that you provide to us directly and information that is automatically collected when you use our service:",
+      "categories": {
+        "account": {
+          "title": "Account Information",
+          "description": "When you create an account, we collect:",
+          "items": {
+            "name": "Full name",
+            "email": "Email address",
+            "password": "Password (stored encrypted)"
+          }
+        },
+        "travel": {
+          "title": "Travel Information",
+          "description": "When you use our service, we collect:",
+          "items": {
+            "routes": "Saved routes and favorite destinations",
+            "searches": "Search history and journey preferences",
+            "preferences": "Transportation preferences and settings"
+          }
+        },
+        "technical": {
+          "title": "Technical Data",
+          "description": "We automatically collect:",
+          "items": {
+            "ip": "IP address and general location",
+            "browser": "Browser type and version",
+            "device": "Device type and operating system",
+            "usage": "Usage data and interaction with our service"
+          }
+        }
+      }
+    },
+    "howWeUseData": {
+      "title": "How We Use Your Information",
+      "description": "We use your personal information for the following purposes:",
+      "purposes": {
+        "provideServices": "To provide and maintain our travel planning service",
+        "personalizeExperience": "To personalize your experience and remember your preferences",
+        "improveServices": "To improve and develop our services based on usage patterns",
+        "communication": "To communicate with you about service updates and important information",
+        "security": "To ensure the security and integrity of our service",
+        "legal": "To comply with legal obligations and resolve disputes"
+      }
+    },
+    "legalBasis": {
+      "title": "Legal Basis for Processing",
+      "description": "Under GDPR, we process your personal data based on the following legal grounds:",
+      "bases": {
+        "consent": "Consent: When you give us explicit consent (e.g., for analytics cookies)",
+        "contract": "Contract: When processing is necessary to provide the service you requested",
+        "legitimate": "Legitimate interests: For improving our service and ensuring security",
+        "legal": "Legal obligation: When required by law"
+      }
+    },
+    "dataSharing": {
+      "title": "How We Share Your Information",
+      "description": "We may share your information with:",
+      "parties": {
+        "serviceProviders": "Service providers who help us operate our platform (e.g., hosting, analytics)",
+        "transitProviders": "Public transit providers to access real-time schedule and route information",
+        "legal": "Legal authorities when required by law or to protect our rights"
+      },
+      "noSelling": "We do not sell your personal information to third parties."
+    },
+    "dataRetention": {
+      "title": "Data Retention",
+      "description": "We retain your personal data for as long as necessary to fulfill the purposes outlined in this policy:",
+      "periods": {
+        "account": "Account data: Until you request account deletion",
+        "travel": "Travel history: Up to 2 years from your last activity",
+        "logs": "Technical logs: Up to 90 days"
+      }
+    },
+    "yourRights": {
+      "title": "Your Rights Under GDPR",
+      "description": "Under GDPR, you have the following rights regarding your personal data:",
+      "rights": {
+        "access": {
+          "title": "Right to Access",
+          "description": "You can request a copy of your personal data"
+        },
+        "rectification": {
+          "title": "Right to Rectification",
+          "description": "You can request correction of inaccurate data"
+        },
+        "erasure": {
+          "title": "Right to Erasure",
+          "description": "You can request deletion of your data ('right to be forgotten')"
+        },
+        "restriction": {
+          "title": "Right to Restriction",
+          "description": "You can request limitation of data processing"
+        },
+        "portability": {
+          "title": "Right to Data Portability",
+          "description": "You can request your data in a machine-readable format"
+        },
+        "objection": {
+          "title": "Right to Object",
+          "description": "You can object to certain types of processing"
+        },
+        "complaint": {
+          "title": "Right to Complain",
+          "description": "You can file a complaint with Datatilsynet (Norwegian Data Protection Authority)"
+        }
+      }
+    },
+    "security": {
+      "title": "Data Security",
+      "description": "We implement appropriate technical and organizational measures to protect your personal data against unauthorized access, alteration, disclosure, or destruction.",
+      "measures": "These measures include encryption, secure servers, access controls, and regular security assessments. However, no method of transmission over the internet is 100% secure, and we cannot guarantee absolute security."
+    },
+    "childrenPrivacy": {
+      "title": "Children's Privacy",
+      "description": "Our service is not intended for children under 16 years of age. We do not knowingly collect personal information from children. If you believe we have collected information from a child, please contact us immediately."
+    },
+    "changes": {
+      "title": "Changes to This Privacy Policy",
+      "description": "We may update this Privacy Policy from time to time. We will notify you of any significant changes by posting a notice on our website or sending you an email. Your continued use of the service after changes become effective constitutes acceptance of the updated policy."
+    },
+    "contact": {
+      "title": "Contact (Development Project)",
+      "description": "DISCLAIMER: This is a testing/demo project. For inquiries about this development project:",
+      "email": "Developer Email",
+      "datatilsynet": {
+        "title": "Note About Data Protection",
+        "description": "This is a demonstration project. If this were a real service, users could contact Datatilsynet (Norwegian Data Protection Authority) at"
+      }
+    },
+    "backToHome": "Back to Home"
+  },
+  "help": {
+    "title": "Help & Support",
+    "subtitle": "Find answers to common questions and learn how to use Reiseklar",
+    "demoNotice": "NOTE: This is a demonstration project. The features described below show what a real travel planning service would offer.",
+    "quickLinks": {
+      "gettingStarted": "Getting Started",
+      "searchRoutes": "Search Routes",
+      "troubleshooting": "Troubleshooting"
+    },
+    "gettingStarted": {
+      "title": "Getting Started",
+      "intro": "Welcome to Reiseklar! Here's how to get started with our travel planning service:",
+      "steps": {
+        "step1": "Create an account or sign in with Google",
+        "step2": "Enter your starting location and destination",
+        "step3": "Choose your preferred travel options and filters",
+        "step4": "Save your favorite routes for quick access"
+      }
+    },
+    "searchingRoutes": {
+      "title": "Searching for Routes",
+      "description": "Finding the perfect route is easy with Reiseklar:",
+      "enterLocations": {
+        "title": "Enter Your Locations",
+        "description": "Type your starting point and destination. You can use addresses, landmarks, or select from recent searches."
+      },
+      "viewResults": {
+        "title": "View Route Options",
+        "description": "We'll show you multiple route options with estimated times, transfers, and eco-friendly alternatives."
+      },
+      "filters": {
+        "title": "Use Filters",
+        "description": "Filter results by public transport type, walking distance, or environmental impact to find your ideal route."
+      }
+    },
+    "savingRoutes": {
+      "title": "Saving Your Favorite Routes",
+      "description": "Save routes you use frequently for quick access:",
+      "benefits": {
+        "quick": "Quick access to your daily commute",
+        "organize": "Organize routes by purpose (work, home, leisure)",
+        "track": "Track your travel history and environmental impact"
+      }
+    },
+    "account": {
+      "title": "Account Management",
+      "create": {
+        "title": "Creating an Account",
+        "description": "Sign up with your email or use Google authentication for quick access. An account lets you save routes, track history, and personalize your experience."
+      },
+      "update": {
+        "title": "Updating Your Profile",
+        "description": "Go to your profile page to update your name, email, preferences, and notification settings."
+      },
+      "delete": {
+        "title": "Deleting Your Account",
+        "description": "You can delete your account at any time from your profile settings. NOTE: In this demo, accounts may be deleted without notice for testing purposes."
+      }
+    },
+    "settings": {
+      "title": "Settings & Preferences",
+      "description": "Customize your experience in the settings page:",
+      "options": {
+        "language": "Change language (English/Norwegian)",
+        "notifications": "Manage email and push notifications",
+        "privacy": "Control your privacy and data settings",
+        "preferences": "Set default travel preferences"
+      }
+    },
+    "troubleshooting": {
+      "title": "Troubleshooting",
+      "noResults": {
+        "title": "No routes found?",
+        "solution": "Try adjusting your search locations, check for typos, or broaden your search criteria. Make sure locations are in Norway."
+      },
+      "loginIssues": {
+        "title": "Can't log in?",
+        "solution": "Reset your password using the 'Forgot Password' link. For Google sign-in issues, check your Google account permissions."
+      },
+      "slowLoading": {
+        "title": "Slow loading times?",
+        "solution": "This demo may experience delays due to API rate limits. Refresh the page or try again in a few moments."
+      }
+    },
+    "contact": {
+      "title": "Still Need Help?",
+      "description": "If you couldn't find the answer you're looking for, feel free to contact us:",
+      "email": "Email",
+      "note": "NOTE",
+      "noteDescription": "This is a demo project. Response times may vary or support may not be available."
+    },
+    "backToHome": "Back to Home"
   },
   "dashboard": {
     "user": {

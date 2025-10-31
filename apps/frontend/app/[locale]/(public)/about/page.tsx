@@ -11,7 +11,6 @@ import {
 } from "react-icons/hi2";
 import { FaLeaf } from "react-icons/fa";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function AboutPage() {
   const t = useTranslations("about");
@@ -63,29 +62,29 @@ export default function AboutPage() {
       <section className="relative pt-32 pb-20 px-4 overflow-hidden bg-gradient-to-b from-blue-50/50 to-white">
         <div className="max-w-5xl mx-auto text-center">
           <div className="animate-fade-in">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              {t("hero.title")}
+            {/* Text above image */}
+            <h1 className="text-3xl md:text-4xl font-normal text-primary mb-12 leading-tight max-w-3xl mx-auto">
+              Reiseklar makes commuting in Norway easier and greener.
             </h1>
 
-            <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              {t("hero.subtitle")}
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
-                href="/signup"
-                className="px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
-              >
-                {t("hero.getStarted")}
-              </Link>
-              <Link
-                href="#mission"
-                className="px-8 py-3 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-50 transition-all duration-300 border-2 border-blue-600"
-              >
-                {t("hero.learnMore")}
-              </Link>
+            {/* Image */}
+            <div className="flex items-center justify-center mb-12">
+              <Image
+                src="/images/about.svg"
+                alt="About Reiseklar"
+                width={500}
+                height={300}
+                className="w-full max-w-lg h-auto"
+                priority
+              />
             </div>
+
+            {/* Text below image */}
+            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              We use real-time data to find you the best routes across all
+              transit options, saving you time and reducing your carbon
+              footprint. Join thousands already commuting smarter.
+            </p>
           </div>
         </div>
 
@@ -97,38 +96,13 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Mission Statement */}
-      <section id="mission" className="py-20 px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              {t("mission.title")}
-            </h2>
-            <div className="w-20 h-1 bg-blue-600 mx-auto rounded-full"></div>
-          </div>
-
-          <div className="bg-gradient-to-br from-blue-50 to-white rounded-3xl p-8 md:p-12 shadow-lg border border-blue-100">
-            <p className="text-lg md:text-xl text-gray-700 leading-relaxed text-center mb-6">
-              {t("mission.description1")}
-            </p>
-            <p className="text-base md:text-lg text-gray-600 leading-relaxed text-center">
-              {t("mission.description2")}
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* Features Grid */}
       <section className="py-20 px-4 bg-gradient-to-b from-white to-gray-50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-2xl md:text-3xl font-semibold text-primary mb-4">
               {t("features.title")}
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-6">
-              {t("features.subtitle")}
-            </p>
-            <div className="w-20 h-1 bg-blue-600 mx-auto rounded-full"></div>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
@@ -137,7 +111,7 @@ export default function AboutPage() {
               return (
                 <div
                   key={index}
-                  className="group relative bg-white rounded-2xl p-8 shadow-md hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-blue-200 hover:-translate-y-1"
+                  className="group relative bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-blue-200 hover:-translate-y-1"
                 >
                   <div className="flex items-start gap-4">
                     <div className="flex-shrink-0">
@@ -161,58 +135,13 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Illustration Section */}
-      <section className="py-20 px-4 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="order-2 md:order-1">
-              <div className="flex items-center justify-center">
-                <Image
-                  src="/images/about.svg"
-                  alt="About Reiseklar"
-                  width={500}
-                  height={300}
-                  className="w-full max-w-lg h-auto"
-                  priority
-                />
-              </div>
-            </div>
-            <div className="order-1 md:order-2">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                Making Commutes Better
-              </h2>
-              <p className="text-lg text-gray-700 leading-relaxed mb-4">
-                {t("mission.description2")}
-              </p>
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
-                  <p className="text-gray-600">Real-time transit information</p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
-                  <p className="text-gray-600">
-                    Intelligent route recommendations
-                  </p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
-                  <p className="text-gray-600">Environmental impact tracking</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Core Values Section */}
       <section className="py-24 px-4 bg-gradient-to-b from-white to-gray-50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-2xl md:text-3xl font-semibold text-primary mb-4">
               {t("values.title")}
             </h2>
-            <div className="w-20 h-1 bg-blue-600 mx-auto rounded-full"></div>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -221,7 +150,7 @@ export default function AboutPage() {
               return (
                 <div
                   key={index}
-                  className="group relative bg-white rounded-2xl p-8 shadow-md hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-transparent hover:-translate-y-1"
+                  className="group relative bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-transparent hover:-translate-y-1"
                 >
                   {/* Gradient Background on Hover */}
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>

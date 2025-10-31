@@ -7,26 +7,8 @@
     "about": "Om oss"
   },
   "about": {
-    "hero": {
-      "title": "Om Reiseklar",
-      "subtitle": "Gjør reisene dine smartere og mer miljøvennlige i hele Norge",
-      "getStarted": "Kom i gang",
-      "learnMore": "Lær mer"
-    },
-    "stats": {
-      "users": "Aktive brukere",
-      "routes": "Ruter planlagt",
-      "co2Saved": "CO₂ spart",
-      "timeSaved": "Tid spart"
-    },
-    "mission": {
-      "title": "Vårt oppdrag",
-      "description1": "Reiseklar ble født av en enkel idé: reising i Norge skal være enklere, raskere og mer miljøvennlig. Vi kombinerer sanntids transportdata, intelligente rutealgoritmer og brukervennlig design for å hjelpe deg å få mest mulig ut av reisen din.",
-      "description2": "Enten du tar buss, tog, trikk eller ferge, gir plattformen vår personlige ruteanbefalinger som sparer deg tid mens du reduserer karbonavtrykket ditt. Bli med tusenvis av nordmenn som allerede gjør pendlerreisen smartere."
-    },
     "features": {
       "title": "Hva vi tilbyr",
-      "subtitle": "Alt du trenger for en sømløs reiseopplevelse",
       "smartRouting": {
         "title": "Smart ruteplanlegging",
         "description": "Våre AI-drevne algoritmer analyserer flere faktorer for å finne den optimale ruten for reisen din, med hensyn til tid, kostnad og miljøpåvirkning."
@@ -58,11 +40,6 @@
         "title": "Bærekraft",
         "description": "Vi er forpliktet til å redusere karbonutslipp ved å gjøre kollektivtransport mer tilgjengelig og attraktivt."
       }
-    },
-    "cta": {
-      "title": "Klar til å forvandle reisen din?",
-      "description": "Bli med i samfunnet vårt og begynn å planlegge smartere ruter i dag",
-      "button": "Registrer deg nå"
     }
   },
   "home": {
@@ -138,6 +115,396 @@
       "arrival": "Ankomst",
       "walk": "Gå"
     }
+  },
+  "cookies": {
+    "message": "Dette demoprosjektet bruker informasjonskapsler for testformål. Du kan velge hvilke informasjonskapsler du tillater.",
+    "readPolicy": "Les informasjonskapselpolicy (Demo)",
+    "acceptAll": "Godta alle",
+    "essentialOnly": "Kun nødvendige",
+    "customize": "Tilpass",
+    "savePreferences": "Lagre preferanser",
+    "back": "Tilbake",
+    "essential": {
+      "title": "Nødvendige informasjonskapsler",
+      "description": "Nødvendig for at nettstedet skal fungere. Kan ikke deaktiveres."
+    },
+    "functional": {
+      "title": "Funksjonelle informasjonskapsler",
+      "description": "Husker preferansene dine som språk og plassering."
+    },
+    "analytics": {
+      "title": "Analyse-informasjonskapsler",
+      "description": "Hjelper oss å forstå hvordan du bruker nettstedet anonymt."
+    }
+  },
+  "cookiePolicy": {
+    "title": "Informasjonskapselpolicy",
+    "lastUpdated": "Sist oppdatert",
+    "date": "31. oktober 2025",
+    "intro": {
+      "paragraph1": "VIKTIG: Reiseklar er et demonstrasjons-/testprosjekt bygget for utdannings- og porteføljeformål. Dette er IKKE en ekte kommersiell tjeneste. Denne informasjonskapselpolicyen er gitt som et eksempel på GDPR-kompatibel informasjonskapselpraksis.",
+      "paragraph2": "Eventuelle informasjonskapsler som brukes under testing er kun for utviklingsformål. Du kan administrere informasjonskapselpreferanser gjennom samtykke-dialogen eller nettleserinnstillingene. Dette demonstrerer beste praksis for brukerpersonvernkontroll."
+    },
+    "whatAreCookies": {
+      "title": "Hva er informasjonskapsler?",
+      "description": "Informasjonskapsler er små tekstfiler som plasseres på datamaskinen eller mobilenheten din når du besøker et nettsted. De brukes mye for å få nettsteder til å fungere mer effektivt og gi informasjon til nettstedseiere. Informasjonskapsler lar nettsteder gjenkjenne enheten din og lagre noe informasjon om preferansene eller tidligere handlinger dine."
+    },
+    "howWeUseCookies": {
+      "title": "Hvordan vi bruker informasjonskapsler",
+      "description": "Vi bruker informasjonskapsler av flere grunner:",
+      "reasons": {
+        "authentication": "For å holde deg innlogget og huske autentiseringsstatusen din",
+        "preferences": "For å huske preferansene dine, som språkvalg og plasseringsinnstillinger",
+        "analytics": "For å forstå hvordan besøkende bruker nettstedet vårt og forbedre tjenestene våre",
+        "security": "For å bidra til å holde nettstedet vårt og dataene dine sikre"
+      }
+    },
+    "typesOfCookies": {
+      "title": "Typer informasjonskapsler vi bruker",
+      "essential": {
+        "title": "Nødvendige informasjonskapsler (Ingen samtykke påkrevd)",
+        "description": "Disse informasjonskapslene er strengt nødvendige for at nettstedet skal fungere. De muliggjør grunnleggende funksjoner som sidenavigasjon, tilgang til sikre områder og autentisering. Vi trenger ikke ditt samtykke for å bruke disse informasjonskapslene da de er nødvendige for tjenesten du ba om. Lagringsperiode: Økt eller opp til 1 år."
+      },
+      "functional": {
+        "title": "Funksjonelle informasjonskapsler (Samtykke påkrevd)",
+        "description": "Disse informasjonskapslene muliggjør forbedret funksjonalitet og personalisering, som å huske språkpreferansen din, lagrede ruter og plasseringsinnstillinger. Vi bruker kun disse informasjonskapslene med ditt eksplisitte samtykke. Lagringsperiode: Opp til 1 år."
+      },
+      "analytics": {
+        "title": "Analyse-informasjonskapsler (Samtykke påkrevd)",
+        "description": "Disse informasjonskapslene hjelper oss å forstå hvordan besøkende samhandler med nettstedet vårt ved å samle inn og rapportere informasjon anonymt. Vi bruker disse dataene for å forbedre nettstedet og tjenestene våre. Vi bruker kun disse informasjonskapslene med ditt eksplisitte samtykke. Lagringsperiode: Opp til 2 år."
+      }
+    },
+    "managingCookies": {
+      "title": "Administrere informasjonskapsler",
+      "description": "De fleste nettlesere lar deg kontrollere informasjonskapsler gjennom innstillingene deres. Du kan sette nettleseren din til å avvise informasjonskapsler eller slette visse informasjonskapsler. Generelt skal du kunne administrere informasjonskapselinnstillinger fra 'preferanser' eller 'alternativer' menyen i nettleseren din.",
+      "warning": "Vær oppmerksom på at hvis du velger å blokkere informasjonskapsler, kan noen funksjoner på nettstedet vårt ikke fungere ordentlig, og du kan ikke få tilgang til visse deler av nettstedet vårt."
+    },
+    "thirdPartyCookies": {
+      "title": "Tredjeparts informasjonskapsler",
+      "description": "I tillegg til våre egne informasjonskapsler kan vi også bruke forskjellige tredjeparts informasjonskapsler for å rapportere bruksstatistikk for tjenesten vår og levere relevant innhold. Disse tredjepartene har sine egne personvernregler, og vi har ikke tilgang til eller kontroll over disse informasjonskapslene."
+    },
+    "changes": {
+      "title": "Endringer i denne informasjonskapselpolicyen",
+      "description": "Vi kan oppdatere denne informasjonskapselpolicyen fra tid til annen for å gjenspeile endringer i praksis vår eller av andre operasjonelle, juridiske eller regulatoriske årsaker. Vennligst besøk denne informasjonskapselpolicyen regelmessig for å holde deg informert om vår bruk av informasjonskapsler."
+    },
+    "contact": {
+      "title": "Kontakt (Utviklingsprosjekt)",
+      "description": "MERK: Dette er et demoprosjekt. For spørsmål om denne demonstrasjonen:",
+      "email": "Utvikler e-post"
+    },
+    "backToHome": "Tilbake til hjem"
+  },
+  "termsOfService": {
+    "title": "Vilkår for bruk",
+    "lastUpdated": "Sist oppdatert",
+    "date": "31. oktober 2025",
+    "notice": {
+      "title": "Viktig melding - Demoprosjekt",
+      "description": "Dette er et demonstrasjons-/testprosjekt for utdannings- og porteføljeformål. Dette er IKKE en ekte kommersiell tjeneste. Disse vilkårene er gitt som et eksempel på hva en ekte tjeneste ville kreve."
+    },
+    "introduction": {
+      "title": "Innledning",
+      "paragraph1": "Velkommen til Reiseklar. Disse vilkårene for bruk ville styre din bruk av vår reiseplanleggingstjeneste hvis dette var en ekte kommersiell applikasjon.",
+      "paragraph2": "Dette dokumentet demonstrerer beste praksis for vilkår for bruk-dokumentasjon i samsvar med norske og EU-forskrifter."
+    },
+    "acceptance": {
+      "title": "Aksept av vilkår",
+      "description": "Ved å få tilgang til eller bruke denne demotjenesten, erkjenner du at dette er et testmiljø. Hvis dette var en ekte tjeneste, ville du godta å være bundet av disse vilkårene og alle gjeldende lover og forskrifter."
+    },
+    "useOfService": {
+      "title": "Bruk av tjenesten",
+      "description": "Hvis dette var en ekte tjeneste, ville brukere godta å:",
+      "rules": {
+        "age": "Være minst 16 år eller ha foreldresamtykke",
+        "accurate": "Gi nøyaktig og fullstendig registreringsinformasjon",
+        "security": "Opprettholde sikkerheten til kontoens legitimasjon",
+        "lawful": "Bruke tjenesten kun til lovlige formål",
+        "noHarm": "Ikke forsøke å skade, forstyrre eller forstyrre tjenesten"
+      }
+    },
+    "userAccounts": {
+      "title": "Brukerkontoer",
+      "paragraph1": "Du kan bli påkrevd å opprette en konto for å få tilgang til visse funksjoner. Du er ansvarlig for å opprettholde konfidensialiteten til kontoinformasjonen din.",
+      "paragraph2": "MERK: Dette er et demomiljø. Eventuelle kontoer som opprettes er kun for testformål og kan slettes når som helst uten varsel."
+    },
+    "intellectualProperty": {
+      "title": "Immaterielle rettigheter",
+      "paragraph1": "Dette er et demonstrasjonsprosjekt. Alt innhold, funksjoner og funksjonalitet eies av utvikleren og er beskyttet av internasjonale opphavsrett, varemerke og andre immaterielle rettigheter.",
+      "paragraph2": "Du kan ikke reprodusere, distribuere, modifisere eller lage avledede verk uten uttrykkelig tillatelse."
+    },
+    "thirdParty": {
+      "title": "Tredjepartstjenester",
+      "description": "Denne demotjenesten kan integreres med tredjeparts APIer og tjenester for demonstrasjonsformål. Utvikleren er ikke ansvarlig for tilgjengeligheten, nøyaktigheten eller innholdet i tredjepartstjenester."
+    },
+    "disclaimer": {
+      "title": "Ansvarsfraskrivelse for garantier",
+      "important": "Viktig: Dette er et demoprosjekt",
+      "description": "Denne tjenesten leveres 'som den er' og 'som tilgjengelig' kun for demonstrasjonsformål. Hvis dette var en ekte tjeneste, ville den bli levert uten garantier av noe slag, verken uttrykkelige eller underforståtte. Bruk på egen risiko."
+    },
+    "liability": {
+      "title": "Ansvarsbegrensning",
+      "description": "Dette er et demonstrasjonsprosjekt uten kommersielt formål. Utvikleren skal ikke være ansvarlig for skader som oppstår ved bruk av denne demotjenesten, inkludert men ikke begrenset til datatap, tjenesteavbrudd eller andre problemer."
+    },
+    "termination": {
+      "title": "Oppsigelse",
+      "description": "Siden dette er et testmiljø, kan tilgangen avsluttes når som helst uten varsel. Hvis dette var en ekte tjeneste, ville vi forbeholde oss retten til å avslutte eller suspendere kontoer for brudd på disse vilkårene."
+    },
+    "changes": {
+      "title": "Endringer i vilkår",
+      "description": "Disse vilkårene kan oppdateres når som helst. Hvis dette var en ekte tjeneste, ville fortsatt bruk etter endringer utgjøre aksept av de endrede vilkårene."
+    },
+    "governingLaw": {
+      "title": "Gjeldende lov",
+      "description": "Hvis dette var en ekte norsk tjeneste, ville disse vilkårene være styrt av norsk lov, og tvister ville være underlagt jurisdiksjonen til norske domstoler."
+    },
+    "contact": {
+      "title": "Kontakt (Demoprosjekt)",
+      "description": "For spørsmål om dette demonstrasjonsprosjektet:",
+      "email": "Utvikler e-post"
+    },
+    "backToHome": "Tilbake til hjem"
+  },
+  "privacyPolicy": {
+    "title": "Personvernerklæring",
+    "lastUpdated": "Sist oppdatert",
+    "date": "31. oktober 2025",
+    "tableOfContents": "Innholdsfortegnelse",
+    "introduction": {
+      "title": "Innledning",
+      "paragraph1": "VIKTIG: Reiseklar er et demonstrasjons-/testprosjekt bygget for utdannings- og porteføljeformål. Dette er IKKE en ekte kommersiell tjeneste og det finnes ingen faktisk selskap. Denne personvernerklæringen er gitt som et eksempel på beste praksis for GDPR-overholdelse.",
+      "paragraph2": "Hvis dette var en ekte tjeneste, ville den være i samsvar med EUs personvernforordning (GDPR) og den norske personopplysningsloven. Data som samles inn under testing er kun for utviklingsformål og vil ikke bli brukt til andre formål."
+    },
+    "dataController": {
+      "title": "Behandlingsansvarlig (Kun utvikling/testing)",
+      "description": "MERK: Dette er et utviklingsprosjekt. Det finnes ingen registrert selskap eller formell behandlingsansvarlig. Denne seksjonen er gitt som et eksempel på hva en ekte tjeneste ville kreve. For spørsmål om dette demoprosjektet, kontakt:",
+      "companyName": "Prosjekt",
+      "email": "Utviklerkontakt"
+    },
+    "dataCollection": {
+      "title": "Hvilken informasjon vi samler inn",
+      "description": "Vi samler inn informasjon som du gir oss direkte og informasjon som automatisk samles inn når du bruker tjenesten vår:",
+      "categories": {
+        "account": {
+          "title": "Kontoinformasjon",
+          "description": "Når du oppretter en konto, samler vi inn:",
+          "items": {
+            "name": "Fullt navn",
+            "email": "E-postadresse",
+            "password": "Passord (lagret kryptert)"
+          }
+        },
+        "travel": {
+          "title": "Reiseinformasjon",
+          "description": "Når du bruker tjenesten vår, samler vi inn:",
+          "items": {
+            "routes": "Lagrede ruter og favorittdestinasjoner",
+            "searches": "Søkehistorikk og reisepreferanser",
+            "preferences": "Transportpreferanser og innstillinger"
+          }
+        },
+        "technical": {
+          "title": "Tekniske data",
+          "description": "Vi samler automatisk inn:",
+          "items": {
+            "ip": "IP-adresse og generell plassering",
+            "browser": "Nettlesertype og versjon",
+            "device": "Enhetstype og operativsystem",
+            "usage": "Bruksdata og interaksjon med tjenesten vår"
+          }
+        }
+      }
+    },
+    "howWeUseData": {
+      "title": "Hvordan vi bruker informasjonen din",
+      "description": "Vi bruker dine personopplysninger til følgende formål:",
+      "purposes": {
+        "provideServices": "For å tilby og vedlikeholde vår reiseplanleggingstjeneste",
+        "personalizeExperience": "For å personalisere opplevelsen din og huske preferansene dine",
+        "improveServices": "For å forbedre og utvikle tjenestene våre basert på bruksmønstre",
+        "communication": "For å kommunisere med deg om tjenesteoppdateringer og viktig informasjon",
+        "security": "For å sikre sikkerheten og integriteten til tjenesten vår",
+        "legal": "For å overholde juridiske forpliktelser og løse tvister"
+      }
+    },
+    "legalBasis": {
+      "title": "Rettslig grunnlag for behandling",
+      "description": "I henhold til GDPR behandler vi dine personopplysninger basert på følgende rettslige grunnlag:",
+      "bases": {
+        "consent": "Samtykke: Når du gir oss uttrykkelig samtykke (f.eks. for analyseinformasjonskapsler)",
+        "contract": "Kontrakt: Når behandling er nødvendig for å levere tjenesten du ba om",
+        "legitimate": "Berettigede interesser: For å forbedre tjenesten vår og sikre sikkerhet",
+        "legal": "Juridisk forpliktelse: Når det kreves av loven"
+      }
+    },
+    "dataSharing": {
+      "title": "Hvordan vi deler informasjonen din",
+      "description": "Vi kan dele informasjonen din med:",
+      "parties": {
+        "serviceProviders": "Tjenesteleverandører som hjelper oss med å drifte plattformen vår (f.eks. hosting, analyse)",
+        "transitProviders": "Kollektivtransportleverandører for å få tilgang til sanntidsruter og avgangsinformasjon",
+        "legal": "Juridiske myndigheter når det kreves av loven eller for å beskytte våre rettigheter"
+      },
+      "noSelling": "Vi selger ikke dine personopplysninger til tredjeparter."
+    },
+    "dataRetention": {
+      "title": "Datalagring",
+      "description": "Vi beholder dine personopplysninger så lenge det er nødvendig for å oppfylle formålene beskrevet i denne policyen:",
+      "periods": {
+        "account": "Kontodata: Til du ber om sletting av kontoen",
+        "travel": "Reisehistorikk: Opp til 2 år fra din siste aktivitet",
+        "logs": "Tekniske logger: Opp til 90 dager"
+      }
+    },
+    "yourRights": {
+      "title": "Dine rettigheter under GDPR",
+      "description": "Under GDPR har du følgende rettigheter angående dine personopplysninger:",
+      "rights": {
+        "access": {
+          "title": "Rett til innsyn",
+          "description": "Du kan be om en kopi av dine personopplysninger"
+        },
+        "rectification": {
+          "title": "Rett til retting",
+          "description": "Du kan be om retting av unøyaktige data"
+        },
+        "erasure": {
+          "title": "Rett til sletting",
+          "description": "Du kan be om sletting av dataene dine ('retten til å bli glemt')"
+        },
+        "restriction": {
+          "title": "Rett til begrensning",
+          "description": "Du kan be om begrensning av databehandling"
+        },
+        "portability": {
+          "title": "Rett til dataportabilitet",
+          "description": "Du kan be om dataene dine i et maskinlesbart format"
+        },
+        "objection": {
+          "title": "Rett til å protestere",
+          "description": "Du kan protestere mot visse typer behandling"
+        },
+        "complaint": {
+          "title": "Rett til å klage",
+          "description": "Du kan klage til Datatilsynet (Norsk Datatilsyn)"
+        }
+      }
+    },
+    "security": {
+      "title": "Datasikkerhet",
+      "description": "Vi implementerer passende tekniske og organisatoriske tiltak for å beskytte dine personopplysninger mot uautorisert tilgang, endring, avsløring eller ødeleggelse.",
+      "measures": "Disse tiltakene inkluderer kryptering, sikre servere, tilgangskontroll og regelmessige sikkerhetsvurderinger. Imidlertid er ingen overføringsmetode over internett 100% sikker, og vi kan ikke garantere absolutt sikkerhet."
+    },
+    "childrenPrivacy": {
+      "title": "Barns personvern",
+      "description": "Tjenesten vår er ikke beregnet på barn under 16 år. Vi samler ikke bevisst inn personopplysninger fra barn. Hvis du tror vi har samlet inn informasjon fra et barn, vennligst kontakt oss umiddelbart."
+    },
+    "changes": {
+      "title": "Endringer i denne personvernerklæringen",
+      "description": "Vi kan oppdatere denne personvernerklæringen fra tid til annen. Vi vil varsle deg om betydelige endringer ved å legge ut en melding på nettstedet vårt eller sende deg en e-post. Din fortsatte bruk av tjenesten etter at endringer trer i kraft utgjør aksept av den oppdaterte policyen."
+    },
+    "contact": {
+      "title": "Kontakt (Utviklingsprosjekt)",
+      "description": "ANSVARSFRASKRIVELSE: Dette er et test-/demoprosjekt. For henvendelser om dette utviklingsprosjektet:",
+      "email": "Utvikler e-post",
+      "datatilsynet": {
+        "title": "Merknad om databeskyttelse",
+        "description": "Dette er et demonstrasjonsprosjekt. Hvis dette var en ekte tjeneste, kunne brukere kontakte Datatilsynet på"
+      }
+    },
+    "backToHome": "Tilbake til hjem"
+  },
+  "help": {
+    "title": "Hjelp og støtte",
+    "subtitle": "Finn svar på vanlige spørsmål og lær hvordan du bruker Reiseklar",
+    "demoNotice": "MERK: Dette er et demonstrasjonsprosjekt. Funksjonene beskrevet nedenfor viser hva en ekte reiseplanleggingstjeneste ville tilby.",
+    "quickLinks": {
+      "gettingStarted": "Kom i gang",
+      "searchRoutes": "Søk ruter",
+      "troubleshooting": "Feilsøking"
+    },
+    "gettingStarted": {
+      "title": "Kom i gang",
+      "intro": "Velkommen til Reiseklar! Slik kommer du i gang med vår reiseplanleggingstjeneste:",
+      "steps": {
+        "step1": "Opprett en konto eller logg inn med Google",
+        "step2": "Skriv inn startstedet og destinasjonen din",
+        "step3": "Velg foretrukne reisealternativer og filtre",
+        "step4": "Lagre favorittrutene dine for rask tilgang"
+      }
+    },
+    "searchingRoutes": {
+      "title": "Søke etter ruter",
+      "description": "Å finne den perfekte ruten er enkelt med Reiseklar:",
+      "enterLocations": {
+        "title": "Skriv inn stedene dine",
+        "description": "Skriv inn utgangspunktet og destinasjonen din. Du kan bruke adresser, landemerker eller velge fra nylige søk."
+      },
+      "viewResults": {
+        "title": "Se rutealternativer",
+        "description": "Vi viser deg flere rutealternativer med estimerte tider, bytter og miljøvennlige alternativer."
+      },
+      "filters": {
+        "title": "Bruk filtre",
+        "description": "Filtrer resultater etter kollektivtransporttype, gangavstand eller miljøpåvirkning for å finne din ideelle rute."
+      }
+    },
+    "savingRoutes": {
+      "title": "Lagre favorittrutene dine",
+      "description": "Lagre ruter du bruker ofte for rask tilgang:",
+      "benefits": {
+        "quick": "Rask tilgang til den daglige pendlerreisen din",
+        "organize": "Organiser ruter etter formål (jobb, hjem, fritid)",
+        "track": "Spor reisehistorikken og miljøpåvirkningen din"
+      }
+    },
+    "account": {
+      "title": "Kontoadministrasjon",
+      "create": {
+        "title": "Opprette en konto",
+        "description": "Registrer deg med e-posten din eller bruk Google-autentisering for rask tilgang. En konto lar deg lagre ruter, spore historikk og personalisere opplevelsen din."
+      },
+      "update": {
+        "title": "Oppdatere profilen din",
+        "description": "Gå til profilsiden din for å oppdatere navn, e-post, preferanser og varslingsinnstillinger."
+      },
+      "delete": {
+        "title": "Slette kontoen din",
+        "description": "Du kan slette kontoen din når som helst fra profilinnstillingene dine. MERK: I denne demoen kan kontoer slettes uten varsel for testformål."
+      }
+    },
+    "settings": {
+      "title": "Innstillinger og preferanser",
+      "description": "Tilpass opplevelsen din på innstillingssiden:",
+      "options": {
+        "language": "Endre språk (engelsk/norsk)",
+        "notifications": "Administrer e-post og push-varsler",
+        "privacy": "Kontroller personvern- og datainnstillingene dine",
+        "preferences": "Sett standard reisepreferanser"
+      }
+    },
+    "troubleshooting": {
+      "title": "Feilsøking",
+      "noResults": {
+        "title": "Ingen ruter funnet?",
+        "solution": "Prøv å justere søkestedene dine, sjekk for skrivefeil eller utvid søkekriteriene dine. Sørg for at stedene er i Norge."
+      },
+      "loginIssues": {
+        "title": "Kan ikke logge inn?",
+        "solution": "Tilbakestill passordet ditt ved å bruke 'Glemt passord'-lenken. For Google-påloggingsproblemer, sjekk Google-kontotillatelsene dine."
+      },
+      "slowLoading": {
+        "title": "Treg lastehastighet?",
+        "solution": "Denne demoen kan oppleve forsinkelser på grunn av API-hastighetsbegrensninger. Oppdater siden eller prøv igjen om noen øyeblikk."
+      }
+    },
+    "contact": {
+      "title": "Trenger du fortsatt hjelp?",
+      "description": "Hvis du ikke fant svaret du leter etter, ta gjerne kontakt med oss:",
+      "email": "E-post",
+      "note": "MERK",
+      "noteDescription": "Dette er et demoprosjekt. Svartider kan variere eller støtte kan være utilgjengelig."
+    },
+    "backToHome": "Tilbake til hjem"
   },
   "dashboard": {
     "user": {
