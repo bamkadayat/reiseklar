@@ -41,72 +41,15 @@ export function WeatherSection() {
           // Continue with weather fetch even if geocoding fails
         }
 
-        const weatherApiUrl = process.env.NEXT_PUBLIC_YR_API_URL || '';
-        const response = await fetch(
-          `${weatherApiUrl}/compact?lat=${lat}&lon=${lon}`
-        );
+        // Fetch weather from our API route (with caching)
+        const response = await fetch(`/api/weather?lat=${lat}&lon=${lon}`);
 
         if (!response.ok) {
           throw new Error('Failed to fetch weather data');
         }
 
         const data = await response.json();
-
-        // Process current weather
-        const currentData = data.properties.timeseries[0];
-        const current = {
-          temperature: Math.round(currentData.data.instant.details.air_temperature),
-          windSpeed: Math.round(currentData.data.instant.details.wind_speed),
-          humidity: Math.round(currentData.data.instant.details.relative_humidity),
-          condition: currentData.data.next_1_hours?.summary?.symbol_code || 'unknown',
-        };
-
-        // Process weekly forecast (next 7 days around noon)
-        const forecast = [];
-        const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-        for (let i = 1; i <= 7; i++) {
-          const targetDate = new Date();
-          targetDate.setDate(targetDate.getDate() + i);
-          targetDate.setHours(12, 0, 0, 0);
-
-          // Find closest data point to noon (between 10 AM and 2 PM)
-          let closestData = null;
-          let closestTimeDiff = Infinity;
-
-          for (const item of data.properties.timeseries) {
-            const itemDate = new Date(item.time);
-
-            // Check if it's the same day
-            if (
-              itemDate.getDate() === targetDate.getDate() &&
-              itemDate.getMonth() === targetDate.getMonth() &&
-              itemDate.getFullYear() === targetDate.getFullYear()
-            ) {
-              const hour = itemDate.getHours();
-              // Look for data between 10 AM and 2 PM
-              if (hour >= 10 && hour <= 14) {
-                const timeDiff = Math.abs(itemDate.getTime() - targetDate.getTime());
-                if (timeDiff < closestTimeDiff) {
-                  closestTimeDiff = timeDiff;
-                  closestData = item;
-                }
-              }
-            }
-          }
-
-          if (closestData) {
-            forecast.push({
-              date: targetDate.toISOString().split('T')[0],
-              day: daysOfWeek[targetDate.getDay()],
-              temperature: Math.round(closestData.data.instant.details.air_temperature),
-              condition: closestData.data.next_6_hours?.summary?.symbol_code ||
-                        closestData.data.next_1_hours?.summary?.symbol_code || 'unknown',
-            });
-          }
-        }
-
-        setWeather({ current, forecast });
+        setWeather(data);
         setLoading(false);
       } catch (err) {
         setError('Unable to load weather data');
