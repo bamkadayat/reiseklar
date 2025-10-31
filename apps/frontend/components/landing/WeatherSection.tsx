@@ -185,9 +185,9 @@ export function WeatherSection() {
     <div className="w-full h-full min-h-[450px]">
       <div className="rounded-2xl p-4 sm:p-6 bg-gradient-to-br from-blue-50 to-indigo-50 h-full flex flex-col gap-4 sm:gap-6">
         {/* Header */}
-        <div className="flex items-center gap-2">
-          <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
-          <h2 className="text-lg sm:text-xl font-bold text-gray-900">{locationName}</h2>
+        <div className="flex items-center gap-2 h-8">
+          <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 flex-shrink-0" />
+          <h2 className="text-lg sm:text-xl font-bold text-gray-900 leading-none">{locationName}</h2>
         </div>
 
         {/* Current Weather */}

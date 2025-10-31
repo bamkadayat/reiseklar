@@ -78,8 +78,8 @@ export function NewsSection() {
         <div className="rounded-2xl p-4 sm:p-6 bg-gradient-to-br from-blue-50 to-indigo-50 h-full flex flex-col">
           <div className="animate-pulse">
             {/* Header skeleton */}
-            <div className="flex items-center gap-2 mb-4 sm:mb-6">
-              <div className="w-4 h-4 sm:w-5 sm:h-5 bg-gray-200 rounded"></div>
+            <div className="flex items-center gap-2 mb-4 sm:mb-6 h-8">
+              <div className="w-4 h-4 sm:w-5 sm:h-5 bg-gray-200 rounded flex-shrink-0"></div>
               <div className="h-6 bg-gray-200 rounded w-32"></div>
             </div>
 
@@ -120,9 +120,9 @@ export function NewsSection() {
     <div className="w-full h-full min-h-[450px]">
       <div className="rounded-2xl p-4 sm:p-6 bg-gradient-to-br from-blue-50 to-indigo-50 h-full flex flex-col gap-4 sm:gap-6">
         {/* Header */}
-        <div className="flex items-center gap-2">
-          <RiNewsFill className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
-          <h2 className="text-lg sm:text-xl font-bold text-gray-900">{t('title')}</h2>
+        <div className="flex items-center gap-2 h-8">
+          <RiNewsFill className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 flex-shrink-0" />
+          <h2 className="text-lg sm:text-xl font-bold text-gray-900 leading-none">{t('title')}</h2>
         </div>
 
         {/* News Items */}
