@@ -80,12 +80,12 @@ export function SignUpForm() {
   }
 
   return (
-    <Card className="border border-gray-200 shadow-none w-full">
-      <CardHeader className="text-center pb-4 pt-6 sm:pb-6 sm:pt-8">
+    <Card className="bg-white border border-gray-200 shadow-lg w-full">
+      <CardHeader className="bg-white text-center pb-4 pt-6 sm:pb-6 sm:pt-8">
         <CardTitle className="text-2xl sm:text-3xl font-bold">Create an account</CardTitle>
         <p className="text-sm text-gray-600">Sign up to get started with Reiseklar</p>
       </CardHeader>
-      <CardContent className="px-4 sm:px-6">
+      <CardContent className="bg-white px-4 sm:px-6">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <div className="space-y-2">
             <Label htmlFor="name" className="text-sm font-medium text-gray-700">Full Name</Label>
@@ -217,7 +217,7 @@ export function SignUpForm() {
           </Link>
         </p>
       </CardContent>
-      <CardFooter className="pb-8">
+      <CardFooter className="bg-white pb-8">
         <p className="text-center text-sm text-gray-600 w-full">
           Already have an account?{' '}
           <Link href="/signIn" className="text-blue-600 hover:underline font-medium">

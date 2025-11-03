@@ -45,17 +45,17 @@ export default function AdminDashboardPage() {
   return (
     <div className="space-y-6 sm:space-y-8">
       {/* Welcome Section */}
-      <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
+      <div className="mb-8">
+        <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-2">
           {t('welcome')}
         </h1>
-        <p className="mt-2 text-sm sm:text-base text-muted-foreground">
+        <p className="text-base sm:text-lg text-muted-foreground">
           {t('welcomeMessage')}
         </p>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {loading ? (
           <>
             <StatCardSkeleton />
@@ -98,15 +98,15 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Recent Activity & User Growth */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {/* Recent Users */}
-        <div className="bg-card rounded-lg border border-border overflow-hidden">
-          <div className="px-6 py-4 border-b border-border">
-            <h2 className="text-lg font-semibold text-foreground">
+        <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
+          <div className="px-6 py-5 border-b border-border bg-card">
+            <h2 className="text-xl font-semibold text-foreground">
               {t('recentUsers')}
             </h2>
           </div>
-          <div className="divide-y divide-border">
+          <div className="space-y-0">
             {loading ? (
               <>
                 <RecentUserCardSkeleton />
@@ -176,9 +176,9 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* System Health */}
-        <div className="bg-card rounded-lg border border-border overflow-hidden">
-          <div className="px-6 py-4 border-b border-border">
-            <h2 className="text-lg font-semibold text-foreground">
+        <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
+          <div className="px-6 py-5 border-b border-border bg-card">
+            <h2 className="text-xl font-semibold text-foreground">
               {t('systemHealth')}
             </h2>
           </div>
@@ -198,16 +198,16 @@ export default function AdminDashboardPage() {
               systemHealth.map((metric) => {
                 const statusColor =
                   metric.status === 'Healthy'
-                    ? 'text-primary'
+                    ? 'text-green-500'
                     : metric.status === 'Warning'
-                    ? 'text-primary/70'
+                    ? 'text-yellow-500'
                     : 'text-destructive';
 
                 const barColor =
                   metric.status === 'Healthy'
-                    ? 'bg-primary'
+                    ? 'bg-green-500'
                     : metric.status === 'Warning'
-                    ? 'bg-primary/70'
+                    ? 'bg-yellow-500'
                     : 'bg-destructive';
 
                 return (
@@ -235,7 +235,7 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {loading ? (
           <>
             <QuickActionSkeleton />
@@ -244,22 +244,22 @@ export default function AdminDashboardPage() {
           </>
         ) : (
           <>
-            <button className="p-6 bg-card border-2 border-primary rounded-lg hover:bg-primary hover:text-primary-foreground transition-all group text-left">
-              <Users className="w-8 h-8 mb-3 text-primary group-hover:text-primary-foreground" />
-              <h3 className="font-semibold mb-1 text-foreground group-hover:text-primary-foreground">{t('manageUsers')}</h3>
-              <p className="text-sm text-muted-foreground group-hover:text-primary-foreground/90">
+            <button className="p-6 bg-card border border-border rounded-xl shadow-sm hover:shadow-md hover:border-primary/50 transition-all group text-left">
+              <Users className="w-10 h-10 mb-4 text-primary" />
+              <h3 className="text-lg font-semibold mb-2 text-foreground">{t('manageUsers')}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 {t('manageUsersDesc')}
               </p>
             </button>
-            <button className="p-6 bg-card border border-border rounded-lg hover:shadow-md transition-all text-left">
-              <Activity className="w-8 h-8 mb-3 text-primary" />
-              <h3 className="font-semibold mb-1 text-foreground">{t('viewAnalytics')}</h3>
-              <p className="text-sm text-muted-foreground">{t('viewAnalyticsDesc')}</p>
+            <button className="p-6 bg-card border border-border rounded-xl shadow-sm hover:shadow-md hover:border-primary/50 transition-all text-left">
+              <Activity className="w-10 h-10 mb-4 text-primary" />
+              <h3 className="text-lg font-semibold mb-2 text-foreground">{t('viewAnalytics')}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">{t('viewAnalyticsDesc')}</p>
             </button>
-            <button className="p-6 bg-card border border-border rounded-lg hover:shadow-md transition-all text-left">
-              <Route className="w-8 h-8 mb-3 text-primary" />
-              <h3 className="font-semibold mb-1 text-foreground">{t('routeManagement')}</h3>
-              <p className="text-sm text-muted-foreground">{t('routeManagementDesc')}</p>
+            <button className="p-6 bg-card border border-border rounded-xl shadow-sm hover:shadow-md hover:border-primary/50 transition-all text-left">
+              <Route className="w-10 h-10 mb-4 text-primary" />
+              <h3 className="text-lg font-semibold mb-2 text-foreground">{t('routeManagement')}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">{t('routeManagementDesc')}</p>
             </button>
           </>
         )}
