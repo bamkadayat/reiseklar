@@ -22,18 +22,18 @@ export function LanguageSwitcher() {
 
   return (
     <Tabs value={locale} onValueChange={handleLanguageChange}>
-      <TabsList className="h-8 bg-muted/50 p-0.5">
+      <TabsList className="h-8 bg-white border border-border p-0.5">
         <TabsTrigger
           value="nb"
           disabled={isPending}
-          className="text-xs font-semibold px-3 py-1 h-7 data-[state=active]:bg-background data-[state=active]:text-foreground disabled:opacity-50"
+          className="text-xs font-semibold px-3 py-1 h-7 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-muted-foreground disabled:opacity-50"
         >
           NO
         </TabsTrigger>
         <TabsTrigger
           value="en"
           disabled={isPending}
-          className="text-xs font-semibold px-3 py-1 h-7 data-[state=active]:bg-background data-[state=active]:text-foreground disabled:opacity-50"
+          className="text-xs font-semibold px-3 py-1 h-7 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-muted-foreground disabled:opacity-50"
         >
           EN
         </TabsTrigger>

@@ -79,12 +79,12 @@ export function Sidebar({ sections, bottomItems, isOpen, onClose, logo, showLang
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed top-0 left-0 z-50 h-screen w-64 bg-background border-r border-border transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static flex flex-col",
+          "fixed top-0 left-0 z-50 h-screen w-64 bg-sidebar shadow-lg transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static flex flex-col border-r border-border",
           isOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
         {/* Logo Section */}
-        <div className="h-16 flex items-center justify-between px-6 border-b border-border flex-shrink-0">
+        <div className="h-16 flex items-center justify-between px-6 flex-shrink-0 border-b border-border">
           <Link href="/" className="flex items-center gap-2">
             {logo && (
               <Image
@@ -121,7 +121,7 @@ export function Sidebar({ sections, bottomItems, isOpen, onClose, logo, showLang
 
         {/* Language & Notifications Section */}
         {(showLanguageSwitcher || showNotifications) && (
-          <div className="px-4 py-4 border-b border-border flex-shrink-0">
+          <div className="px-4 py-4 flex-shrink-0">
             <div className="flex items-center justify-between gap-2">
               {/* Language Switcher */}
               {showLanguageSwitcher && (
@@ -173,10 +173,10 @@ export function Sidebar({ sections, bottomItems, isOpen, onClose, logo, showLang
                         href={item.href}
                         onClick={() => onClose()}
                         className={cn(
-                          "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
+                          "flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium transition-all",
                           isActive
-                            ? "bg-accent text-accent-foreground"
-                            : "text-foreground hover:bg-muted"
+                            ? "bg-sidebar-active text-foreground shadow-sm"
+                            : "text-muted-foreground hover:bg-sidebar-active/50"
                         )}
                       >
                         <Icon className="w-5 h-5 flex-shrink-0" />
@@ -203,7 +203,7 @@ export function Sidebar({ sections, bottomItems, isOpen, onClose, logo, showLang
 
         {/* Bottom Items */}
         {bottomItems && bottomItems.length > 0 && (
-          <div className="px-3 py-4 border-t border-border space-y-1 flex-shrink-0">
+          <div className="px-3 py-4 space-y-1 flex-shrink-0">
             {bottomItems.map((item) => {
               const Icon = item.icon;
               // Remove locale prefix from pathname for comparison
@@ -224,10 +224,10 @@ export function Sidebar({ sections, bottomItems, isOpen, onClose, logo, showLang
                   href={item.href}
                   onClick={handleClick}
                   className={cn(
-                    "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
+                    "flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium transition-all",
                     isActive
-                      ? "bg-accent text-accent-foreground"
-                      : "text-foreground hover:bg-muted"
+                      ? "bg-sidebar-active text-foreground shadow-sm"
+                      : "text-muted-foreground hover:bg-sidebar-active/50"
                   )}
                 >
                   <Icon className="w-5 h-5 flex-shrink-0" />

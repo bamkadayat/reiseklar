@@ -161,14 +161,14 @@ export function ForgotPasswordForm() {
   // Step 1: Enter email
   if (step === 'email') {
     return (
-      <Card className="border border-gray-200 shadow-none w-full">
-        <CardHeader className="text-center pb-4 pt-6 sm:pb-6 sm:pt-8">
+      <Card className="bg-white border border-gray-200 shadow-lg w-full">
+        <CardHeader className="bg-white text-center pb-4 pt-6 sm:pb-6 sm:pt-8">
           <CardTitle className="text-2xl sm:text-3xl font-bold">Forgot password?</CardTitle>
           <p className="text-sm text-gray-600 mt-2">
             Enter your email address and we&apos;ll send you a 4-digit code to reset your password.
           </p>
         </CardHeader>
-        <CardContent className="px-4 sm:px-6">
+        <CardContent className="bg-white px-4 sm:px-6">
           <form onSubmit={handleEmailSubmit} className="space-y-5">
             <div className="space-y-2">
               <Label htmlFor="email" className="text-sm font-medium text-gray-700">Email</Label>
@@ -203,7 +203,7 @@ export function ForgotPasswordForm() {
             </Button>
           </form>
         </CardContent>
-        <CardFooter className="pb-8 flex justify-center">
+        <CardFooter className="bg-white pb-8 flex justify-center">
           <Link
             href="/signIn"
             className="inline-flex items-center text-sm text-blue-600 hover:underline font-medium"
@@ -218,8 +218,8 @@ export function ForgotPasswordForm() {
 
   // Step 2: Enter code and new password
   return (
-    <Card className="border border-gray-200 shadow-none w-full">
-      <CardHeader className="text-center pb-4 pt-6 sm:pb-6 sm:pt-8">
+    <Card className="bg-white border border-gray-200 shadow-lg w-full">
+      <CardHeader className="bg-white text-center pb-4 pt-6 sm:pb-6 sm:pt-8">
         <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-norwegian-blue/10">
           <Mail className="h-6 w-6 text-norwegian-blue" />
         </div>
@@ -228,7 +228,7 @@ export function ForgotPasswordForm() {
           We sent a 4-digit code to <strong>{email}</strong>
         </p>
       </CardHeader>
-      <CardContent className="px-4 sm:px-6">
+      <CardContent className="bg-white px-4 sm:px-6">
         <form onSubmit={handleResetSubmit} className="space-y-5">
           <div className="space-y-3">
             <Label className="text-sm font-medium text-gray-700">Verification Code</Label>

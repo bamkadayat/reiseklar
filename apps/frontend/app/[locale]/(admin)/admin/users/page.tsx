@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Search, Filter, UserPlus, X } from 'lucide-react';
+import { Search, UserPlus, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { adminService } from '@/lib/api/admin.service';
 import type { AdminUser } from '@reiseklar/shared';
@@ -106,40 +106,40 @@ export default function AdminUsersPage() {
   return (
     <div className="space-y-6 sm:space-y-8">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
+          <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-2">
             {t('title')}
           </h1>
-          <p className="mt-2 text-sm sm:text-base text-muted-foreground">
+          <p className="text-base sm:text-lg text-muted-foreground">
             {t('description')}
           </p>
         </div>
-        <button className="flex items-center justify-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition-colors whitespace-nowrap">
+        <button className="flex items-center justify-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-xl hover:bg-primary/90 shadow-sm hover:shadow-md transition-all whitespace-nowrap">
           <UserPlus className="w-5 h-5" />
           {t('addUser')}
         </button>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="bg-card rounded-lg border border-border p-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-5">
+        <div className="bg-card rounded-xl shadow-sm border border-border p-5">
           <p className="text-sm text-muted-foreground">{t('totalUsers')}</p>
           <p className="text-2xl font-bold text-foreground mt-1">{users.length}</p>
         </div>
-        <div className="bg-card rounded-lg border border-border p-4">
+        <div className="bg-card rounded-xl shadow-sm border border-border p-5">
           <p className="text-sm text-muted-foreground">{t('activeUsers')}</p>
           <p className="text-2xl font-bold text-primary mt-1">
             {users.filter((u) => u.status === 'Active').length}
           </p>
         </div>
-        <div className="bg-card rounded-lg border border-border p-4">
+        <div className="bg-card rounded-xl shadow-sm border border-border p-5">
           <p className="text-sm text-muted-foreground">{t('totalTrips')}</p>
           <p className="text-2xl font-bold text-primary mt-1">
             {users.reduce((sum, u) => sum + u.trips, 0)}
           </p>
         </div>
-        <div className="bg-card rounded-lg border border-border p-4">
+        <div className="bg-card rounded-xl shadow-sm border border-border p-5">
           <p className="text-sm text-muted-foreground">{t('admins')}</p>
           <p className="text-2xl font-bold text-primary mt-1">
             {users.filter((u) => u.role === 'ADMIN').length}
@@ -148,7 +148,7 @@ export default function AdminUsersPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-card rounded-lg border border-border p-4">
+      <div className="bg-card rounded-xl shadow-sm border border-border p-5">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
@@ -157,7 +157,7 @@ export default function AdminUsersPage() {
               placeholder={t('searchUsers')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-10 py-2 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-foreground placeholder:text-muted-foreground"
+              className="w-full pl-10 pr-10 py-3 border border-input rounded-xl focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-foreground placeholder:text-muted-foreground shadow-sm"
             />
             {searchQuery && (
               <button
@@ -169,10 +169,6 @@ export default function AdminUsersPage() {
               </button>
             )}
           </div>
-          <button className="flex items-center justify-center gap-2 px-4 py-2 border border-input rounded-lg hover:bg-muted transition-colors text-foreground">
-            <Filter className="w-5 h-5" />
-            {t('filters')}
-          </button>
         </div>
         {/* Search Results Info */}
         {searchQuery && (
@@ -183,7 +179,7 @@ export default function AdminUsersPage() {
       </div>
 
       {/* Users Table */}
-      <div className="bg-card rounded-lg border border-border overflow-hidden">
+      <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
         {/* Desktop Table */}
         <div className="hidden md:block overflow-x-auto">
           <table className="w-full">

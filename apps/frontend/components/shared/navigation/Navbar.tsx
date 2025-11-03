@@ -73,7 +73,7 @@ export function Navbar({ initialUser }: NavbarProps) {
 
   return (
     <>
-  <nav className="sticky top-0 z-40 bg-card backdrop-blur-sm bg-opacity-95 shadow-sm border-b border-border">
+  <nav className="sticky top-0 z-40 bg-card backdrop-blur-sm bg-opacity-95 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-1.5">
           {/* Logo */}

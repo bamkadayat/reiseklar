@@ -38,7 +38,7 @@ export function DashboardHeader({
   };
 
   return (
-    <header className="h-16 bg-background border-b border-border sticky top-0 z-30">
+    <header className="h-16 bg-card sticky top-0 z-30 border-b border-border shadow-sm">
       <div className="h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         {/* Left Side - Menu Button + Logo */}
         <div className="flex items-center gap-3">
@@ -59,12 +59,12 @@ export function DashboardHeader({
           </div>
 
           {/* User Profile */}
-          <div className="hidden md:flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-muted transition-colors cursor-pointer">
-            <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-semibold">
+          <div className="hidden md:flex items-center gap-3 px-4 py-2 rounded-xl hover:bg-muted transition-all cursor-pointer shadow-sm">
+            <div className="w-9 h-9 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-semibold shadow-sm">
               {userName.charAt(0).toUpperCase()}
             </div>
             <div className="text-sm">
-              <p className="font-medium text-foreground"> {user?.name}</p>
+              <p className="font-semibold text-foreground"> {user?.name}</p>
             </div>
           </div>
 
@@ -72,7 +72,7 @@ export function DashboardHeader({
           <button
             onClick={handleLogout}
             disabled={isLoggingOut}
-            className="p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-2.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-xl transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
             aria-label="Logout"
             title="Logout"
           >
