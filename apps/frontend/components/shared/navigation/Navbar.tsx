@@ -85,7 +85,7 @@ export function Navbar({ initialUser }: NavbarProps) {
                 width={155}
                 height={42}
                 priority
-                className="object-contain transition-transform duration-300 group-hover:scale-110"
+                className="object-contain transition-transform duration-300 group-hover:scale-110 w-32 sm:w-36 md:w-[155px]"
               />
             </div>
           </Link>
@@ -152,24 +152,23 @@ export function Navbar({ initialUser }: NavbarProps) {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden flex flex-col items-center gap-1.5 text-primary p-3 hover:bg-muted rounded-lg transition-all duration-200"
+            className="md:hidden flex items-center justify-center w-10 h-10 text-primary bg-gray-100 hover:bg-gray-200 rounded-full transition-all duration-200"
             aria-label={isMobileMenuOpen ? "Close mobile menu" : "Open mobile menu"}
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-menu"
           >
-            <span className="text-sm font-semibold transition-opacity duration-200">
-              {isMobileMenuOpen ? "Close" : "Menu"}
-            </span>
-            <div className="relative w-8 h-4 flex items-center justify-center">
+            <div className="relative w-6 h-4 flex flex-col justify-center items-start gap-1.5">
               <span
-                className={`absolute w-8 h-0.5 bg-norwegian-blue rounded-full transition-all duration-300 ease-in-out ${
-                  isMobileMenuOpen ? "rotate-45" : "rotate-0 -translate-y-1.5"
+                className={`w-full bg-norwegian-blue rounded-full transition-all duration-300 ease-in-out ${
+                  isMobileMenuOpen ? "rotate-45 translate-y-1.5" : "rotate-0"
                 }`}
+                style={{ height: '3px' }}
               ></span>
               <span
-                className={`absolute w-8 h-0.5 bg-norwegian-blue rounded-full transition-all duration-300 ease-in-out ${
-                  isMobileMenuOpen ? "-rotate-45" : "rotate-0 translate-y-1.5"
+                className={`w-4 bg-norwegian-blue rounded-full transition-all duration-300 ease-in-out ${
+                  isMobileMenuOpen ? "-rotate-45 -translate-y-0.5" : "rotate-0"
                 }`}
+                style={{ height: '3px' }}
               ></span>
             </div>
           </button>
@@ -178,19 +177,10 @@ export function Navbar({ initialUser }: NavbarProps) {
     </nav>
 
     {/* Backdrop & Mobile Menu moved outside <nav> to escape stacking context */}
-    {/* Mobile Menu Backdrop */}
-    <div
-      className={`fixed inset-0 bg-black/40 backdrop-blur-sm z-50 md:hidden transition-opacity duration-300 ${
-        isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-      }`}
-      onClick={() => setIsMobileMenuOpen(false)}
-      aria-hidden="true"
-    />
-
     {/* Mobile Menu Overlay */}
     <div
       id="mobile-menu"
-      className={`fixed right-0 top-0 bottom-0 w-96 max-w-[90vw] bg-card z-[60] md:hidden transition-transform duration-300 ease-in-out shadow-2xl border-l border-border ${
+      className={`fixed inset-0 w-screen h-screen bg-card z-[60] md:hidden transition-transform duration-300 ease-in-out ${
         isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
       }`}
       role="dialog"
@@ -199,28 +189,28 @@ export function Navbar({ initialUser }: NavbarProps) {
     >
       <div className="flex flex-col h-full overflow-y-auto">
         {/* Menu Header */}
-        <div className="px-6 py-4 border-b border-border bg-muted flex-shrink-0 flex items-center justify-between">
-          <h3 id="mobile-menu-title" className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Menu</h3>
+        <div className="px-6 py-4 flex-shrink-0 flex items-center justify-end">
           <button
             type="button"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition"
+            className="p-2 rounded-lg text-norwegian-blue hover:text-norwegian-blue/80 hover:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition"
             aria-label="Close mobile menu"
           >
-            <X className="w-5 h-5" />
+            <X className="w-8 h-8 font-semibold" strokeWidth={2} />
           </button>
         </div>
 
-        <div className="flex-1 px-4 py-6 space-y-1">
-          {/* Language Switcher */}
-            <div className="mb-6 px-2">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Language</p>
+        <div className="flex-1 flex items-center justify-center px-8 py-6">
+          <div className="w-full max-w-md space-y-8">
+            {/* Language Switcher */}
+            <div className="flex flex-col items-center">
+              <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">Language</p>
               <LanguageSwitcher />
             </div>
 
             {/* Account Section */}
-            <div className="space-y-1">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3 px-2">Account</p>
+            <div className="space-y-3">
+              <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3 text-center">Account</p>
 
               {isAuthenticated ? (
                 <>
@@ -228,9 +218,9 @@ export function Navbar({ initialUser }: NavbarProps) {
                   <Link
                     href="/user"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex items-center gap-3 text-primary hover:text-primary/80 font-medium text-base px-4 py-3 rounded-xl hover:bg-muted transition-all duration-200 active:scale-95"
+                    className="flex items-center justify-center gap-3 text-primary hover:text-primary/80 font-medium text-xl px-6 py-4 rounded-xl hover:bg-muted transition-all duration-200 active:scale-95"
                   >
-                    <User className="w-5 h-5" />
+                    <User className="w-6 h-6" />
                     <span>Dashboard</span>
                   </Link>
 
@@ -238,9 +228,9 @@ export function Navbar({ initialUser }: NavbarProps) {
                   <button
                     onClick={handleLogout}
                     disabled={isLoggingOut}
-                    className="flex items-center gap-3 text-destructive hover:text-destructive/80 font-medium text-base px-4 py-3 rounded-xl hover:bg-destructive/10 transition-all duration-200 disabled:opacity-50 w-full text-left active:scale-95"
+                    className="flex items-center justify-center gap-3 text-destructive hover:text-destructive/80 font-medium text-xl px-6 py-4 rounded-xl hover:bg-destructive/10 transition-all duration-200 disabled:opacity-50 w-full active:scale-95"
                   >
-                    <LogOut className={`w-5 h-5 ${isLoggingOut ? 'animate-pulse' : ''}`} />
+                    <LogOut className={`w-6 h-6 ${isLoggingOut ? 'animate-pulse' : ''}`} />
                     <span>{isLoggingOut ? 'Logging out...' : 'Logout'}</span>
                   </button>
                 </>
@@ -250,9 +240,9 @@ export function Navbar({ initialUser }: NavbarProps) {
                   <Link
                     href="/signIn"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex items-center gap-3 text-primary hover:text-primary/80 font-medium text-base px-4 py-3 rounded-xl hover:bg-muted transition-all duration-200 active:scale-95"
+                    className="flex items-center justify-center gap-3 text-primary hover:text-primary/80 font-medium text-xl px-6 py-4 rounded-xl hover:bg-muted transition-all duration-200 active:scale-95"
                   >
-                    <BiLogIn className="w-5 h-5" />
+                    <BiLogIn className="w-6 h-6" />
                     <span>{t("signIn")}</span>
                   </Link>
 
@@ -260,9 +250,9 @@ export function Navbar({ initialUser }: NavbarProps) {
                   <Link
                     href="/signUp"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex items-center gap-3 text-primary hover:text-primary/80 font-medium text-base px-4 py-3 rounded-xl hover:bg-muted transition-all duration-200 active:scale-95"
+                    className="flex items-center justify-center gap-3 text-primary hover:text-primary/80 font-medium text-xl px-6 py-4 rounded-xl hover:bg-muted transition-all duration-200 active:scale-95"
                   >
-                    <BiUserPlus className="w-5 h-5" />
+                    <BiUserPlus className="w-6 h-6" />
                     <span>{t("signUp")}</span>
                   </Link>
                 </>
@@ -270,18 +260,19 @@ export function Navbar({ initialUser }: NavbarProps) {
             </div>
 
             {/* Navigation Section */}
-            <div className="pt-6 space-y-1">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3 px-2">Navigation</p>
+            <div className="space-y-3">
+              <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3 text-center">Navigation</p>
 
               {/* About Link */}
               <Link
                 href="/about"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center text-primary hover:text-primary/80 font-medium text-base px-4 py-3 rounded-xl hover:bg-muted transition-all duration-200 active:scale-95"
+                className="flex items-center justify-center text-primary hover:text-primary/80 font-medium text-xl px-6 py-4 rounded-xl hover:bg-muted transition-all duration-200 active:scale-95"
               >
                 {t("about")}
               </Link>
             </div>
+          </div>
         </div>
       </div>
     </div>

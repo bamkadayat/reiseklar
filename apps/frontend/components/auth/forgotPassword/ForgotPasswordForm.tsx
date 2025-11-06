@@ -179,7 +179,7 @@ export function ForgotPasswordForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={isLoading}
-                className={`h-12 ${error ? 'border-red-500' : ''}`}
+                className={`h-12 ${error ? 'border-red-500' : 'border border-gray-300 focus:border-gray-400 focus:ring-2 focus:ring-gray-200'}`}
                 autoFocus
               />
               {error && (
@@ -246,7 +246,7 @@ export function ForgotPasswordForm() {
                   onKeyDown={(e) => handleKeyDown(index, e)}
                   onPaste={index === 0 ? handlePaste : undefined}
                   disabled={isLoading}
-                  className={`w-14 h-14 text-center text-2xl font-semibold ${error && !passwordErrors.length ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`w-14 h-14 text-center text-2xl font-semibold ${error && !passwordErrors.length ? 'border-red-500' : 'border border-gray-300 focus:border-gray-400 focus:ring-2 focus:ring-gray-200'}`}
                   autoFocus={index === 0}
                 />
               ))}
@@ -266,7 +266,7 @@ export function ForgotPasswordForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={isLoading}
-                className="h-12 pr-10"
+                className="h-12 pr-10 border border-gray-300 focus:border-gray-400 focus:ring-2 focus:ring-gray-200"
               />
               <button
                 type="button"
@@ -296,7 +296,7 @@ export function ForgotPasswordForm() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 disabled={isLoading}
-                className="h-12 pr-10"
+                className="h-12 pr-10 border border-gray-300 focus:border-gray-400 focus:ring-2 focus:ring-gray-200"
               />
               <button
                 type="button"

@@ -95,7 +95,7 @@ export function SignUpForm() {
               placeholder="John Doe"
               {...register('name')}
               disabled={isSubmitting}
-              className={`h-12 ${errors.name ? 'border-red-500' : ''}`}
+              className={`h-12 ${errors.name ? 'border-red-500' : 'border border-gray-300 focus:border-gray-400 focus:ring-2 focus:ring-gray-200'}`}
             />
             {errors.name && (
               <p className="text-sm text-red-500">{errors.name.message}</p>
@@ -110,7 +110,7 @@ export function SignUpForm() {
               placeholder="name@example.com"
               {...register('email')}
               disabled={isSubmitting}
-              className={`h-12 ${errors.email ? 'border-red-500' : ''}`}
+              className={`h-12 ${errors.email ? 'border-red-500' : 'border border-gray-300 focus:border-gray-400 focus:ring-2 focus:ring-gray-200'}`}
             />
             {errors.email && (
               <p className="text-sm text-red-500">{errors.email.message}</p>
@@ -126,7 +126,7 @@ export function SignUpForm() {
                 placeholder="Enter your password"
                 {...register('password')}
                 disabled={isSubmitting}
-                className={`h-12 pr-10 ${errors.password ? 'border-red-500' : ''}`}
+                className={`h-12 pr-10 ${errors.password ? 'border-red-500' : 'border border-gray-300 focus:border-gray-400 focus:ring-2 focus:ring-gray-200'}`}
               />
               <button
                 type="button"
@@ -158,7 +158,7 @@ export function SignUpForm() {
                 placeholder="Confirm your password"
                 {...register('confirmPassword')}
                 disabled={isSubmitting}
-                className={`h-12 pr-10 ${errors.confirmPassword ? 'border-red-500' : ''}`}
+                className={`h-12 pr-10 ${errors.confirmPassword ? 'border-red-500' : 'border border-gray-300 focus:border-gray-400 focus:ring-2 focus:ring-gray-200'}`}
               />
               <button
                 type="button"

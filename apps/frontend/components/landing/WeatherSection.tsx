@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Cloud, CloudRain, Sun, Wind, Droplets, MapPin } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import type { WeatherData } from '@reiseklar/shared/types/weather';
+import { WeatherSkeleton } from './WeatherSkeleton';
 
 export function WeatherSection() {
   const t = useTranslations('home.weather');
@@ -97,21 +98,7 @@ export function WeatherSection() {
   };
 
   if (loading) {
-    return (
-      <div className="w-full h-full min-h-[450px]">
-        <div className="rounded-2xl p-8 shadow-sm border border-gray-100 h-full">
-          <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-48 mb-6"></div>
-            <div className="h-32 bg-gray-200 rounded mb-6"></div>
-            <div className="grid grid-cols-7 gap-4">
-              {[...Array(7)].map((_, i) => (
-                <div key={i} className="h-24 bg-gray-200 rounded"></div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return <WeatherSkeleton />;
   }
 
   if (error || !weather) {
