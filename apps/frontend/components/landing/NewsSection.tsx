@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo, useCallback } from 'react';
 import { ExternalLink, Calendar } from 'lucide-react';
 import { RiNewsFill } from 'react-icons/ri';
 import { useTranslations } from 'next-intl';
+import { NewsSkeleton } from './NewsSkeleton';
 
 interface NewsItem {
   title: string;
@@ -73,35 +74,7 @@ export function NewsSection() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="w-full h-full min-h-[450px]">
-        <div className="rounded-2xl p-4 sm:p-6 bg-gradient-to-br from-blue-50 to-indigo-50 h-full flex flex-col">
-          <div className="animate-pulse">
-            {/* Header skeleton */}
-            <div className="flex items-center gap-2 mb-4 sm:mb-6 h-8">
-              <div className="w-4 h-4 sm:w-5 sm:h-5 bg-gray-200 rounded flex-shrink-0"></div>
-              <div className="h-6 bg-gray-200 rounded w-32"></div>
-            </div>
-
-            {/* News items skeleton */}
-            <div className="flex-1 space-y-3">
-              {[...Array(3)].map((_, i) => (
-                <div key={i} className="bg-white rounded-lg p-4 shadow-sm">
-                  <div className="space-y-2">
-                    <div className="h-4 bg-gray-200 rounded w-full"></div>
-                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                    <div className="flex items-center gap-2 mt-3">
-                      <div className="h-3 bg-gray-200 rounded w-20"></div>
-                      <div className="h-3 bg-gray-200 rounded w-16"></div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return <NewsSkeleton />;
   }
 
   if (error || news.length === 0) {
