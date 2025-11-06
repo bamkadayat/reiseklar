@@ -200,18 +200,15 @@ export function Navbar({ initialUser }: NavbarProps) {
           </button>
         </div>
 
-        <div className="flex-1 flex items-center justify-center px-8 py-6">
+        <div className="flex-1 flex justify-center px-8 py-6">
           <div className="w-full max-w-md space-y-8">
             {/* Language Switcher */}
             <div className="flex flex-col items-center">
-              <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">Language</p>
               <LanguageSwitcher />
             </div>
 
             {/* Account Section */}
             <div className="space-y-3">
-              <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3 text-center">Account</p>
-
               {isAuthenticated ? (
                 <>
                   {/* User Profile */}
@@ -242,7 +239,6 @@ export function Navbar({ initialUser }: NavbarProps) {
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="flex items-center justify-center gap-3 text-primary hover:text-primary/80 font-medium text-xl px-6 py-4 rounded-xl hover:bg-muted transition-all duration-200 active:scale-95"
                   >
-                    <BiLogIn className="w-6 h-6" />
                     <span>{t("signIn")}</span>
                   </Link>
 
@@ -252,7 +248,6 @@ export function Navbar({ initialUser }: NavbarProps) {
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="flex items-center justify-center gap-3 text-primary hover:text-primary/80 font-medium text-xl px-6 py-4 rounded-xl hover:bg-muted transition-all duration-200 active:scale-95"
                   >
-                    <BiUserPlus className="w-6 h-6" />
                     <span>{t("signUp")}</span>
                   </Link>
                 </>
@@ -260,14 +255,12 @@ export function Navbar({ initialUser }: NavbarProps) {
             </div>
 
             {/* Navigation Section */}
-            <div className="space-y-3">
-              <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3 text-center">Navigation</p>
-
+            <div className="space-y-0">
               {/* About Link */}
               <Link
                 href="/about"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center justify-center text-primary hover:text-primary/80 font-medium text-xl px-6 py-4 rounded-xl hover:bg-muted transition-all duration-200 active:scale-95"
+                className="flex items-center justify-center text-primary hover:text-primary/80 font-medium text-xl px-6  rounded-xl hover:bg-muted transition-all duration-200 active:scale-95"
               >
                 {t("about")}
               </Link>
