@@ -100,8 +100,8 @@ export default function AdminDashboardPage() {
       {/* Recent Activity & User Growth */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {/* Recent Users */}
-        <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
-          <div className="px-6 py-5 border-b border-border bg-card">
+        <div className="bg-card rounded-xl shadow-sm border border-border dark:border-blue-500/20 overflow-hidden">
+          <div className="px-6 py-5 border-b border-border dark:border-blue-500/20 bg-card">
             <h2 className="text-xl font-semibold text-foreground">
               {t('recentUsers')}
             </h2>
@@ -176,8 +176,8 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* System Health */}
-        <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
-          <div className="px-6 py-5 border-b border-border bg-card">
+        <div className="bg-card rounded-xl shadow-sm border border-border dark:border-blue-500/20 overflow-hidden">
+          <div className="px-6 py-5 border-b border-border dark:border-blue-500/20 bg-card">
             <h2 className="text-xl font-semibold text-foreground">
               {t('systemHealth')}
             </h2>
@@ -244,19 +244,19 @@ export default function AdminDashboardPage() {
           </>
         ) : (
           <>
-            <button className="p-6 bg-card border border-border rounded-xl shadow-sm hover:shadow-md hover:border-primary/50 transition-all group text-left">
+            <button className="p-6 bg-card border border-border dark:border-blue-500/20 rounded-xl shadow-sm hover:shadow-md hover:border-primary/50 dark:hover:border-blue-400/40 transition-all group text-left">
               <Users className="w-10 h-10 mb-4 text-primary" />
               <h3 className="text-lg font-semibold mb-2 text-foreground">{t('manageUsers')}</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 {t('manageUsersDesc')}
               </p>
             </button>
-            <button className="p-6 bg-card border border-border rounded-xl shadow-sm hover:shadow-md hover:border-primary/50 transition-all text-left">
+            <button className="p-6 bg-card border border-border dark:border-blue-500/20 rounded-xl shadow-sm hover:shadow-md hover:border-primary/50 dark:hover:border-blue-400/40 transition-all text-left">
               <Activity className="w-10 h-10 mb-4 text-primary" />
               <h3 className="text-lg font-semibold mb-2 text-foreground">{t('viewAnalytics')}</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">{t('viewAnalyticsDesc')}</p>
             </button>
-            <button className="p-6 bg-card border border-border rounded-xl shadow-sm hover:shadow-md hover:border-primary/50 transition-all text-left">
+            <button className="p-6 bg-card border border-border dark:border-blue-500/20 rounded-xl shadow-sm hover:shadow-md hover:border-primary/50 dark:hover:border-blue-400/40 transition-all text-left">
               <Route className="w-10 h-10 mb-4 text-primary" />
               <h3 className="text-lg font-semibold mb-2 text-foreground">{t('routeManagement')}</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">{t('routeManagementDesc')}</p>

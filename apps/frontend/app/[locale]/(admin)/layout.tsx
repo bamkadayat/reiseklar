@@ -94,15 +94,17 @@ export default function AdminLayout({
         {/* Main Content */}
         <div className="flex-1 flex flex-col min-w-0">
           {/* Header */}
-          <DashboardHeader
-            onMenuClick={() => setIsSidebarOpen(true)}
-            userName={user?.name || user?.email || 'Admin'}
-            userRole="admin"
-            notificationCount={0}
-          />
+          <div className="backdrop-blur-sm">
+            <DashboardHeader
+              onMenuClick={() => setIsSidebarOpen(true)}
+              userName={user?.name || user?.email || 'Admin'}
+              userRole="admin"
+              notificationCount={0}
+            />
+          </div>
 
           {/* Main Content Area */}
-          <main className="flex-1 overflow-y-auto bg-background">
+          <main className="flex-1 overflow-y-auto bg-card">
             <div className="max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
               {children}
             </div>

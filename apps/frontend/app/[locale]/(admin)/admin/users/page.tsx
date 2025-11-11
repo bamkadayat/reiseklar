@@ -123,23 +123,23 @@ export default function AdminUsersPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-5">
-        <div className="bg-card rounded-xl shadow-sm border border-border p-5">
+        <div className="bg-card rounded-xl shadow-sm border border-border dark:border-blue-500/20 p-5">
           <p className="text-sm text-muted-foreground">{t('totalUsers')}</p>
           <p className="text-2xl font-bold text-foreground mt-1">{users.length}</p>
         </div>
-        <div className="bg-card rounded-xl shadow-sm border border-border p-5">
+        <div className="bg-card rounded-xl shadow-sm border border-border dark:border-blue-500/20 p-5">
           <p className="text-sm text-muted-foreground">{t('activeUsers')}</p>
           <p className="text-2xl font-bold text-primary mt-1">
             {users.filter((u) => u.status === 'Active').length}
           </p>
         </div>
-        <div className="bg-card rounded-xl shadow-sm border border-border p-5">
+        <div className="bg-card rounded-xl shadow-sm border border-border dark:border-blue-500/20 p-5">
           <p className="text-sm text-muted-foreground">{t('totalTrips')}</p>
           <p className="text-2xl font-bold text-primary mt-1">
             {users.reduce((sum, u) => sum + u.trips, 0)}
           </p>
         </div>
-        <div className="bg-card rounded-xl shadow-sm border border-border p-5">
+        <div className="bg-card rounded-xl shadow-sm border border-border dark:border-blue-500/20 p-5">
           <p className="text-sm text-muted-foreground">{t('admins')}</p>
           <p className="text-2xl font-bold text-primary mt-1">
             {users.filter((u) => u.role === 'ADMIN').length}
@@ -148,7 +148,7 @@ export default function AdminUsersPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-card rounded-xl shadow-sm border border-border p-5">
+      <div className="bg-card rounded-xl shadow-sm border border-border dark:border-blue-500/20 p-5">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
@@ -157,7 +157,7 @@ export default function AdminUsersPage() {
               placeholder={t('searchUsers')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-10 py-3 border border-input rounded-xl focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-foreground placeholder:text-muted-foreground shadow-sm"
+              className="w-full pl-10 pr-10 py-3 border-0 rounded-xl focus:ring-2 focus:ring-ring bg-muted/50 text-foreground placeholder:text-muted-foreground"
             />
             {searchQuery && (
               <button
@@ -179,7 +179,7 @@ export default function AdminUsersPage() {
       </div>
 
       {/* Users Table */}
-      <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
+      <div className="bg-card rounded-xl shadow-sm border border-border dark:border-blue-500/20 overflow-hidden">
         {/* Desktop Table */}
         <div className="hidden md:block overflow-x-auto">
           <table className="w-full">
