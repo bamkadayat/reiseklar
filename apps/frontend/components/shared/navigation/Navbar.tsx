@@ -78,7 +78,7 @@ export function Navbar({ initialUser }: NavbarProps) {
         <div className="flex justify-between items-center py-1.5">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 py-1 group">
-            <div className="relative w-[206px] h-[47px]">
+            <div className="relative w-[141px] h-[47px]">
               <Image
                 src="/images/logo.svg"
                 alt="Reiseklar Logo"
