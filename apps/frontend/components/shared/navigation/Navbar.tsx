@@ -78,14 +78,13 @@ export function Navbar({ initialUser }: NavbarProps) {
         <div className="flex justify-between items-center py-1.5">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 py-1 group">
-            <div className="relative">
+            <div className="relative w-[206px] h-[47px]">
               <Image
-                src="/images/dark-logo.svg"
+                src="/images/logo.svg"
                 alt="Reiseklar Logo"
-                width={155}
-                height={42}
+                fill
                 priority
-                className="object-contain transition-transform duration-300 group-hover:scale-110 w-32 sm:w-36 md:w-[155px]"
+                className="object-contain transition-transform duration-300 group-hover:scale-110"
               />
             </div>
           </Link>
