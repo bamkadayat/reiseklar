@@ -20,12 +20,11 @@ export function Navbar({ initialUser }: NavbarProps) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const t = useTranslations("nav");
   const { logout } = useAuth();
-  const { user: reduxUser, isAuthenticated: reduxIsAuthenticated, isCheckingAuth } = useAppSelector((state) => state.auth);
+  const { isAuthenticated: reduxIsAuthenticated, isCheckingAuth } = useAppSelector((state) => state.auth);
   const router = useRouter();
 
   // Use server-side user initially, then switch to Redux after hydration
   // This prevents flickering on page load
-  const user = isCheckingAuth ? initialUser : (reduxUser || initialUser);
   const isAuthenticated = isCheckingAuth ? (initialUser !== null) : reduxIsAuthenticated;
 
   const handleLogout = async () => {
