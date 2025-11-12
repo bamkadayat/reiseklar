@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { useState, useEffect } from "react";
@@ -21,12 +20,11 @@ export function Navbar({ initialUser }: NavbarProps) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const t = useTranslations("nav");
   const { logout } = useAuth();
-  const { user: reduxUser, isAuthenticated: reduxIsAuthenticated, isCheckingAuth } = useAppSelector((state) => state.auth);
+  const { isAuthenticated: reduxIsAuthenticated, isCheckingAuth } = useAppSelector((state) => state.auth);
   const router = useRouter();
 
   // Use server-side user initially, then switch to Redux after hydration
   // This prevents flickering on page load
-  const user = isCheckingAuth ? initialUser : (reduxUser || initialUser);
   const isAuthenticated = isCheckingAuth ? (initialUser !== null) : reduxIsAuthenticated;
 
   const handleLogout = async () => {
@@ -77,16 +75,18 @@ export function Navbar({ initialUser }: NavbarProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-1.5">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 py-1 group">
-            <div className="relative w-[206px] h-[47px]">
-              <Image
-                src="/images/logo.svg"
-                alt="Reiseklar Logo"
-                fill
-                priority
-                className="object-contain transition-transform duration-300 group-hover:scale-110"
-              />
-            </div>
+          <Link href="/" className="flex items-center gap-3 py-1 group">
+            <img
+              src="/images/logo.svg"
+              alt="Reiseklar Logo"
+              width={40}
+              height={39}
+              className="object-contain transition-transform duration-300 group-hover:scale-110 dark:brightness-0 dark:invert"
+            />
+            <span className="text-xl font-bold">
+              <span className="text-primary">REISE</span>
+              <span className="text-[#750505] dark:text-red-400">KLAR</span>
+            </span>
           </Link>
 
           {/* Desktop Navigation */}

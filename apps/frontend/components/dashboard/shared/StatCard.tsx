@@ -30,7 +30,7 @@ export function StatCard({
   color = 'blue',
 }: StatCardProps) {
   return (
-    <div className="bg-card rounded-lg border border-border p-6 hover:shadow-md transition-shadow">
+    <div className="bg-card rounded-lg border border-border dark:border-blue-500/20 p-6 hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <p className="text-sm font-medium text-muted-foreground mb-1">{title}</p>

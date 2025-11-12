@@ -38,7 +38,7 @@ export function DashboardHeader({
   };
 
   return (
-    <header className="h-16 bg-card sticky top-0 z-30 border-b border-border shadow-sm">
+    <header className="h-16 bg-card/95 dark:bg-card/80 backdrop-blur-md sticky top-0 z-30 border-b border-border/50 dark:border-border/20 shadow-sm">
       <div className="h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         {/* Left Side - Menu Button + Logo */}
         <div className="flex items-center gap-3">

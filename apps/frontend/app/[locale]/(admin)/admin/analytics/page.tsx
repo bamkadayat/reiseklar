@@ -78,7 +78,7 @@ export default function AdminAnalyticsPage() {
             className={`px-4 py-2 rounded-lg font-medium transition-colors ${
               period === selectedPeriod
                 ? 'bg-primary text-primary-foreground'
-                : 'bg-muted text-muted-foreground border border-border hover:bg-accent hover:text-accent-foreground'
+                : 'bg-muted text-muted-foreground border border-border dark:border-blue-500/20 hover:bg-accent hover:text-accent-foreground'
             }`}
           >
             {period === '7d' && t('last7Days')}
@@ -140,7 +140,7 @@ export default function AdminAnalyticsPage() {
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* User Growth Chart */}
-        <div className="bg-card rounded-lg border border-border p-6">
+        <div className="bg-card rounded-lg border border-border dark:border-blue-500/20 p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-foreground">
               {t('userGrowthChart')}
@@ -177,7 +177,7 @@ export default function AdminAnalyticsPage() {
         </div>
 
         {/* Route Usage Chart */}
-        <div className="bg-card rounded-lg border border-border p-6">
+        <div className="bg-card rounded-lg border border-border dark:border-blue-500/20 p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-foreground">
               {t('routeUsage')}
@@ -244,8 +244,8 @@ export default function AdminAnalyticsPage() {
       </div>
 
       {/* Popular Routes */}
-      <div className="bg-card rounded-lg border border-border overflow-hidden">
-        <div className="px-6 py-4 border-b border-border flex items-center justify-between">
+      <div className="bg-card rounded-lg border border-border dark:border-blue-500/20 overflow-hidden">
+        <div className="px-6 py-4 border-b border-border dark:border-blue-500/20 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-foreground">
             {t('popularRoutes')}
           </h2>

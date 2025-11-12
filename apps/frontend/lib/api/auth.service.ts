@@ -193,4 +193,17 @@ export const authService = {
 
     return response.data;
   },
+
+  /**
+   * Delete current user profile
+   */
+  async deleteProfile(): Promise<{ message: string }> {
+    const response = await apiClient.delete<ApiResponse<{ message: string }>>('/api/users/me');
+
+    if (!response.success || !response.data) {
+      throw new Error(response.error || 'Failed to delete profile');
+    }
+
+    return response.data;
+  },
 };

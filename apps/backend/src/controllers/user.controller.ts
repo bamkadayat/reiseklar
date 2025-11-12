@@ -88,6 +88,55 @@ export class UserController {
     }
   }
 
+  // DELETE /api/users/me
+  async deleteProfile(req: AuthRequest, res: Response) {
+    try {
+      if (!req.userId) {
+        return res.status(401).json({
+          success: false,
+          error: 'Unauthorized',
+        });
+      }
+
+      // Delete user's trips first (due to foreign key constraints)
+      await prisma.trip.deleteMany({
+        where: { userId: req.userId },
+      });
+
+      // Delete user's places
+      await prisma.place.deleteMany({
+        where: { userId: req.userId },
+      });
+
+      // Delete the user
+      await prisma.user.delete({
+        where: { id: req.userId },
+      });
+
+      // Clear cookies
+      res.clearCookie('accessToken');
+      res.clearCookie('refreshToken');
+
+      res.status(200).json({
+        success: true,
+        data: { message: 'Profile deleted successfully' },
+      });
+    } catch (error) {
+      console.error('Error deleting profile:', error);
+      if (error instanceof Error) {
+        return res.status(400).json({
+          success: false,
+          error: error.message,
+        });
+      }
+
+      res.status(500).json({
+        success: false,
+        error: 'Internal server error',
+      });
+    }
+  }
+
   // POST /api/users/places - Create a new place
   async createPlace(req: AuthRequest, res: Response) {
     try {

@@ -14,6 +14,9 @@ router.get('/me', (req, res) => userController.getProfile(req, res));
 // PUT /api/users/me - Update current user profile
 router.put('/me', (req, res) => userController.updateProfile(req, res));
 
+// DELETE /api/users/me - Delete current user profile
+router.delete('/me', (req, res) => userController.deleteProfile(req, res));
+
 // Place routes
 // POST /api/users/places - Create a new place
 router.post('/places', (req, res) => userController.createPlace(req, res));

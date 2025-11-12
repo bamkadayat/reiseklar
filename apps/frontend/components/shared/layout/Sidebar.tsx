@@ -4,9 +4,7 @@ import { Link } from "@/i18n/routing";
 import { usePathname } from "next/navigation";
 import { LucideIcon, Bell } from "lucide-react";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 import { LanguageSwitcher } from '@/components/shared/navigation/LanguageSwitcher';
-import { useEffect, useState } from 'react';
 
 export interface SidebarItem {
   icon: LucideIcon;
@@ -36,27 +34,6 @@ interface SidebarProps {
 
 export function Sidebar({ sections, bottomItems, isOpen, onClose, logo, showLanguageSwitcher = false, showNotifications = false, notificationCount = 0 }: SidebarProps) {
   const pathname = usePathname();
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  useEffect(() => {
-    // Check initial theme
-    const checkTheme = () => {
-      setIsDarkMode(document.documentElement.classList.contains('dark'));
-    };
-
-    checkTheme();
-
-    // Watch for theme changes
-    const observer = new MutationObserver(checkTheme);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class'],
-    });
-
-    return () => observer.disconnect();
-  }, []);
-
-  const logoSrc = isDarkMode ? '/images/light-logo.svg' : '/images/dark-logo.svg';
 
   return (
     <>
@@ -85,16 +62,21 @@ export function Sidebar({ sections, bottomItems, isOpen, onClose, logo, showLang
       >
         {/* Logo Section */}
         <div className="h-16 flex items-center justify-between px-6 flex-shrink-0 border-b border-border">
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-3">
             {logo && (
-              <Image
-                src={logoSrc}
-                alt="Reiseklar Logo"
-                width={120}
-                height={32}
-                priority
-                className="object-contain"
-              />
+              <>
+                <img
+                  src="/images/logo.svg"
+                  alt="Reiseklar Logo"
+                  width={32}
+                  height={31}
+                  className="object-contain dark:brightness-0 dark:invert"
+                />
+                <span className="text-lg font-bold">
+                  <span className="text-primary">REISE</span>
+                  <span className="text-[#750505] dark:text-red-400">KLAR</span>
+                </span>
+              </>
             )}
           </Link>
           <button
