@@ -2,6 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 import { JourneyResults } from '@/components/journey/JourneyResults';
+import { JourneyPageSkeleton } from '@/components/journey/JourneyPageSkeleton';
 import { Suspense } from 'react';
 
 function JourneyContent() {
@@ -54,14 +55,7 @@ function JourneyContent() {
 export default function JourneyPage() {
   return (
     <div className="max-w-7xl mx-auto px-0 sm:px-4 lg:px-6">
-      <Suspense fallback={
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-700 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading journey options...</p>
-          </div>
-        </div>
-      }>
+      <Suspense fallback={<JourneyPageSkeleton />}>
         <JourneyContent />
       </Suspense>
     </div>

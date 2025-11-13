@@ -16,17 +16,23 @@ export function WeatherSection() {
   useEffect(() => {
     const fetchWeather = async (lat: number, lon: number) => {
       try {
-        // Fetch location name using Entur Geocoder API
+        // Fetch location name using Entur Geocoder API with timeout
         try {
           const geocoderUrl = process.env.NEXT_PUBLIC_ENTUR_GEOCODER_API_URL || '';
+
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 second timeout
+
           const geocodeResponse = await fetch(
             `${geocoderUrl}/reverse?point.lat=${lat}&point.lon=${lon}&size=1`,
             {
               headers: {
                 'ET-Client-Name': 'reiseklar-no',
               },
+              signal: controller.signal,
             }
           );
+          clearTimeout(timeoutId);
 
           if (geocodeResponse.ok) {
             const geocodeData = await geocodeResponse.json();

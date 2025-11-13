@@ -2,8 +2,8 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export function JourneyCardSkeleton() {
   return (
-    <Card className="shadow-none">
-      <CardContent className="p-4 sm:p-6">
+    <Card className="shadow-sm border border-gray-200 bg-white">
+      <CardContent className="p-3 sm:p-4 md:p-6">
         {/* Header Skeleton */}
         <div className="flex items-center justify-between mb-3 sm:mb-4">
           <div className="h-4 bg-gray-200 rounded w-24 animate-pulse"></div>

@@ -1,13 +1,21 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useTranslations } from 'next-intl';
+import dynamic from 'next/dynamic';
 import { JourneyCard } from './JourneyCard';
 import { JourneyCardSkeleton } from './JourneyCardSkeleton';
-import { AlternativeRoutes } from './AlternativeRoutes';
+import { JourneyMapSkeleton } from './JourneyMapSkeleton';
 import { JourneySearchModifier } from './JourneySearchModifier';
-import { JourneyMap } from './JourneyMap';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+
+// Dynamic import for JourneyMap to reduce initial bundle size
+const JourneyMap = dynamic(
+  () => import('./JourneyMap').then(mod => mod.JourneyMap),
+  {
+    loading: () => <JourneyMapSkeleton />,
+    ssr: false, // Disable SSR for mapbox-gl as it requires browser APIs
+  }
+);
 
 interface JourneyResultsProps {
   startId: string;
@@ -39,7 +47,6 @@ export function JourneyResults({
   stopLon,
   dateTime,
 }: JourneyResultsProps) {
-  const t = useTranslations('journey');
   const [journeys, setJourneys] = useState<Journey[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -306,7 +313,9 @@ export function JourneyResults({
           {/* Main Content - Map and Journey Results */}
           <div className="lg:col-span-9 space-y-3 sm:space-y-4">
             {/* Map - shown above journey cards on all screens */}
-            {!isLoading && journeys.length > 0 && (
+            {isLoading ? (
+              <JourneyMapSkeleton />
+            ) : journeys.length > 0 ? (
               <JourneyMap
                 journey={journeys[selectedJourneyIndex]}
                 startLat={searchParams.startLat}
@@ -316,7 +325,7 @@ export function JourneyResults({
                 stopLon={searchParams.stopLon}
                 stopLabel={searchParams.stopLabel}
               />
-            )}
+            ) : null}
 
             {/* Journey Results */}
             <div className="space-y-3 sm:space-y-4">

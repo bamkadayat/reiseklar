@@ -66,6 +66,12 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
+        {/* Preconnect to external APIs */}
+        <link rel="dns-prefetch" href="https://api.entur.io" />
+        <link rel="preconnect" href="https://api.entur.io" />
+        <link rel="dns-prefetch" href="https://api.met.no" />
+        <link rel="preconnect" href="https://api.met.no" />
         {/* Theme initialization script - runs before React hydration to prevent flash */}
         <script
           dangerouslySetInnerHTML={{
