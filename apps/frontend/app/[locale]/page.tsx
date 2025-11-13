@@ -1,9 +1,27 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { HeroSection } from '@/components/landing/HeroSection';
 import { PublicPageWrapper } from '@/components/shared/layout/PublicPageWrapper';
-import { WeatherSection } from '@/components/landing/WeatherSection';
-import { NewsSection } from '@/components/landing/NewsSection';
+import { WeatherSkeleton } from '@/components/landing/WeatherSkeleton';
+import { NewsSkeleton } from '@/components/landing/NewsSkeleton';
+
+// Dynamically import non-critical sections to improve initial load
+const WeatherSection = dynamic(
+  () => import('@/components/landing/WeatherSection').then(mod => mod.WeatherSection),
+  {
+    loading: () => <WeatherSkeleton />,
+    ssr: false,
+  }
+);
+
+const NewsSection = dynamic(
+  () => import('@/components/landing/NewsSection').then(mod => mod.NewsSection),
+  {
+    loading: () => <NewsSkeleton />,
+    ssr: false,
+  }
+);
 
 export default function Home() {
   return (
