@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { LucideIcon, Bell } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LanguageSwitcher } from '@/components/shared/navigation/LanguageSwitcher';
+import { useTheme } from '@/contexts/ThemeContext';
 
 export interface SidebarItem {
   icon: LucideIcon;
@@ -34,6 +35,7 @@ interface SidebarProps {
 
 export function Sidebar({ sections, bottomItems, isOpen, onClose, logo, showLanguageSwitcher = false, showNotifications = false, notificationCount = 0 }: SidebarProps) {
   const pathname = usePathname();
+  const { effectiveTheme } = useTheme();
 
   return (
     <>
@@ -64,19 +66,13 @@ export function Sidebar({ sections, bottomItems, isOpen, onClose, logo, showLang
         <div className="h-16 flex items-center justify-between px-6 flex-shrink-0 border-b border-border">
           <Link href="/" className="flex items-center gap-3">
             {logo && (
-              <>
-                <img
-                  src="/images/logo.svg"
-                  alt="Reiseklar Logo"
-                  width={32}
-                  height={31}
-                  className="object-contain dark:brightness-0 dark:invert"
-                />
-                <span className="text-lg font-bold">
-                  <span className="text-primary">REISE</span>
-                  <span className="text-[#750505] dark:text-red-400">KLAR</span>
-                </span>
-              </>
+              <img
+                src={effectiveTheme === 'dark' ? "/images/dark-logo.svg" : "/images/logo.svg"}
+                alt="Reiseklar Logo"
+                width={110}
+                height={100}
+                className="object-contain"
+              />
             )}
           </Link>
           <button

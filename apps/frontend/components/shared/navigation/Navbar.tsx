@@ -73,20 +73,23 @@ export function Navbar({ initialUser }: NavbarProps) {
     <>
   <nav className="sticky top-0 z-40 bg-card backdrop-blur-sm bg-opacity-95 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-1.5">
+        <div className="flex justify-between items-center py-2">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 py-1 group">
             <img
               src="/images/logo.svg"
               alt="Reiseklar Logo"
-              width={40}
-              height={39}
-              className="object-contain transition-transform duration-300 group-hover:scale-110 dark:brightness-0 dark:invert"
+              width={110}
+              height={100}
+              className="object-contain transition-transform duration-300 group-hover:scale-110 dark:hidden"
             />
-            <span className="text-xl font-bold">
-              <span className="text-primary">REISE</span>
-              <span className="text-[#750505] dark:text-red-400">KLAR</span>
-            </span>
+            <img
+              src="/images/dark-logo.svg"
+              alt="Reiseklar Logo"
+              width={110}
+              height={100}
+              className="object-contain transition-transform duration-300 group-hover:scale-110 hidden dark:block"
+            />
           </Link>
 
           {/* Desktop Navigation */}
